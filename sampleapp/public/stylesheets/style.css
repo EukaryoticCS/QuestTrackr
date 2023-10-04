@@ -1,0 +1,247 @@
+/* element styles */
+* {
+  margin: 0;     /* by default, all elements (selector *) have no margin */
+}
+html {
+  width: 100%;                    /* 100% width of parent (root) element */
+  height: 100vh;                              /* 100% height of viewport */
+  background: rgb(0, 0, 0, 0.1);                            /* 10% black */
+  font-size: 1.0em;                                /* our root font size */
+  font-family: Arial, Helvetica, sans-serif;             /* default font */
+}
+body {
+  min-height: 100%;
+}
+section {
+  padding: 0.5rem;
+  flex-grow: 1;         /* in a flexbox, sections expand along flex axis */
+}
+h1 {                                           /* Website name in header */
+  font-size: 2.0rem;
+  font-weight: normal;
+}
+h2 {                                                   /* About, Contact */
+  font-size: 1.25rem;
+}
+h3 {                                                 /* Section headings */
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+h4 {                                               /* Section item title */
+  font-weight: normal;
+  padding: 0.5rem;
+}
+p {                                                 /* Section item body */
+  padding: 0.5rem;
+}
+a:link, a:visited {            /* anchor links, and visited anchor links */
+  color: black;
+  text-decoration: none;                            /* disable underline */
+}
+a:hover {                                 /* when anchor link is hovered */
+  color: rgb(25, 25, 25);
+}
+a:active {                                /* when anchor link is clicked */
+  color: rgb(96, 96, 96);
+}
+/* component styles */
+#container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns:
+    [left] 10rem auto 10rem [right];
+  grid-template-rows:
+    [top] 5rem auto 5rem [bottom];     /* header height fits its content */
+  grid-template-areas:
+    "head head head"
+    "panleft mainbody panright"
+    "foot foot foot";
+}
+#header {
+  grid-area: head;                    /* corresponds to name in template */
+  background: rgb(0, 0, 0, 0.2);                            /* 20% black */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;  /* site name and nav item text aligns baseline */
+  padding: 1.0rem;
+}
+#panel {                                       /* for element id="panel" */
+  display: flex;                     /* this element is a flexbox parent */
+  flex-direction: column;          /* its child elements flex vertically */
+  padding: 0.5rem;
+  background: rgb(0, 0, 0, 0.1);                            /* 10% black */
+}
+#panel.left {                 /* for element id="panel" and class="left" */
+  grid-area: panleft;                  /* this element fills a grid area */
+}
+#panel.right {
+  grid-area: panright;
+}
+#footer {
+  grid-area: foot;
+  display: flex;                     /* this element is a flexbox parent */
+  flex-direction: column;          /* its child elements flex vertically */
+  justify-content: center;           /* horizontal center footer content */
+  align-items: center;                 /* vertical center footer content */
+  padding: 0.5rem;
+  background: rgb(0, 0, 0, 0.2);
+}
+#mainbody {                                 /* for element id="mainbody" */
+  display: flex;                     /* this element is a flexbox parent */
+  flex-direction: column;          /* its child elements flex vertically */
+  grid-area: mainbody;
+  justify-self: center;          /* fixed-width mainbody always centered */
+  width: 100%;
+  min-width: 22.5rem;            /* mainbody width can't go < 22.5rem */
+}
+div#panel,
+div#mainbody {                               /* extra space under header */
+  padding-top: 0.5rem;
+}
+#partners, #sections {     /* for element id="partners" or id="sections" */
+  display: flex;                     /* this element is a flexbox parent */
+  flex-direction: row;           /* its child elements flex horizontally */
+  flex-wrap: wrap;           /* its child elements can wrap to next line */
+  align-content: flex-start;       /* child elements start in upper left */
+}
+#partners.wide {           /* for element id="partners" and class="wide" */
+  display: none;              /* by default, do not display this element */
+}
+#menu {
+  position: absolute;      /* menu position unaffected by other elements */
+  right: 0;                       /* zero pixels from the right boundary */
+  background: rgb(239, 239, 239);
+  border: 0.15rem solid rgb(0, 0, 0, 0.4);
+  visibility: hidden;        /* visibility property supports transitions */
+  opacity: 0;      /* opacity + visibility transition = menu fade effect */
+  z-index: 1;              /* ensure menu appears over all other content */
+}
+#menuitems {               /* menu is implemented as a flexbox container */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+#menuitems h3 {
+  border-top: 0.15rem solid rgb(0, 0, 0, 0.1);  /* light horizontal rule */
+}
+#menuitems .sectrule {
+  border-color: rgb(0, 0, 0, 0.25);            /* darker horizontal rule */
+}
+#menuitems .menuhead {
+  border-top: none;
+}
+#menuitems h3:hover {
+  background-color: rgb(0, 0, 0, 0.1);     /* gray of rollover menuitems */
+}
+.menubutton {
+  text-align: right;
+  cursor: pointer;            /* indicates it can be clicked like a link */
+  user-select: none;            /* user cannot select the button as text */
+}
+#menuitems .alignright {
+  text-align: right;            /* right-aligned menu item text (unused) */
+}
+#header h1.menubutton {
+  display: none;        /* in default view (landscape), hide menu button */
+  border: 0.15rem solid rgb(0, 0, 0, 0);   /* (invisible) alignment shim */
+}
+#header .placeholder {    /* this invisible button is rendered when menu */
+  color: rgb(0, 0, 0, 0); /* button is hidden, so header height matches. */
+  user-select: none;       /* user can't select text of invisible button */
+}
+.sectionlink, .partnerlink {
+  border-radius: 0.25rem;     /* give this element a slight rounded edge */
+  font-weight: normal;
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  width: 7rem;                            /* fixed width for these items */
+  margin-bottom: 1rem;                  /* slight margin for readability */
+  background: rgb(0, 0, 0, 0.1);
+}
+.sectionlink:hover, .partnerlink:hover {
+  background-color: rgb(0, 0, 0, 0.065);   /* brighten bg on mouse hover */
+}
+.partnerlink {
+  height: 7rem;        /* partner elements are additionally fixed height */
+}
+.partnerlink.wide {
+  margin: 0.5rem 1rem 0.5rem 0;      /* margins for spacing if they wrap */
+}
+.clickable-area {      /* use whenever a clickable area excludes margins */
+  height: 100%;                 /* clickable area spans height of parent */
+}
+.eventitem, .announceitem, .motditem {
+  margin-bottom: 0.5rem;                /* slight margin for readability */
+}
+.title {                                    /* e.g., "Open for business" */
+  font-style: italic;
+  font-weight: normal;
+  font-size: 1.1rem;
+}
+.date, .ingredient {                            /* e.g., January 1, 2021 */
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 0 0 0.01rem 0.5rem;
+  color: rgb(0, 0, 0, 0.5);
+}
+.navitem {                                             /* About, Contact */
+  font-weight: normal;
+  padding: 0 0.5rem 0 1rem;
+}
+.headspace, .panspace, .footspace, .bodyspace {
+  flex-grow: 1;      /* these elements expand on flex axis to fill space */
+}
+/* table styles ("items for sale") */
+table {
+  border-collapse: collapse;               /* pixel-adjacent table cells */
+  width: 100%;
+  margin-bottom: 1rem;
+}
+th {
+  text-align: left;
+}
+tr {
+  margin: 4rem 0 0 0;
+  border-bottom: 0.15rem solid rgb(0, 0, 0, 0.2);     /* horizontal rule */
+}
+td, th {
+  padding: 0.5rem;
+  vertical-align: top;
+}
+td.price {
+  white-space: nowrap;        /* white space in price does not wrap line */
+}
+td.qty, th.qty {
+  text-align: center;
+}
+span.perunit {
+  opacity: 0.5;
+}
+/* responsive styles applied in portrait mode */
+@media screen and (max-width: 45rem) {      /* if viewport width < 45rem */
+  #panel.left {
+    grid-column-end: left;         /* panel grid area shrinks to nothing */
+  }
+  #panel.right {
+    grid-column-start: right;      /* panel grid area shrinks to nothing */
+  }
+  #partners.tall {
+    display: none;  /* hide partners in panel (overwrites display: flex) */
+  }
+  #partners.wide {
+    display: flex;   /* show partners in body (overwrites display: none) */
+  }
+  #panel,                                 /* these disappear from layout */
+  #header .placeholder,
+  .navitem {
+    display: none;
+  }
+  #mainbody {
+    grid-column-start: left;         /* mainbody now starts at left edge */
+    grid-column-end: right;           /* mainbody now ends at right edge */
+  }
+  #header h1.menubutton {              /* display the header menu button */
+    display: inline;                         /* overwrites display: none */
+  }
+}

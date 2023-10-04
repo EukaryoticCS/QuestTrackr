@@ -1,0 +1,67 @@
+doctype html
+html
+  head
+    title= pagetitle
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    script(src="/javascripts/menu.js")
+    link(rel="stylesheet", href="/stylesheets/style.css")
+  body
+    #menu
+      section#menuitems
+        .menubutton
+          h1.menubutton(onclick="menuToggle('hide')") &#9776;
+        a(href="/")
+          h3.menuhead Our Farm Stand
+        a(href="/tips")
+          h3.sectrule Tips for living well
+        a(href="/recipes")
+          h3 Recipes
+        a(href="/advice")
+          h3 Homesteading advice
+        a(href="/about")
+          h3.sectrule About Us
+        a(href="/contact")
+          h3 Contact Us
+    #container
+      #header
+        a(href="/")
+          h1.logo Our Farm Stand
+        .headspace
+        h1.menubutton(onclick="menuToggle('show')") &#9776;
+        h1.placeholder &#9776;
+        h2.navitem
+          a(href="/about")
+            .clickable-area About Us
+        h2.navitem
+          a(href="/contact")
+            .clickable-area Contact Us
+      #panel.left
+        section#sections
+          .sectionlink
+            a(href="/tips")
+              .clickable-area Tips for living well
+          .sectionlink
+            a(href="/recipes")
+              .clickable-area Recipes
+          .sectionlink
+            a(href="/advice")
+              .clickable-area Homesteading advice
+      block mainbody
+      #panel.right
+        h3 Our friends
+        section#partners.tall
+          .partnerlink
+            a(href="/")
+              .clickable-area Green Valley Greens
+          .partnerlink
+            a(href="/")
+              .clickable-area Turkey Hill Farm
+          .partnerlink
+            a(href="/")
+              .clickable-area Burt's Maple Syrup
+          .partnerlink
+            a(href="/")
+              .clickable-area Only Organic Seeds
+      #footer
+        p Copyright &copy; 2020 Alice &amp; Bob's Farm Stand

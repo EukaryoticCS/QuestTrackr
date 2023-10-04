@@ -1,0 +1,65 @@
+extends layout
+block mainbody
+  #mainbody
+    section.mainbodyitems
+      h3 Announcements
+      section.announcements
+        .announceitem
+          h4.title Open for business
+          p.date Jan. 15
+          p Renovations of our new storefront are complete, and we're open for business.
+      h3 Items for sale
+      section.forsaleitems
+        table
+          tr
+            th Item
+            th Description
+            th Price
+            th.qty Qty
+          tr
+            td Milk
+            td Good source of calcium.
+            td.price $2
+              span.perunit  / half gal.
+            td.qty 3
+          tr
+            td Eggs
+            td Great for breakfast and baking.
+            td.price $4
+              span.perunit  / doz.
+            td.qty 6
+          tr
+            td Whole chicken
+            td Perfect for roasting.
+            td.price $5
+              span.perunit  / lb.
+            td.qty 4
+      h3 Upcoming events
+      section
+        .eventitem
+          h4.title Cider Fest
+          p.date October 20, 2pm&ndash;6pm
+          p Celebrate the season with fresh-pressed cider from our orchards.
+        .eventitem
+          h4.title Bread baking workshop
+          p.date December 13, 9am&ndash;noon
+          p Learn how to create and cultivate a sourdough starter.
+      h3 Message of the day
+      section
+        .motditem
+          p Eat better food. Support your local farm stand.
+        h3#partners.wide Our friends
+        section#partners.wide
+          .partnerlink.wide
+            a(href="")
+              .clickable-area Green Valley Greens
+          .partnerlink.wide
+            a(href="")
+              .clickable-area Turkey Hill Farm
+          .partnerlink.wide
+            a(href="/")
+              .clickable-area Burt's Maple Syrup
+          .partnerlink.wide
+            a(href="")
+              .clickable-area Only Organic Seeds
+        .bodyspace
