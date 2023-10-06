@@ -9,4 +9,4 @@ Have you ever played a video game and wanted to see EVERYTHING it had to offer? 
    
 My project, known as “QuestTrackr”, aims to centralize these Completion Trackers into a single web app where users can create templates for any game on any platform and upload them to the database for other users to add to their profile and track their individual completion on it. These templates will be extremely customizable and visually pleasing. Users will then be able to share their profile and brag about the games they have completed, boasting game collections, achievements, and completion percentages.   
    
-This project is the end result of my Capstone class, in which students are tasked with taking on a large project of their own design and creating it with little outside help from start to finish.
+This project is the end result of my Capstone class, in which students are tasked with taking on a large project of their own design and creating it from start to finish with little outside help.
