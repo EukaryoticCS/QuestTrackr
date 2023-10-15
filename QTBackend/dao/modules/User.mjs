@@ -1,12 +1,13 @@
 class User {
     constructor(username, email, password) {
+        date = new Date()
         this.username = username
         this.email = email
         this.password = password
         this.profile = {} //This will be an object with things like bio, age, etc.
         this.templates = []
-        this.createdAt = new Date()
-        this.lastLogin = null
+        this.createdAt = date
+        this.lastLogin = date
         this.roles = ['user']
     }
 
@@ -31,4 +32,4 @@ class User {
     }
 }
 
-module.exports = User
+export default User
