@@ -1,6 +1,6 @@
 class User {
     constructor(username, email, password) {
-        date = new Date()
+        const date = new Date()
         this.username = username
         this.email = email
         this.password = password

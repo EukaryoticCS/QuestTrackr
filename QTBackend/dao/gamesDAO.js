@@ -1,6 +1,6 @@
 import mongodb from "mongodb"
 const ObjectId = mongodb.ObjectId
-import User from "./modules/User.mjs"
+import Game from "./modules/Game.mjs"
 let users
 
 export default class UsersDAO {
@@ -53,7 +53,7 @@ export default class UsersDAO {
     }
 
     static async createUser(user) {
-        return await users.insertOne(user);
+        users.insertOne(user);
     }
 
     static async updateUser(user, profileData) {

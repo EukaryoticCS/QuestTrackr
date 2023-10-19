@@ -6,7 +6,7 @@ import UsersDAO from "./dao/usersDAO.js"
 dotenv.config()
 const MongoClient = mongodb.MongoClient
 
-const port = process.env.PORT || 9000
+const port = process.env.PORT || 5000
 
 MongoClient.connect(
     process.env.QUESTTRACKR_DB_URI, {

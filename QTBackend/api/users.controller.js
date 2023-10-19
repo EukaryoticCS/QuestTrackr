@@ -33,6 +33,7 @@ export default class UsersCtrl {
             const UserResponse = await UsersDAO.createUser(
                 new User(username, email, password)
             )
+
             res.json({ status: "success" })
         } catch (e) {
             res.status(500).json({ error: e.message })
