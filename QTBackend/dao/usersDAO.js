@@ -1,6 +1,5 @@
 import mongodb from "mongodb"
 const ObjectId = mongodb.ObjectId
-import User from "./modules/User.mjs"
 let users
 
 export default class UsersDAO {
