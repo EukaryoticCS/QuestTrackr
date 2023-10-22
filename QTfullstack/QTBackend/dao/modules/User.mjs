@@ -15,8 +15,8 @@ class User {
         this.profile = {...this.profile, ...profileData} //Spread syntax -- merges the two together
     }
 
-    addTemplate(templateId) {
-        this.templates.push(templateId)
+    addTemplate(template) {
+        this.templates.push(template)
     }
 
     removeTemplate(templateId) {

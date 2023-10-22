@@ -1,26 +1,25 @@
 import mongodb from "mongodb"
 const ObjectId = mongodb.ObjectId
-import Game from "./modules/Game.mjs"
-let users
+let games
 
-export default class UsersDAO {
+export default class GamesDAO {
     static async injectDB(conn) {
-        if (users) {
+        if (games) {
             return
         }
         try {
-            users = await conn.db(process.env.USERS_NS).collection("users")
+            games = await conn.db(process.env.GAMES_NS).collection("games")
         } catch (e) {
             console.error(
-                `Unable to establish a connection handle in usersDAO: ${e}`
+                `Unable to establish a connection handle in gamesDAO: ${e}`
             )
         }
     }
 
-    static async getUsers({
+    static async getGames({
         filters = null,
         page = 0,
-        usersPerPage = 20,
+        gamesPerPage = 20,
     } = {}) {
         let query
         if (filters) {
@@ -30,33 +29,29 @@ export default class UsersDAO {
         let cursor
 
         try {
-            cursor = await users
+            cursor = await games
                 .find(query)
         } catch (e) {
             console.error(`Unable to issue find command, ${e}`)
-            return { usersList: [], totalNumUsers: 0 }
+            return { gamesList: [], totalNumGames: 0 }
         }
 
-        const displayCursor = cursor.limit(usersPerPage).skip(usersPerPage * page)
+        const displayCursor = cursor.limit(gamesPerPage).skip(gamesPerPage * page)
 
         try {
-            const usersList = await displayCursor.toArray()
-            const totalNumUsers = await users.countDocuments(query)
+            const gamesList = await displayCursor.toArray()
+            const totalNumGames = await games.countDocuments(query)
             
-            return { usersList, totalNumUsers }
+            return { gamesList, totalNumGames }
         } catch (e) {
             console.error(
                 `Unable to convert cursor to array or problem counting documents: ${e}`
             )
-            return { usersList: [], totalNumUsers: 0 }
+            return { gamesList: [], totalNumGames: 0 }
         }
     }
 
     static async createUser(user) {
-        users.insertOne(user);
-    }
-
-    static async updateUser(user, profileData) {
-        
+        games.insertOne(user);
     }
 }

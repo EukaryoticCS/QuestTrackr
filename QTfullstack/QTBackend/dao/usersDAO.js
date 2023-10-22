@@ -41,7 +41,7 @@ export default class UsersDAO {
         try {
             const usersList = await displayCursor.toArray()
             const totalNumUsers = await users.countDocuments(query)
-            
+
             return { usersList, totalNumUsers }
         } catch (e) {
             console.error(
@@ -51,11 +51,50 @@ export default class UsersDAO {
         }
     }
 
+    static async getUserByUsername(username) {
+        return await users.findOne({ "username": username })
+    }
+
     static async createUser(user) {
         return await users.insertOne(user);
     }
 
-    static async updateUser(user, profileData) {
-        
+    static async updateUser(username, profile) {
+        return await users.findOneAndUpdate({ username: username }, { $set: { "profile": profile } })
+    }
+
+    static async getUserTemplates(username) {
+        const user = await this.getUserByUsername(username)
+        return user.templates
+    }
+
+    static async addTemplateToProfile(username, template) {
+        template._id = new ObjectId
+        return await users.findOneAndUpdate({ username: username }, { $push: { templates: template } })
+    }
+
+    static async trackTemplate(username, templateId, checkUpdate) {
+        const id = new ObjectId(templateId)
+        let update
+        if (checkUpdate.selected) {
+            update = { $set: { "templates.$[template].sections.$[section].checks.$[check].selected": checkUpdate.selected } }
+        } else if (checkUpdate.completed) {
+            update = { $set: { "templates.$[template].sections.$[section].checks.$[check].completed": checkUpdate.completed } }
+        } else { //if checkUpdate.collected
+            update = { $set: { "templates.$[template].sections.$[section].checks.$[check].collected": checkUpdate.collected } }
+        }
+
+        return await users.updateOne(
+            { "username": username },
+            update,
+            {
+                "returnOriginal": false,
+                "arrayFilters": [
+                    { "template._id": id },
+                    { "section.title": checkUpdate.section },
+                    { "check.name": checkUpdate.name }
+                ]
+            }
+        )
     }
 }
