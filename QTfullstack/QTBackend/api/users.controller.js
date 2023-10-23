@@ -78,14 +78,22 @@ export default class UsersCtrl {
         }
     }
 
+    static async apiGetTrackingTemplate(req, res, next) {
+        const username = req.params.username
+        const templateId = req.params.templateId
+
+        const trackingTemplate = await UsersDAO.getTrackingTemplate(username, templateId)
+        res.json({ trackingTemplate })
+    }
+
     static async apiTrackTemplate(req, res, next) {
         try {
             const username = req.params.username
             const templateId = req.params.templateId
             const checkUpdate = req.body.checkUpdate
 
-            const returnThing = await UsersDAO.trackTemplate(username, templateId, checkUpdate)
-            res.json({ returnThing })
+            await UsersDAO.trackTemplate(username, templateId, checkUpdate)
+            res.json({ status: "success" })
         } catch (e) {
             res.status(500).json({ error: e.message })
         }

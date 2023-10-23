@@ -41,7 +41,7 @@ export default class GamesDAO {
         try {
             const gamesList = await displayCursor.toArray()
             const totalNumGames = await games.countDocuments(query)
-            
+
             return { gamesList, totalNumGames }
         } catch (e) {
             console.error(
@@ -51,7 +51,41 @@ export default class GamesDAO {
         }
     }
 
-    static async createUser(user) {
-        games.insertOne(user);
+    static async createGame(game) {
+        return await games.insertOne(game)
+    }
+
+    static async getGameByGameId(gameId) {
+        return await games.findOne({ "_id": new ObjectId(gameId) })
+    }
+
+    static async updateGame(gameId, gameData) {
+        return await games.findOneAndUpdate({ "_id": new ObjectId(gameId) }, { $set: gameData }, { overwrite: true })
+    }
+
+    static async getGameTemplates(gameId) {
+        const game = await this.getGameByGameId(gameId)
+        return game.templates
+    }
+
+    static async addTemplateToGame(gameId, template) {
+        return await games.updateOne(
+            { "_id": new ObjectId(gameId) },
+            {
+                $push: {
+                    "templates": {
+                        "_id": new ObjectId,
+                        "title": template.title,
+                        "author": template.author,
+                        "sections": []
+                    }
+                }
+            }
+        )
+    }
+
+    static async getTemplateById(gameId, templateId) {
+        const game = await this.getGameByGameId(gameId)
+        return game.templates.find(template => template._id == templateId)
     }
 }

@@ -51,12 +51,12 @@ export default class UsersDAO {
         }
     }
 
-    static async getUserByUsername(username) {
-        return await users.findOne({ "username": username })
+    static async createUser(user) {
+        return await users.insertOne(user)
     }
 
-    static async createUser(user) {
-        return await users.insertOne(user);
+    static async getUserByUsername(username) {
+        return await users.findOne({ "username": username })
     }
 
     static async updateUser(username, profile) {
@@ -71,6 +71,11 @@ export default class UsersDAO {
     static async addTemplateToProfile(username, template) {
         template._id = new ObjectId
         return await users.findOneAndUpdate({ username: username }, { $push: { templates: template } })
+    }
+
+    static async getTrackingTemplate(username, templateId) {
+        const user = await this.getUserByUsername(username)
+        return user.templates.find(template => template._id == templateId)
     }
 
     static async trackTemplate(username, templateId, checkUpdate) {

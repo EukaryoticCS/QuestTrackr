@@ -12,6 +12,7 @@ router.route("/:username").get(UsersCtrl.apiGetUserByUsername)
 router.route("/:username/templates").get(UsersCtrl.apiGetUserTemplates)
                                     .post(UsersCtrl.apiAddTemplateToProfile)
 
-router.route("/:username/templates/:templateId").patch(UsersCtrl.apiTrackTemplate)
+router.route("/:username/templates/:templateId").get(UsersCtrl.apiGetTrackingTemplate)
+                                                .patch(UsersCtrl.apiTrackTemplate)
 
 export default router

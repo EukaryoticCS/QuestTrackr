@@ -5,14 +5,6 @@ class Game {
         this.platforms = platforms
         this.templates = []
     }
-
-    addTemplate(template) {
-        this.templates.push(template)
-    }
-
-    removeTemplate(templateId) {
-        this.templates = this.templates.filter(template => template.id !== templateId)
-    }
 }
 
 export default Game

@@ -10,26 +10,6 @@ class User {
         this.lastLogin = date
         this.roles = ['user']
     }
-
-    updateProfile(profileData) {
-        this.profile = {...this.profile, ...profileData} //Spread syntax -- merges the two together
-    }
-
-    addTemplate(template) {
-        this.templates.push(template)
-    }
-
-    removeTemplate(templateId) {
-        this.templates = this.templates.filter(template => template.id !== templateId)
-    }
-
-    getLastLogin() {
-        return this.lastLogin
-    }
-
-    setLastLogin(date) {
-        this.lastLogin = date
-    }
 }
 
 export default User
