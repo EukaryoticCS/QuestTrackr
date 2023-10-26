@@ -27,11 +27,14 @@ export default class GamesCtrl {
     static async apiCreateGame(req, res, next) {
         try {
             const title = req.body.title
-            const releaseYear = req.body.releaseYear ? parseInt(req.body.releaseYear, 10) : "N/A"
+            const summary = req.body.summary
+            const developers = req.body.developers != [] && req.body.developers != null ? req.body.developers : ["N/A"]
+            const publishers = req.body.publishers != [] && req.body.publishers != null ? req.body.publishers : ["N/A"]
+            const releaseDates = req.body.releaseDates != [] && req.body.releaseDates != null ? req.body.releaseDates : ["N/A"]
             const platforms = req.body.platforms
 
             const GameResponse = await GamesDAO.createGame(
-                new Game(title, releaseYear, platforms)
+                new Game(title, summary, developers, publishers, releaseDates, platforms)
             )
 
             res.json({ status: "success" })
