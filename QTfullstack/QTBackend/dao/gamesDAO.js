@@ -52,36 +52,61 @@ export default class GamesDAO {
     }
 
     static async createGame(game) {
-        return await games.insertOne(game)
+        try {
+            return await games.insertOne(game)
+        } catch (e) {
+            console.error(`Error inserting game: ` + e.message)
+            return null
+        }
     }
 
     static async getGameByGameId(gameId) {
-        return await games.findOne({ "_id": new ObjectId(gameId) })
+        try {
+            return await games.findOne({ "_id": new ObjectId(gameId) })
+        } catch (e) {
+            console.error(`Error finding game: ` + e.message)
+            return null
+        }
     }
 
     static async updateGame(gameId, gameData) {
-        return await games.findOneAndUpdate({ "_id": new ObjectId(gameId) }, { $set: gameData }, { overwrite: true })
+        try {
+            return await games.findOneAndUpdate({ "_id": new ObjectId(gameId) }, { $set: gameData }, { overwrite: true })
+        } catch (e) {
+            console.error(`Error updating game: ` + e.message)
+            return null
+        }
     }
 
     static async getGameTemplates(gameId) {
-        const game = await this.getGameByGameId(gameId)
-        return game.templates
+        try {
+            const game = await this.getGameByGameId(gameId)
+            return game.templates
+        } catch (e) {
+            console.error(`Game not found: ` + e.message)
+            return null
+        }
     }
 
     static async addTemplateToGame(gameId, template) {
-        return await games.updateOne(
-            { "_id": new ObjectId(gameId) },
-            {
-                $push: {
-                    "templates": {
-                        "_id": new ObjectId,
-                        "title": template.title,
-                        "author": template.author,
-                        "sections": []
+        try {
+            return await games.updateOne(
+                { "_id": new ObjectId(gameId) },
+                {
+                    $push: {
+                        "templates": {
+                            "_id": new ObjectId,
+                            "title": template.title,
+                            "author": template.author,
+                            "sections": []
+                        }
                     }
                 }
-            }
-        )
+            )
+        } catch (e) {
+            console.error(`Error adding template: ` + e.message)
+            return null
+        }
     }
 
     static async getTemplateById(gameId, templateId) {

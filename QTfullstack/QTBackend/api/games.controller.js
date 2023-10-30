@@ -30,14 +30,14 @@ export default class GamesCtrl {
             const summary = req.body.summary
             const developers = req.body.developers != [] && req.body.developers != null ? req.body.developers : ["N/A"]
             const publishers = req.body.publishers != [] && req.body.publishers != null ? req.body.publishers : ["N/A"]
-            const releaseDates = req.body.releaseDates != [] && req.body.releaseDates != null ? req.body.releaseDates : ["N/A"]
+            const releaseYear = req.body.releaseYear
             const platforms = req.body.platforms
 
-            const GameResponse = await GamesDAO.createGame(
-                new Game(title, summary, developers, publishers, releaseDates, platforms)
+            const gameResponse = await GamesDAO.createGame(
+                new Game(title, summary, developers, publishers, releaseYear, platforms)
             )
 
-            res.json({ status: "success" })
+            res.json({ status: gameResponse })
         } catch (e) {
             res.status(500).json({ error: e.message })
         }

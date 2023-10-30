@@ -5,7 +5,7 @@ const ObjectId = mongodb.ObjectId
 
 dotenv.config()
 
-let offset = 170000
+let offset = 0
 
 async function importGames(offset) {
     const response = await igdb.default(process.env.TWITCH_CLIENT_ID, process.env.TWITCH_APP_ACCESS_TOKEN)
@@ -83,7 +83,7 @@ async function addGame(game) {
         const database = client.db('QTDatabase')
         const games = database.collection('games')
 
-        games.insertOne(game)
+        await games.insertOne(game)
     } catch (e) {
         console.log(e.message)
     } finally {
@@ -97,7 +97,7 @@ async function addFiveHundredGames(inputGames) {
         const database = client.db('QTDatabase')
         const games = database.collection('games')
 
-        games.insertMany(inputGames)
+        await games.insertMany(inputGames)
     } catch (e) {
         console.log(e.message)
     } finally {
@@ -115,7 +115,7 @@ async function deleteAllButOOT() {
         const database = client.db('QTDatabase')
         const games = database.collection('games')
 
-        games.deleteMany({ "_id": { $nin: [new ObjectId("652f52c3fa72fed7f553edf1")] } })
+        await games.deleteMany({ "_id": { $nin: [new ObjectId("652f52c3fa72fed7f553edf1")] } })
     } catch (e) {
         console.log(e.message)
     } finally {
@@ -123,7 +123,9 @@ async function deleteAllButOOT() {
     }
 }
 
-while (offset < 254000) {
+while (offset < 300000) {
     await importGames(offset)
     offset += 500
 }
+
+// deleteAllButOOT()

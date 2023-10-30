@@ -1,13 +1,11 @@
 class User {
-    constructor(username, email, password) {
-        const date = new Date()
-        this.username = username
+    constructor(email, username, password) {
         this.email = email
+        this.username = username
         this.password = password
         this.profile = {} //This will be an object with things like bio, age, etc.
         this.templates = []
-        this.createdAt = date
-        this.lastLogin = date
+        this.createdAt = new Date() //today
         this.roles = ['user']
     }
 }

@@ -102,4 +102,12 @@ export default class UsersDAO {
             }
         )
     }
+
+    static async validateUserEmail(username) {
+        try {
+            return await users.findOneAndUpdate({ username: username }, { $set: { validate: true } })
+        } catch (e) {
+            console.log("Error validating email in UsersDAO: " + e.message)
+        }
+    }
 }

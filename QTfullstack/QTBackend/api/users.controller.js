@@ -26,15 +26,15 @@ export default class UsersCtrl {
 
     static async apiCreateUser(req, res, next) {
         try {
-            const username = req.body.username
             const email = req.body.email
+            const username = req.body.username
             const password = req.body.password
 
             const UserResponse = await UsersDAO.createUser(
-                new User(username, email, password)
+                new User(email, username, password)
             )
 
-            res.json({ status: "success" })
+            res.json({ UserResponse })
         } catch (e) {
             res.status(500).json({ error: e.message })
         }
@@ -95,6 +95,15 @@ export default class UsersCtrl {
             await UsersDAO.trackTemplate(username, templateId, checkUpdate)
             res.json({ status: "success" })
         } catch (e) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+
+    static async apiValidateUserEmail(req, res, next) {
+        try {
+            UsersDAO.validateUserEmail(req.params.username)
+            res.json({ status: "success" })
+        } catch {
             res.status(500).json({ error: e.message })
         }
     }
