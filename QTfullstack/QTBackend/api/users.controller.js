@@ -30,6 +30,10 @@ export default class UsersCtrl {
             const username = req.body.username
             const password = req.body.password
 
+            if (await UsersDAO.checkExistingUser(email, username)) {
+                res.json(409).json({ error: "Username or Email already taken" })
+            }
+
             const UserResponse = await UsersDAO.createUser(
                 new User(email, username, password)
             )
