@@ -1,24 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { Link } from "react-router-dom";
-import QTLogo from "../QT.svg";
+import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
-interface Props {
-  username: string;
-}
-
-function QTNavBar({ username }: Props) {
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const logInHandler = () => {
-    setLoggedIn(true)
-  }
-
+function QTNavBar() {
   return (
     <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="#">
-          <img alt="" src={QTLogo} height="60" width="80" className="mx-2" />
+        <Link className="navbar-brand" to="/">
+          <QTLogo height="60" width="80" className="mx-2" />
           QuestTrackr
         </Link>
         <button
@@ -44,87 +35,28 @@ function QTNavBar({ username }: Props) {
               </form>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="#">
+              <Link className="nav-link" to="/about">
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="#">
+              <Link className="nav-link" to="/faq">
                 FAQ
               </Link>
               {/* Should FAQ even go here? */}
             </li>
           </ul>
           <div className="nav navbar-nav ml-auto">
-            {loggedIn ? (
-              <div className="nav-item">
-                <Link className="nav-link" to="#">
-                  {username}
-                  <img
-                    alt=""
-                    src={QTLogo}
-                    height="50"
-                    width="50"
-                    className="mx-2"
-                  />
-                </Link>
-              </div>
-            ) : (
-              <div className="dropdown dropstart">
-                <button className="btn btn-secondary" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
-                  Login
+            <SignedIn>
+              <UserButton afterSignOutUrl="/"/>
+            </SignedIn>
+            <SignedOut>
+              <SignInButton>
+                <button type="button" className="btn btn-secondary">
+                  Login/Register
                 </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <form className="px-4 py-3">
-                    <div className="form-group">
-                      <label htmlFor="exampleDropdownFormEmail1">
-                        Email address
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="exampleDropdownFormEmail1"
-                        placeholder="email@example.com"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="exampleDropdownFormPassword1">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        id="exampleDropdownFormPassword1"
-                        placeholder="Password"
-                      />
-                    </div>
-                    <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="dropdownCheck"
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="dropdownCheck"
-                      >
-                        Remember me
-                      </label>
-                    </div>
-                    <button type="submit" className="btn btn-primary" onClick={logInHandler}>
-                      Sign in
-                    </button>
-                  </form>
-                  <div className="dropdown-divider"></div>
-                  <Link className="dropdown-item" to="#">
-                    New around here? Sign up
-                  </Link>
-                  <Link className="dropdown-item" to="#">
-                    Forgot password?
-                  </Link>
-                </div>
-              </div>
-            )}
+              </SignInButton>
+            </SignedOut>
           </div>
         </div>
       </div>
