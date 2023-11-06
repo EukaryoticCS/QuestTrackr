@@ -34,7 +34,7 @@ const Home = () => {
             <strong>You've come to the right place.</strong>
           </p>
         </div>
-        <div className="col-6 img-fluid float-end">
+        <div className="col-6 img-fluid float-end card">
           <img alt="" src={TemplateExample} className="mh-50" />
         </div>
       </div>

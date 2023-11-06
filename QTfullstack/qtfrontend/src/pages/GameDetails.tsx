@@ -23,7 +23,7 @@ const GameDetails = (props: Props) => {
   const arrayDeveloperItems = props.developers.map((developer) => <li>{developer}</li>);
   const arrayPublisherItems = props.publishers.map((publisher) => <li>{publisher}</li>);
   const arrayPlatformItems = props.platforms.map((platform) => <li>{platform}</li>);
-  const arrayTemplateItems = props.templates.map((template) => <TemplateCard title={template.title} author={template.author}/>)
+  const arrayTemplateItems = props.templates.map((template) => <TemplateCard title={template.title} author={template.author} imgUrl="templateExample.jpg"/>)
 
   return (
     <>
