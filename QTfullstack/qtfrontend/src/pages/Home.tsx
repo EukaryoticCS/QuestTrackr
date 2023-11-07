@@ -1,5 +1,5 @@
 import React from "react";
-import "bootswatch/dist/vapor/bootstrap.min.css";
+// import "bootswatch/dist/vapor/bootstrap.min.css";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import TemplateExample from "../assets/jpg/templateExample.jpg";

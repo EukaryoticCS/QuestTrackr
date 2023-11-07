@@ -1,4 +1,5 @@
 import React from "react";
+import "bootswatch/dist/slate/bootstrap.min.css";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import {
@@ -20,6 +21,7 @@ import Settings from "./pages/Settings.tsx";
 import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
 import Tracking from "./pages/Tracking.tsx";
+
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -85,7 +87,7 @@ const ClerkWithRoutes = () => {
                 title: "All Achievements",
                 author: "Eukaryotic",
                 templateData: {
-                  
+
                 }
               }]}
             />
