@@ -1,5 +1,5 @@
 import React from "react";
-import "bootswatch/dist/slate/bootstrap.min.css";
+import "bootswatch/dist/vapor/bootstrap.min.css";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import {
