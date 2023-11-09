@@ -8,11 +8,11 @@ import ReactFlow, {
   MiniMap,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import SectionNode from "../components/SectionNode.tsx";
-import TextNode from "../components/TextNode.tsx";
-import ImageNode from "../components/ImageNode.tsx";
+import SectionNode from "../components/Nodes/SectionNode.tsx";
+import TextNode from "../components/Nodes/TextNode.tsx";
+import ImageNode from "../components/Nodes/ImageNode.tsx";
 import TemplateTools from "../components/TemplateTools.tsx";
-import CheckboxNode from "../components/CheckboxNode.tsx";
+import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 
 
 const initialNodes: Node[] = [
@@ -76,10 +76,9 @@ const initialNodes: Node[] = [
   {
     id: "5",
     position: { x: 300, y: 0 },
-    data: { label: "asdfasdf" },
+    data: { img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png" },
     type: "imageNode",
     style: {
-      border: "1px solid black",
       fontSize: 15,
       height: 20,
       width: 40

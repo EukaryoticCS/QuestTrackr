@@ -24,10 +24,6 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              aria-current="page"
-              title="Shapes"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -54,9 +50,6 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              title="Text"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,9 +76,6 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              title="Images"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -113,9 +103,6 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              title="Checkboxes"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,9 +130,6 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              title="Numbers"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -172,9 +156,6 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              title="Dropdowns"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -202,9 +183,6 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              title="Percent"
-              data-bs-toggle="tooltip"
-              data-bs-placement="right"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -231,10 +209,6 @@ const TemplateTools = () => {
       >
         <button
           className="nav-link py-3 border-bottom mt-auto mb-3"
-          aria-current="page"
-          title="Settings"
-          data-bs-toggle="tooltip"
-          data-bs-placement="right"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
