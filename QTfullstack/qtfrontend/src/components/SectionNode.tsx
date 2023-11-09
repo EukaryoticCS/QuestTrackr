@@ -1,7 +1,7 @@
 import React from "react";
 import { NodeResizer } from "reactflow";
 
-const SectionBox = ({ data, selected }) => {
+const SectionNode = ({ data, selected }) => {
 
 
   return (
@@ -9,12 +9,12 @@ const SectionBox = ({ data, selected }) => {
       <NodeResizer
         color="ff0071"
         isVisible={selected}
-        minWidth={100}
-        minHeight={30}
+        minWidth={20}
+        minHeight={20}
       />
-      <div className="px-2">{data.label}</div>
+      <div className="px-2"></div>
     </>
   );
 };
 
-export default SectionBox;
+export default SectionNode;

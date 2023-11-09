@@ -22,7 +22,6 @@ import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
 import Tracking from "./pages/Tracking.tsx";
 
-
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
 const ClerkWithRoutes = () => {
