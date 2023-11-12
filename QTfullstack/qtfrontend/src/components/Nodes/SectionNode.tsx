@@ -12,7 +12,7 @@ const SectionNode = ({ data, selected }) => {
         minWidth={20}
         minHeight={20}
       />
-      <div className="px-2"></div>
+      <div className="px-2 text-center"></div>
     </>
   );
 };

@@ -11,7 +11,7 @@ const TextNode = ({ data, selected }) => {
         minWidth={20}
         minHeight={20}
       />
-      <div>{data.label}</div>
+      <div className="text-center">{data.label}</div>
     </>
   );
 };

@@ -10,7 +10,7 @@ const ImageNode = ({ data, selected }) => {
         minWidth={20}
         minHeight={20}
       />
-      <img alt="" src={data.img}/>
+      <img alt="" src={data.img} style={{width: "100%", height: "100%"}}/>
     </>
   );
 };

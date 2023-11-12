@@ -13,6 +13,8 @@ import TextNode from "../components/Nodes/TextNode.tsx";
 import ImageNode from "../components/Nodes/ImageNode.tsx";
 import TemplateTools from "../components/TemplateTools.tsx";
 import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
+import NumberNode from "../components/Nodes/NumberNode.tsx";
+import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 
 
 const initialNodes: Node[] = [
@@ -67,7 +69,6 @@ const initialNodes: Node[] = [
     data: { label: "asdfasdf" },
     type: "textNode",
     style: {
-      border: "1px solid black",
       fontSize: 15,
       height: 20,
       width: 40
@@ -75,7 +76,7 @@ const initialNodes: Node[] = [
   },
   {
     id: "5",
-    position: { x: 300, y: 0 },
+    position: { x: 400, y: 0 },
     data: { img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png" },
     type: "imageNode",
     style: {
@@ -86,8 +87,8 @@ const initialNodes: Node[] = [
   },
   {
     id: "6",
-    position: { x: 300, y: 0 },
-    data: { label: "asdfasdf" },
+    position: { x: 500, y: 0 },
+    data: { label: "" },
     type: "checkboxNode",
     style: {
       fontSize: 15,
@@ -95,9 +96,31 @@ const initialNodes: Node[] = [
       width: 15,
     },
   },
+  {
+    id: "7",
+    position: { x: 600, y: 0 },
+    data: { label: "", max: 20 },
+    type: "numberNode",
+    style: {
+      fontSize: 15,
+      height: 70,
+      width: 190,
+    },
+  },
+  {
+    id: "8",
+    position: { x: 600, y: 0 },
+    data: { label: "", max: 20 },
+    type: "dropdownNode",
+    style: {
+      fontSize: 15,
+      height: 20,
+      width: 20,
+    },
+  },
 ];
 
-const nodeTypes = { sectionNode: SectionNode, textNode: TextNode, imageNode: ImageNode, checkboxNode: CheckboxNode };
+const nodeTypes = { sectionNode: SectionNode, textNode: TextNode, imageNode: ImageNode, checkboxNode: CheckboxNode, numberNode: NumberNode, dropdownNode: DropdownNode };
 
 function TemplateCreation() {
   const [nodes, setNodes] = useState(initialNodes);
