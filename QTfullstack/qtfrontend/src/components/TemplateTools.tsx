@@ -3,7 +3,17 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 
-const TemplateTools = () => {
+interface Props {
+  onShapesClick: React.MouseEventHandler,
+  onTextClick: React.MouseEventHandler,
+  onImageClick: React.MouseEventHandler,
+  onCheckboxClick: React.MouseEventHandler,
+  onNumbersClick: React.MouseEventHandler,
+  onDropdownClick: React.MouseEventHandler,
+  // onPercentageClick: React.MouseEventHandler
+}
+
+const TemplateTools = ({onShapesClick, onTextClick, onImageClick, onCheckboxClick, onNumbersClick, onDropdownClick}: Props) => {
   return (
     <div className="d-flex flex-column bg-dark text-center justify-content-center">
       <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
@@ -24,6 +34,7 @@ const TemplateTools = () => {
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
+              onClick={onShapesClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -40,16 +51,17 @@ const TemplateTools = () => {
         </li>
         <li>
           <OverlayTrigger
-            key="shapes"
+            key="text"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`}>
+              <Tooltip id={`tooltip-text`}>
                 <h4 className="m-auto">Text</h4>
               </Tooltip>
             }
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
+              onClick={onTextClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,16 +78,17 @@ const TemplateTools = () => {
         </li>
         <li>
           <OverlayTrigger
-            key="shapes"
+            key="images"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`}>
+              <Tooltip id={`tooltip-images`}>
                 <h4 className="m-auto">Images</h4>
               </Tooltip>
             }
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
+              onClick={onImageClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -93,16 +106,17 @@ const TemplateTools = () => {
         </li>
         <li>
           <OverlayTrigger
-            key="shapes"
+            key="checkboxes"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`}>
+              <Tooltip id={`tooltip-checkboxes`}>
                 <h4 className="m-auto">Checkboxes</h4>
               </Tooltip>
             }
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
+              onClick={onCheckboxClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,16 +134,17 @@ const TemplateTools = () => {
         </li>
         <li>
           <OverlayTrigger
-            key="shapes"
+            key="numbers"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`}>
+              <Tooltip id={`tooltip-numbers`}>
                 <h4 className="m-auto">Numbers</h4>
               </Tooltip>
             }
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
+              onClick={onNumbersClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -146,16 +161,17 @@ const TemplateTools = () => {
         </li>
         <li>
           <OverlayTrigger
-            key="shapes"
+            key="dropdowns"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`}>
+              <Tooltip id={`tooltip-dropdowns`}>
                 <h4 className="m-auto">Dropdowns</h4>
               </Tooltip>
             }
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
+              onClick={onDropdownClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -173,16 +189,17 @@ const TemplateTools = () => {
         </li>
         <li>
           <OverlayTrigger
-            key="shapes"
+            key="percentages"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`}>
+              <Tooltip id={`tooltip-percentages`}>
                 <h4 className="m-auto">Percentages</h4>
               </Tooltip>
             }
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
+              // onClick={onPercentageClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

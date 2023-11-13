@@ -1,9 +1,7 @@
 import React from "react";
-import { NodeResizer } from "reactflow";
+import { NodeResizer, NodeToolbar, Position } from "reactflow";
 
-const SectionNode = ({ data, selected }) => {
-
-
+const ShapeNode = ({ data, selected }) => {
   return (
     <>
       <NodeResizer
@@ -12,9 +10,12 @@ const SectionNode = ({ data, selected }) => {
         minWidth={20}
         minHeight={20}
       />
+      <NodeToolbar position={Position.Top} align="center">
+        
+      </NodeToolbar>
       <div className="px-2 text-center"></div>
     </>
   );
 };
 
-export default SectionNode;
+export default ShapeNode;

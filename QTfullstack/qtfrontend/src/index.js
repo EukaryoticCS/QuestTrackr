@@ -21,6 +21,7 @@ import Settings from "./pages/Settings.tsx";
 import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
 import Tracking from "./pages/Tracking.tsx";
+import { ReactFlowProvider } from "reactflow";
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -82,13 +83,13 @@ const ClerkWithRoutes = () => {
                 "Android",
                 "Nintendo Switch",
               ]}
-              templates={[{
-                title: "All Achievements",
-                author: "Eukaryotic",
-                templateData: {
-
-                }
-              }]}
+              templates={[
+                {
+                  title: "All Achievements",
+                  author: "Eukaryotic",
+                  templateData: {},
+                },
+              ]}
             />
           }
         />
@@ -107,8 +108,10 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ClerkWithRoutes />
-    </BrowserRouter>
+    <ReactFlowProvider>
+      <BrowserRouter>
+        <ClerkWithRoutes />
+      </BrowserRouter>
+    </ReactFlowProvider>
   </React.StrictMode>
 );
