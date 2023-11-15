@@ -7,7 +7,7 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   const updateNodeColor = useStore((state) => state.updateNodeColor);
 
   return (
-    <div style={{ backgroundColor: data.color }}>
+    <>
       <NodeResizer
         color="ff0071"
         isVisible={selected}
@@ -23,8 +23,8 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           />
         </div>
       </NodeToolbar>
-      <div className="px-2 text-center" style={{ padding: 20 }} ></div>
-    </div>
+      <div className="px-2 text-center" style={{ backgroundColor: data.color, width: "100%", height: "100%" }} ></div>
+    </>
   );
 };
 

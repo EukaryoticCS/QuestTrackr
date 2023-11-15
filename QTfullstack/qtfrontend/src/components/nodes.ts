@@ -6,11 +6,9 @@ export default [
     position: { x: 0, y: 0 },
     type: "shapeNode",
     data: { color: "F6E05E"},
+    className:"d-flex",
     style: {
-      background: "#fff",
       border: "1px solid black",
-      borderRadius: 15,
-      fontSize: 12,
       zIndex: -1,
       height: 20,
       width: 40,
