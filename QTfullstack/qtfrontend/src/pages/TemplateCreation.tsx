@@ -50,186 +50,150 @@ const selector = (state) => ({
   nodes: state.nodes,
   onNodesChange: state.onNodesChange,
   onConnect: state.onConnect,
+  onAdd: state.onAdd,
 });
 
 function TemplateCreation() {
-  const { nodes, onNodesChange, onConnect } =
-    useStore(selector);
-
-  // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  // const [editState, setEditState] = useState({
-  //   id: "",
-  //   background: "",
-  //   label: "",
-  //   color: "",
-  // });
-  // const { setViewport, screenToFlowPosition } = useReactFlow();
-  // const [rfInstance, setrfInstance] = useState<any>(null);
-
-  // const onSave = useCallback(() => {
-  //   if (rfInstance != null) {
-  //     const flow = rfInstance.toObject();
-  //     localStorage.setItem(flowKey, JSON.stringify(flow));
-  //   }
-  // }, [rfInstance]);
-
-  // const onRestore = useCallback(() => {
-  //   const restoreFlow = async () => {
-  //     const flow = JSON.parse(localStorage.getItem(flowKey) || "{}");
-
-  //     if (flow) {
-  //       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-  //       setNodes(flow.nodes || []);
-  //       setViewport({ x, y, zoom });
-  //     }
-  //   };
-
-  //   restoreFlow();
-  // }, [setNodes, setViewport]);
-
-  // const onAdd = useCallback(
-  //   (newNode) => {
-  //     const reactFlowContainer = document.querySelector(".react-flow");
-  //     const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
-
-  //     if (!reactFlowBounds) {
-  //       return;
-  //     }
-
-  //     const center = screenToFlowPosition({
-  //       x: reactFlowBounds.width * 0.5,
-  //       y: reactFlowBounds.height * 0.5
-  //     });
-
-  //     newNode.position = center;
-  //     console.log(newNode);
-
-  //     // setNodes((nds) => nds.concat(newNode));
-  //   },
-  //   [
-  //     //setNodes,
-  //     screenToFlowPosition]
-  // );
-
-  // const onEdit = () => {
-  //   setNodes((nds) =>
-  //     nds.map((node) => {
-  //       if (node.id === editState.id) {
-  //         node.style = {
-  //           ...node.style,
-  //           background: editState.background,
-  //           color: editState.color,
-  //         };
-  //         node.data = {
-  //           ...node.data,
-  //           label: editState.label,
-  //         };
-  //       }
-  //       return node;
-  //     })
-  //   );
-  // };
+  const { nodes, onNodesChange, onConnect, onAdd } = useStore(selector);
+  const { setViewport, screenToFlowPosition } = useReactFlow();
 
   return (
     <div className="row min-vh-100 p-0">
       <div className="d-flex col-sm-auto py-0 m-0">
         <TemplateTools
-          onShapesClick={
-            () => {}
-            // onAdd({
-            //   id: getNodeId(),
-            //   position: { x: 0, y: 0 },
-            //   type: "shapeNode",
-            //   data: {color: "#ffffff"},
-            //   style: {
-            //     border: "1px solid black",
-            //     borderRadius: 15,
-            //     fontSize: 12,
-            //     zIndex: -1,
-            //     height: 20,
-            //     width: 40,
-            //   },
-            // })
-          }
-          onTextClick={
-            () => {}
-            // onAdd({
-            //   id: getNodeId(),
-            //   position: { x: 0, y: 0 },
-            //   type: "textNode",
-            //   data: { label: "Input Text Here" },
-            //   style: {
-            //     fontSize: 15,
-            //     height: 20,
-            //     width: 40,
-            //   },
-            // })
-          }
-          onImageClick={
-            () => {}
-            // onAdd({
-            //   id: getNodeId(),
-            //   position: { x: 0, y: 0 },
-            //   data: {
-            //     img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png",
-            //   },
-            //   type: "imageNode",
-            //   style: {
-            //     fontSize: 15,
-            //     height: 20,
-            //     width: 40,
-            //   },
-            // })
-          }
-          onCheckboxClick={
-            () => {}
-            // onAdd({
-            //   id: getNodeId(),
-            //   position: { x: 0, y: 0 },
-            //   data: {},
-            //   type: "checkboxNode",
-            //   style: {
-            //     fontSize: 15,
-            //     height: 15,
-            //     width: 15,
-            //   },
-            // })
-          }
-          onNumbersClick={
-            () => {}
-            // onAdd({
-            //   id: getNodeId(),
-            //   position: { x: 0, y: 0 },
-            //   data: { max: 20, color: "#ffffff" },
-            //   type: "numberNode",
-            //   // style: {
-            //   //   fontSize: 15,
-            //   //   height: 60,
-            //   //   width: 220,
-            //   // },
-            // })
-          }
-          onDropdownClick={
-            () => {}
-            // onAdd({
-            //   id: getNodeId(),
-            //   position: { x: 0, y: 0 },
-            //   data: {
-            //     options: [
-            //       "",
-            //       "Option 1",
-            //       "Option 2",
-            //       "Option 3",
-            //     ],
-            //   },
-            //   type: "dropdownNode",
-            //   style: {
-            //     fontSize: 15,
-            //     height: 20,
-            //     width: 20,
-            //   },
-            // })
-          }
+          onShapesClick={() => {
+            const reactFlowContainer = document.querySelector(".react-flow");
+            const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
+
+            const center = screenToFlowPosition({
+              x: reactFlowBounds!.width * 0.5,
+              y: reactFlowBounds!.height * 0.5,
+            });
+
+            onAdd({
+              id: getNodeId(),
+              position: { x: center.x, y: center.y },
+              type: "shapeNode",
+              data: { color: "#ffffff" },
+              style: {
+                border: "1px solid black",
+                borderRadius: 15,
+                fontSize: 12,
+                zIndex: -1,
+                height: 20,
+                width: 40,
+              },
+            });
+          }}
+          onTextClick={() => {
+            const reactFlowContainer = document.querySelector(".react-flow");
+            const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
+
+            const center = screenToFlowPosition({
+              x: reactFlowBounds!.width * 0.5,
+              y: reactFlowBounds!.height * 0.5,
+            });
+
+            onAdd({
+              id: getNodeId(),
+              position: { x: center.x, y: center.y },
+              type: "textNode",
+              data: { label: "Input Text Here" },
+              style: {
+                fontSize: 15,
+                height: 20,
+                width: 40,
+              },
+            });
+          }}
+          onImageClick={() => {
+            const reactFlowContainer = document.querySelector(".react-flow");
+            const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
+
+            const center = screenToFlowPosition({
+              x: reactFlowBounds!.width * 0.5,
+              y: reactFlowBounds!.height * 0.5,
+            });
+
+            onAdd({
+              id: getNodeId(),
+              position: { x: center.x, y: center.y },
+              data: {
+                img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png",
+              },
+              type: "imageNode",
+              style: {
+                fontSize: 15,
+                height: 20,
+                width: 40,
+              },
+            });
+          }}
+          onCheckboxClick={() => {
+            const reactFlowContainer = document.querySelector(".react-flow");
+            const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
+
+            const center = screenToFlowPosition({
+              x: reactFlowBounds!.width * 0.5,
+              y: reactFlowBounds!.height * 0.5,
+            });
+
+            onAdd({
+              id: getNodeId(),
+              position: { x: center.x, y: center.y },
+              data: {},
+              type: "checkboxNode",
+              style: {
+                fontSize: 15,
+                height: 15,
+                width: 15,
+              },
+            });
+          }}
+          onNumbersClick={() => {
+            const reactFlowContainer = document.querySelector(".react-flow");
+            const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
+
+            const center = screenToFlowPosition({
+              x: reactFlowBounds!.width * 0.5,
+              y: reactFlowBounds!.height * 0.5,
+            });
+
+            onAdd({
+              id: getNodeId(),
+              position: { x: center.x, y: center.y },
+              data: { max: 20, color: "#ffffff" },
+              type: "numberNode",
+              style: {
+                fontSize: 15,
+                height: 60,
+                width: 220,
+              },
+            });
+          }}
+          onDropdownClick={() => {
+            const reactFlowContainer = document.querySelector(".react-flow");
+            const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
+
+            const center = screenToFlowPosition({
+              x: reactFlowBounds!.width * 0.5,
+              y: reactFlowBounds!.height * 0.5,
+            });
+
+            onAdd({
+              id: getNodeId(),
+              position: { x: center.x, y: center.y },
+              data: {
+                options: ["", "Option 1", "Option 2", "Option 3"],
+              },
+              type: "dropdownNode",
+              style: {
+                fontSize: 15,
+                height: 20,
+                width: 20,
+              },
+            });
+          }}
         />
       </div>
       <div className="col-sm-10 p-0 m-0">
