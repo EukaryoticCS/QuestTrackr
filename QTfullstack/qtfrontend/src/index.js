@@ -66,31 +66,9 @@ const ClerkWithRoutes = () => {
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<FAQ />} />
         <Route
-          path="/gamedetails"
+          path="/gamedetails/:title"
           element={
-            <GameDetails
-              title="Portal"
-              summary="Waking up in a seemingly empty laboratory, the player is made to complete various physics-based puzzle challenges through numerous test chambers in order to test out the new Aperture Science Handheld Portal Device, without an explanation as to how, why or by whom."
-              developers={["Valve"]}
-              publishers={["Valve", "Electronic Arts"]}
-              releaseYear={2007}
-              platforms={[
-                "Linux",
-                "PC (Microsoft Windows)",
-                "PlayStation 3",
-                "Xbox 360",
-                "Mac",
-                "Android",
-                "Nintendo Switch",
-              ]}
-              templates={[
-                {
-                  title: "All Achievements",
-                  author: "Eukaryotic",
-                  templateData: {},
-                },
-              ]}
-            />
+            <GameDetails/>
           }
         />
         {/* URLs will probably need to change */}

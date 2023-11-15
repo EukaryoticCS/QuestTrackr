@@ -1,9 +1,13 @@
-import React from "react";
-import { NodeResizer, NodeToolbar, Position } from "reactflow";
+import React, { useState } from "react";
+import { NodeResizer, NodeToolbar, Position, NodeProps } from "reactflow";
 
-const ShapeNode = ({ data, selected }) => {
+import useStore, { NodeData } from "../store.tsx";
+
+const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
+  const updateNodeColor = useStore((state) => state.updateNodeColor);
+
   return (
-    <>
+    <div style={{ backgroundColor: data.color }}>
       <NodeResizer
         color="ff0071"
         isVisible={selected}
@@ -11,10 +15,16 @@ const ShapeNode = ({ data, selected }) => {
         minHeight={20}
       />
       <NodeToolbar position={Position.Top} align="center">
-        
+        <div className="form form-control">
+          <input
+            defaultValue={data.color}
+            type="color"
+            onChange={(e) => updateNodeColor(id, e.target.value)}
+            className="nodrag"
+          />
+        </div>
       </NodeToolbar>
-      <div className="px-2 text-center"></div>
-    </>
+    </div>
   );
 };
 

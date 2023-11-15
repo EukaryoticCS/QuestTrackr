@@ -45,6 +45,11 @@ function QTNavBar() {
               </Link>
               {/* Should FAQ even go here? */}
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/templatecreate">
+                Template Creation
+              </Link>
+            </li>
           </ul>
           <div className="nav navbar-nav ml-auto">
             <SignedIn>

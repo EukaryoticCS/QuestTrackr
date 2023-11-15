@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import TemplateCard from "../components/TemplateCard.tsx";
+import { useParams } from "react-router-dom";
 
 interface Template {
   title: string,
@@ -9,7 +10,7 @@ interface Template {
   templateData: object
 }
 
-interface Props {
+interface Game {
   title: string;
   summary: string;
   developers: string[];
@@ -19,11 +20,19 @@ interface Props {
   templates: Template[];
 }
 
-const GameDetails = (props: Props) => {
-  const arrayDeveloperItems = props.developers.map((developer) => <li>{developer}</li>);
-  const arrayPublisherItems = props.publishers.map((publisher) => <li>{publisher}</li>);
-  const arrayPlatformItems = props.platforms.map((platform) => <li>{platform}</li>);
-  const arrayTemplateItems = props.templates.map((template) => <TemplateCard title={template.title} author={template.author} imgUrl="templateExample.jpg"/>)
+const GameDetails = () => {
+  const [details, setDetails] = useState({_id: "", summary: "", title: "", developers: [""], publishers: [""], releaseYear: 0, platforms: [""], templates: [{title: "", author: ""}]});
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/v1/games/653ede087229563d3aea9984")
+      .then((res) => res.json())
+      .then((data) => {console.log(data); setDetails(data)});
+  }, []);
+
+  const arrayDeveloperItems = details.developers.map((developer) => <li>{developer}</li>);
+  const arrayPublisherItems = details.publishers.map((publisher) => <li>{publisher}</li>);
+  const arrayPlatformItems = details.platforms.map((platform) => <li>{platform}</li>);
+  const arrayTemplateItems = details.templates.map((template) => <TemplateCard title={template.title} author={template.author} imgUrl="templateExample.jpg"/>)
 
   return (
     <>
@@ -38,10 +47,10 @@ const GameDetails = (props: Props) => {
           />
         </div>
         <div className="col md-3 m-4">
-          <h2 className="display-1">{props.title}</h2>
+          <h2 className="display-1">{details.title}</h2>
           <div className="row border-primary">
             <div className="h3">
-              {props.summary}<br/><br/>
+              {details.summary}<br/><br/>
               
               Developer(s):
               <ul>
@@ -51,7 +60,7 @@ const GameDetails = (props: Props) => {
               <ul>
                 {arrayPublisherItems}
               </ul><br/>
-              Release Year: {props.releaseYear}<br/>
+              Release Year: {details.releaseYear}<br/>
               Platforms: 
               <ul>
                 {arrayPlatformItems}
@@ -67,7 +76,6 @@ const GameDetails = (props: Props) => {
           {arrayTemplateItems}
         </div>
       </div>
-
       <QTFooter />
     </>
   );
