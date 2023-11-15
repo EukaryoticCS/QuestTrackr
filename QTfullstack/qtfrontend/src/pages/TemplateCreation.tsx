@@ -17,25 +17,23 @@ import ImageNode from "../components/Nodes/ImageNode.tsx";
 import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
-import useStore from "../components/store.tsx"
-
-import { shallow } from 'zustand/shallow';
+import useStore from "../components/store.tsx";
 
 const flowKey: string = "example-flow";
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
   switch (node.type) {
-    case 'shapeNode':
-      return '#133C55'
-    case 'textNode':
-    case 'imageNode':
-      return '#386FA4'
-    case 'checkboxNode':
-    case 'numberNode':
-    case 'dropdownNode':
-      return '#59A5D8'
+    case "shapeNode":
+      return "#133C55";
+    case "textNode":
+    case "imageNode":
+      return "#386FA4";
+    case "checkboxNode":
+    case "numberNode":
+    case "dropdownNode":
+      return "#59A5D8";
     default:
-      return '#FFFFFF'
+      return "#FFFFFF";
   }
 }
 
@@ -48,19 +46,15 @@ const nodeTypes = {
   dropdownNode: DropdownNode,
 };
 
-// const initialNodes: Node[] = [
-// ];
-
 const selector = (state) => ({
   nodes: state.nodes,
-  edges: state.edges,
   onNodesChange: state.onNodesChange,
-  onEdgesChange: state.onEdgesChange,
-  onConnect: state.onConnect
-})
+  onConnect: state.onConnect,
+});
 
 function TemplateCreation() {
-const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector);
+  const { nodes, onNodesChange, onConnect } =
+    useStore(selector);
 
   // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   // const [editState, setEditState] = useState({
@@ -71,7 +65,6 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
   // });
   // const { setViewport, screenToFlowPosition } = useReactFlow();
   // const [rfInstance, setrfInstance] = useState<any>(null);
-  
 
   // const onSave = useCallback(() => {
   //   if (rfInstance != null) {
@@ -114,7 +107,7 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
   //     // setNodes((nds) => nds.concat(newNode));
   //   },
   //   [
-  //     //setNodes, 
+  //     //setNodes,
   //     screenToFlowPosition]
   // );
 
@@ -141,7 +134,8 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
     <div className="row min-vh-100 p-0">
       <div className="d-flex col-sm-auto py-0 m-0">
         <TemplateTools
-          onShapesClick={() => {}
+          onShapesClick={
+            () => {}
             // onAdd({
             //   id: getNodeId(),
             //   position: { x: 0, y: 0 },
@@ -157,7 +151,8 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
             //   },
             // })
           }
-          onTextClick={() => {}
+          onTextClick={
+            () => {}
             // onAdd({
             //   id: getNodeId(),
             //   position: { x: 0, y: 0 },
@@ -170,7 +165,8 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
             //   },
             // })
           }
-          onImageClick={() => {}
+          onImageClick={
+            () => {}
             // onAdd({
             //   id: getNodeId(),
             //   position: { x: 0, y: 0 },
@@ -185,7 +181,8 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
             //   },
             // })
           }
-          onCheckboxClick={() => {}
+          onCheckboxClick={
+            () => {}
             // onAdd({
             //   id: getNodeId(),
             //   position: { x: 0, y: 0 },
@@ -198,7 +195,8 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
             //   },
             // })
           }
-          onNumbersClick={() => {}
+          onNumbersClick={
+            () => {}
             // onAdd({
             //   id: getNodeId(),
             //   position: { x: 0, y: 0 },
@@ -211,7 +209,8 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
             //   // },
             // })
           }
-          onDropdownClick={() => {}
+          onDropdownClick={
+            () => {}
             // onAdd({
             //   id: getNodeId(),
             //   position: { x: 0, y: 0 },
@@ -235,20 +234,17 @@ const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selec
       </div>
       <div className="col-sm-10 p-0 m-0">
         <ReactFlow
-          // defaultNodes={initialNodes}
           minZoom={0.2}
           maxZoom={4}
           fitView
           nodes={nodes}
-          edges={edges}
           onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           proOptions={{ hideAttribution: true }}
         >
           <Background variant={BackgroundVariant.Dots} />
-          <MiniMap nodeColor={nodeColor} zoomable pannable/>
+          <MiniMap nodeColor={nodeColor} zoomable pannable />
           <Controls />
         </ReactFlow>
       </div>

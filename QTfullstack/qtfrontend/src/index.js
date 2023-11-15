@@ -66,7 +66,7 @@ const ClerkWithRoutes = () => {
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<FAQ />} />
         <Route
-          path="/gamedetails/:title"
+          path="/gamedetails"
           element={
             <GameDetails/>
           }

@@ -1,5 +1,4 @@
-import { create } from 'zustand';
-import {shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional';
 import {
   Connection,
   Edge,
@@ -25,23 +24,17 @@ export type RFState = {
   nodes: Node<NodeData>[];
   edges: Edge[];
   onNodesChange: OnNodesChange;
-  onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   updateNodeColor: (nodeId: string, color: string) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-const useStore = create<RFState>((set, get) => ({
+const useStore = createWithEqualityFn<RFState>((set, get) => ({
   nodes: initialNodes,
   edges: initialEdges,
   onNodesChange: (changes: NodeChange[]) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),
-    });
-  },
-  onEdgesChange: (changes: EdgeChange[]) => {
-    set({
-      edges: applyEdgeChanges(changes, get().edges),
     });
   },
   onConnect: (connection: Connection) => {
@@ -61,6 +54,6 @@ const useStore = create<RFState>((set, get) => ({
       }),
     });
   }
-}));
+}), Object.is);
 
 export default useStore;

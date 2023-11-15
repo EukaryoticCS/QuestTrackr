@@ -20,10 +20,10 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             defaultValue={data.color}
             type="color"
             onChange={(e) => updateNodeColor(id, e.target.value)}
-            className="nodrag"
           />
         </div>
       </NodeToolbar>
+      <div className="px-2 text-center" style={{ padding: 20 }} ></div>
     </div>
   );
 };

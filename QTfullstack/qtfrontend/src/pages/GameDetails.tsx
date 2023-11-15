@@ -24,7 +24,7 @@ const GameDetails = () => {
   const [details, setDetails] = useState({_id: "", summary: "", title: "", developers: [""], publishers: [""], releaseYear: 0, platforms: [""], templates: [{title: "", author: ""}]});
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/games/653ede087229563d3aea9984")
+    fetch("http://localhost:5000/api/v1/games/653edec67229563d3aec8d80")
       .then((res) => res.json())
       .then((data) => {console.log(data); setDetails(data)});
   }, []);
