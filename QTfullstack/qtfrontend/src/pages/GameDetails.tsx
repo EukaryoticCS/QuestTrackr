@@ -18,16 +18,18 @@ interface Game {
   releaseYear: number;
   platforms: string[];
   templates: Template[];
+  cover: string
 }
 
 const GameDetails = () => {
-  const [details, setDetails] = useState({_id: "", summary: "", title: "", developers: [""], publishers: [""], releaseYear: 0, platforms: [""], templates: [{title: "", author: ""}]});
+  const [details, setDetails] = useState({_id: "", summary: "", title: "", developers: [""], publishers: [""], releaseYear: 0, platforms: [""], templates: [{title: "", author: ""}], cover: ""});
+  const { gameId } = useParams();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/games/653edec67229563d3aec8d80")
+    fetch("http://localhost:5000/api/v1/games/" + gameId)
       .then((res) => res.json())
       .then((data) => {console.log(data); setDetails(data)});
-  }, []);
+  }, [gameId]);
 
   const arrayDeveloperItems = details.developers.map((developer) => <li>{developer}</li>);
   const arrayPublisherItems = details.publishers.map((publisher) => <li>{publisher}</li>);
@@ -42,7 +44,7 @@ const GameDetails = () => {
           <img
             className="img-fluid card"
             alt=""
-            src="https://i1.theportalwiki.net/img/thumb/b/b8/PortalBoxart.jpg/1024px-PortalBoxart.jpg"
+            src={details.cover}
             height="300"
           />
         </div>

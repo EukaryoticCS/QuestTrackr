@@ -23,7 +23,7 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           />
         </div>
       </NodeToolbar>
-      <div className="px-2 text-center" style={{ backgroundColor: data.color, width: "100%", height: "100%" }} ></div>
+      <div className="px-2 text-center" style={{ backgroundColor: data.color, width: "100%", height: "100%", borderRadius: 15}} ></div>
     </>
   );
 };
