@@ -28,7 +28,7 @@ const GameDetails = () => {
   useEffect(() => {
     fetch("http://localhost:5000/api/v1/games/" + gameId)
       .then((res) => res.json())
-      .then((data) => {console.log(data); setDetails(data)});
+      .then((data) => {setDetails(data)});
   }, [gameId]);
 
   const arrayDeveloperItems = details.developers.map((developer) => <li>{developer}</li>);

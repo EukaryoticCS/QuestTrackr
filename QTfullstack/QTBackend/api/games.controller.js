@@ -5,8 +5,9 @@ export default class GamesCtrl {
     static async apiGetGames(req, res, next) {
         const gamesPerPage = req.query.gamesPerPage ? parseInt(req.query.gamesPerPage, 10) : 20
         const page = req.query.page ? parseInt(req.query.page, 10): 0
+        const title = req.query.title;
 
-        let filters = {}
+        let filters = {title: title}
 
         const {gamesList, totalNumGames} = await GamesDAO.getGames({
             filters,

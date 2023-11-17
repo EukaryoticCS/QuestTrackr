@@ -22,6 +22,7 @@ import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
 import Tracking from "./pages/Tracking.tsx";
 import { ReactFlowProvider } from "reactflow";
+import Search from "./pages/Search.tsx";
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -74,6 +75,7 @@ const ClerkWithRoutes = () => {
         {/* URLs will probably need to change */}
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/search" element={<Search userInputTitle="The Legend of Zelda" />} />
         <Route path="/templatecreate" element={<TemplateCreation />} />
         <Route path="/template/:templateId" element={<TemplateDetails />} />
         <Route path="/track" element={<Tracking />} />

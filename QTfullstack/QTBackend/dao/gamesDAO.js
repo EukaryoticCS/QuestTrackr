@@ -25,14 +25,22 @@ export default class GamesDAO {
 
   static async getGames({ filters = null, page = 0, gamesPerPage = 20 } = {}) {
     let query;
-    if (filters) {
-      //Set query up using filters
+    if (filters.title && filters.title.length > 0) {
+      query = [{
+        $search: {
+          "text": {
+            "path": "title",
+            "query": filters.title,
+            "fuzzy": {},
+          },
+        },
+      }];
     }
 
     let cursor;
 
     try {
-      cursor = await games.find(query);
+      cursor = await games.aggregate(query);
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`);
       return { gamesList: [], totalNumGames: 0 };
@@ -42,7 +50,13 @@ export default class GamesDAO {
 
     try {
       const gamesList = await displayCursor.toArray();
-      const totalNumGames = await games.countDocuments(query);
+
+      gamesList.forEach(async (game) => {
+        game = {...game, imgUrl: await this.getGameCover(game.title)}
+      });
+
+      console.log(gamesList);
+      const totalNumGames = gamesList.length;
 
       return { gamesList, totalNumGames };
     } catch (e) {
@@ -75,7 +89,6 @@ export default class GamesDAO {
 
   static async getGameCover(title) {
     try {
-      console.log(title);
       const igdbGame = await igdb
         .default(
           process.env.TWITCH_CLIENT_ID,
