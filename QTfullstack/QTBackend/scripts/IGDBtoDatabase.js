@@ -19,7 +19,7 @@ async function importGames(offset) {
       "involved_companies.developer",
       "involved_companies.publisher",
       "first_release_date",
-      "cover",
+      "cover.image_id",
     ])
     .limit(500)
     .offset(offset)
@@ -68,24 +68,13 @@ async function importGames(offset) {
       }
     }
 
-    let cover = "";
+    let cover = "/NoCoverFound.png";
     if (responseGame.cover) {
       try {
-        const igdbGameData = await igdb
-          .default(
-            process.env.TWITCH_CLIENT_ID,
-            process.env.TWITCH_APP_ACCESS_TOKEN
-          )
-          .fields(["image_id"])
-          .where(`id=${responseGame.cover}`)
-          .request("/covers");
-
-        if (igdbGameData.data[0]) {
-          cover =
-            "http://images.igdb.com/igdb/image/upload/t_cover_big_2x/" +
-            igdbGameData.data[0].image_id +
-            ".jpg";
-        }
+        cover =
+          "http://images.igdb.com/igdb/image/upload/t_cover_big_2x/" +
+          responseGame.cover.image_id +
+          ".jpg";
       } catch (e) {
         console.log("Error with cover: " + e.message);
       }
@@ -122,17 +111,21 @@ async function addGame(game) {
 }
 
 async function addFiveHundredGames(inputGames) {
-  console.log("Adding batch " + offset / 500 + "!");
-  const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
-  try {
-    const database = client.db("QTDatabase");
-    const games = database.collection("games");
+  if (inputGames.length > 0) {
+    console.log("Adding batch " + offset / 500 + "!");
+    const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
+    try {
+      const database = client.db("QTDatabase");
+      const games = database.collection("games");
 
-    await games.insertMany(inputGames);
-  } catch (e) {
-    console.log(e.message);
-  } finally {
-    await client.close();
+      await games.insertMany(inputGames);
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      await client.close();
+    }
+  } else {
+    console.log("Batch " + offset / 500 + " is empty!");
   }
 }
 
@@ -153,11 +146,12 @@ async function deleteAllButOOT() {
   }
 }
 
-deleteAllButOOT();
-
-while (offset < 300000) {
-  await importGames(offset);
-  offset += 500;
+async function dumpDatabase() {
+  await deleteAllButOOT();
+  while (offset < 300000) {
+    await importGames(offset);
+    offset += 500;
+  }
 }
 
-// deleteAllButOOT()
+dumpDatabase();
