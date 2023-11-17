@@ -51,10 +51,6 @@ export default class GamesDAO {
     try {
       const gamesList = await displayCursor.toArray();
 
-      gamesList.forEach(async (game) => {
-        game = {...game, imgUrl: await this.getGameCover(game.title)}
-      });
-
       console.log(gamesList);
       const totalNumGames = gamesList.length;
 
@@ -79,7 +75,6 @@ export default class GamesDAO {
   static async getGameByGameId(gameId) {
     try {
       let game = await games.findOne({ _id: new ObjectId(gameId) });
-      game = { ...game, cover: await this.getGameCover(game.title) };
       return game;
     } catch (e) {
       console.error(`Error finding game: ` + e.message);
@@ -87,23 +82,23 @@ export default class GamesDAO {
     }
   }
 
-  static async getGameCover(title) {
-    try {
-      const igdbGame = await igdb
-        .default(
-          process.env.TWITCH_CLIENT_ID,
-          process.env.TWITCH_APP_ACCESS_TOKEN
-        )
-        .fields(["cover.image_id"])
-        .where(`name = "${title}"`)
-        .request("/games");
+  // static async getGameCover(title) {
+  //   try {
+  //     const igdbGame = await igdb
+  //       .default(
+  //         process.env.TWITCH_CLIENT_ID,
+  //         process.env.TWITCH_APP_ACCESS_TOKEN
+  //       )
+  //       .fields(["cover.image_id"])
+  //       .where(`name = "${title}"`)
+  //       .request("/games");
 
-      return `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.data[0].cover.image_id}.jpg`;
-    } catch (e) {
-      console.error(`Error finding gameCover: ` + e.message);
-      return null;
-    }
-  }
+  //     return `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.data[0].cover.image_id}.jpg`;
+  //   } catch (e) {
+  //     console.error(`Error finding gameCover: ` + e.message);
+  //     return null;
+  //   }
+  // }
 
   static async updateGame(gameId, gameData) {
     try {

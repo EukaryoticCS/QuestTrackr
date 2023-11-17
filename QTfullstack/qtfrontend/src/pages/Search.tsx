@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import GameCard from '../components/GameCard.tsx';
 
 const Search = ({userInputTitle}) => {
-  const [details, setDetails] = useState([{_id: "", title: "", imgUrl: ""}]);
+  const [details, setDetails] = useState([{_id: "", title: "", cover: ""}]);
 
   useEffect(() => {
     console.log(userInputTitle);
@@ -11,7 +11,7 @@ const Search = ({userInputTitle}) => {
     .then((data) => {console.log(data); setDetails(data.games)})
   }, [userInputTitle])
 
-  const gamesList = details.map(game => <GameCard _id={game._id} title={game.title} imgUrl={game.imgUrl}/>)
+  const gamesList = details.map(game => <GameCard _id={game._id} title={game.title} imgUrl={game.cover}/>)
 
   return (
     <>
