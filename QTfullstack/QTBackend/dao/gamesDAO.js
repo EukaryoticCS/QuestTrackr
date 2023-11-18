@@ -46,10 +46,8 @@ export default class GamesDAO {
       return { gamesList: [], totalNumGames: 0 };
     }
 
-    const displayCursor = cursor.limit(gamesPerPage).skip(gamesPerPage * page);
-
     try {
-      const gamesList = await displayCursor.toArray();
+      const gamesList = await cursor.skip(gamesPerPage * page).limit(gamesPerPage).toArray();
 
       console.log(gamesList);
       const totalNumGames = gamesList.length;

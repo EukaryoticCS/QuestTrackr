@@ -3,7 +3,8 @@ import GamesDAO from "../dao/gamesDAO.js"
 
 export default class GamesCtrl {
     static async apiGetGames(req, res, next) {
-        const gamesPerPage = req.query.gamesPerPage ? parseInt(req.query.gamesPerPage, 10) : 20
+        const gamesPerPage = 20;
+        //const gamesPerPage = req.query.gamesPerPage ? parseInt(req.query.gamesPerPage, 10) : 20
         const page = req.query.page ? parseInt(req.query.page, 10): 0
         const title = req.query.title;
 

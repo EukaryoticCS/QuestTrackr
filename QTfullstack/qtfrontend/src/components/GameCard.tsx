@@ -9,14 +9,17 @@ interface Props {
 
 const GameCard = ({ _id, title, imgUrl }: Props) => {
   return (
-    <Link to={`http://localhost:3000/gamedetails/${_id}`}>
-      <div className="card col-sm-2">
+    <div className="card col-sm-2 my-auto">
+      <Link to={`http://localhost:3000/gamedetails/${_id}`}>
         <img className="card-img" src={imgUrl} alt="game"></img>
-        <div className="card-img-overlay h4">
-          <div className="card-title">{title}</div>
+        <div
+          className="card-img-overlay d-flex text-center h4 m-0"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
+          <div className="card-title mt-auto">{title}</div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 
