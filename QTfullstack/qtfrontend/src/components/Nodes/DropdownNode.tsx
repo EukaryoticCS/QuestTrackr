@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { Dropdown } from "react-bootstrap";
 import { NodeResizer } from "reactflow";
 
 const DropdownNode = ({ data, selected }) => {
+  const [selectedOption, setSelectedOption] = useState("");
+
   return (
     <>
       <NodeResizer
@@ -10,13 +13,22 @@ const DropdownNode = ({ data, selected }) => {
         minWidth={20}
         minHeight={20}
       />
-      <div className="container form-group">
-        <select className="form-select form-select-sm">
-          {data.options.map((option: string) => (
-            <option key={option}>{option}</option>
-          ))}
-        </select>
-      </div>
+        <Dropdown drop="down-centered">
+          <Dropdown.Toggle variant="primary">{selectedOption}</Dropdown.Toggle>
+          <Dropdown.Menu className="">
+            {data.options.map((option: string) => {
+              return (
+                <Dropdown.Item
+                  onClick={() => {
+                    setSelectedOption(option);
+                  }}
+                >
+                  {option}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
     </>
   );
 };

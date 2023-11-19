@@ -11,7 +11,7 @@ import {
   SignedOut,
 } from "@clerk/clerk-react";
 import { dark } from "@clerk/themes";
-import ProtectedPage from "./pages/ProtectedPage.tsx";
+// import ProtectedPage from "./pages/ProtectedPage.tsx";
 import Home from "./pages/Home.tsx";
 import About from "./pages/About.tsx";
 import FAQ from "./pages/FAQ.tsx";
@@ -47,19 +47,6 @@ const ClerkWithRoutes = () => {
           path="/sign-up/*"
           element={
             <SignUp redirectUrl={"/protected"} routing="path" path="/sign-up" />
-          }
-        />
-        <Route
-          path="/protected"
-          element={
-            <>
-              <SignedIn>
-                <ProtectedPage />
-              </SignedIn>
-              <SignedOut>
-                <RedirectToSignIn />
-              </SignedOut>
-            </>
           }
         />
         <Route path="/*" element={<Home />} exact />

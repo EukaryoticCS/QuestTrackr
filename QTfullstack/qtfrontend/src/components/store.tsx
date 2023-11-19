@@ -15,7 +15,10 @@ import {
 } from "reactflow";
 
 export type NodeData = {
+  label: string;
   color: string;
+  textColor: string;
+  total: number;
 };
 
 export type RFState = {
@@ -24,6 +27,7 @@ export type RFState = {
   onNodesChange: OnNodesChange;
   onConnect: OnConnect;
   updateNodeColor: (nodeId: string, color: string) => void;
+  updateTextColor: (nodeId: string, color: string) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -58,6 +62,16 @@ const useStore = createWithEqualityFn<RFState>(
         }),
       });
     },
+    updateTextColor: (nodeId: string, textColor: string) => {
+      set ({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = {...node.data, textColor}
+          }
+          return node;
+        })
+      })
+    }
   }),
   Object.is
 );

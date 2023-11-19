@@ -98,11 +98,11 @@ function TemplateCreation() {
               id: getNodeId(),
               position: { x: center.x, y: center.y },
               type: "textNode",
-              data: { label: "Input Text Here" },
+              data: { label: "Input Text Here", textColor: "#ffffff" },
               style: {
                 fontSize: 15,
-                height: 20,
-                width: 40,
+                height: 30,
+                width: 150,
               },
             });
           }}
@@ -162,7 +162,7 @@ function TemplateCreation() {
             onAdd({
               id: getNodeId(),
               position: { x: center.x, y: center.y },
-              data: { max: 20, color: "#ffffff" },
+              data: { max: 20, textColor: "#ffffff", total: 20 },
               type: "numberNode",
               style: {
                 fontSize: 15,
@@ -184,7 +184,7 @@ function TemplateCreation() {
               id: getNodeId(),
               position: { x: center.x, y: center.y },
               data: {
-                options: ["", "Option 1", "Option 2", "Option 3"],
+                options: ["", "short", "meeeeeediummmm", "loooooooooooooooooooong"],
               },
               type: "dropdownNode",
               style: {
@@ -196,7 +196,7 @@ function TemplateCreation() {
           }}
         />
       </div>
-      <div className="col-sm-10 p-0 m-0">
+      <div className="col p-0 m-0">
         <ReactFlow
           minZoom={0.2}
           maxZoom={4}
@@ -211,37 +211,6 @@ function TemplateCreation() {
           <MiniMap nodeColor={nodeColor} zoomable pannable />
           <Controls />
         </ReactFlow>
-      </div>
-      <div className="col-sm-1 p-0 m-0">
-        Id:{" "}
-        <input
-          type="text"
-          onChange={(e) => {
-            // setEditState((prev) => ({ ...prev, id: e.target.value }));
-          }}
-        />
-        Label:{" "}
-        <input
-          type="text"
-          onChange={(e) => {
-            // setEditState((prev) => ({ ...prev, label: e.target.value }));
-          }}
-        />
-        Color:{" "}
-        <input
-          type="color"
-          onChange={(e) => {
-            // setEditState((prev) => ({ ...prev, background: e.target.value }));
-          }}
-        />
-        Text Color:{" "}
-        <input
-          type="color"
-          onChange={(e) => {
-            // setEditState((prev) => ({ ...prev, color: e.target.value }));
-          }}
-        />
-        {/* <button onClick={onEdit}>Edit node</button> */}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";

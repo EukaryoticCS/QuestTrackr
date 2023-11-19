@@ -5,7 +5,6 @@ import QTFooter from "../components/QTFooter.tsx";
 import TemplateExample from "../assets/jpg/templateExample.jpg";
 import { SignInButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
-import debounce from 'lodash.debounce';
 import Search from "./Search.tsx";
 
 const Home = () => {
