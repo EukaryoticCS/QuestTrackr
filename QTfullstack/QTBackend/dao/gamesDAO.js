@@ -1,7 +1,5 @@
 import mongodb from "mongodb";
 import dotenv from "dotenv";
-import igdb from "igdb-api-node";
-import axios from "axios";
 
 dotenv.config();
 
@@ -26,15 +24,17 @@ export default class GamesDAO {
   static async getGames({ filters = null, page = 0, gamesPerPage = 20 } = {}) {
     let query;
     if (filters.title && filters.title.length > 0) {
-      query = [{
-        $search: {
-          "text": {
-            "path": "title",
-            "query": filters.title,
-            "fuzzy": {},
+      query = [
+        {
+          $search: {
+            text: {
+              path: "title",
+              query: filters.title,
+              fuzzy: {},
+            },
           },
         },
-      }];
+      ];
     }
 
     let cursor;
@@ -47,7 +47,10 @@ export default class GamesDAO {
     }
 
     try {
-      const gamesList = await cursor.skip(gamesPerPage * page).limit(gamesPerPage).toArray();
+      const gamesList = await cursor
+        .skip(gamesPerPage * page)
+        .limit(gamesPerPage)
+        .toArray();
 
       console.log(gamesList);
       const totalNumGames = gamesList.length;
@@ -79,24 +82,6 @@ export default class GamesDAO {
       return null;
     }
   }
-
-  // static async getGameCover(title) {
-  //   try {
-  //     const igdbGame = await igdb
-  //       .default(
-  //         process.env.TWITCH_CLIENT_ID,
-  //         process.env.TWITCH_APP_ACCESS_TOKEN
-  //       )
-  //       .fields(["cover.image_id"])
-  //       .where(`name = "${title}"`)
-  //       .request("/games");
-
-  //     return `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.data[0].cover.image_id}.jpg`;
-  //   } catch (e) {
-  //     console.error(`Error finding gameCover: ` + e.message);
-  //     return null;
-  //   }
-  // }
 
   static async updateGame(gameId, gameData) {
     try {

@@ -1,10 +1,10 @@
-import React from "react";
-// import "bootstrap/dist/js/bootstrap.min.js";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
-function QTNavBar() {
+function QTNavBar({handleInputChange}) {
+
   return (
     <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
       <div className="container-fluid">
@@ -30,6 +30,7 @@ function QTNavBar() {
                 <input
                   className="form-control mx-sm-2"
                   type="search"
+                  onChange={handleInputChange}
                   placeholder="Search"
                 />
               </form>

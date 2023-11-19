@@ -20,6 +20,7 @@ async function importGames(offset) {
       "involved_companies.publisher",
       "first_release_date",
       "cover.image_id",
+      "category",
     ])
     .limit(500)
     .offset(offset)
@@ -82,12 +83,13 @@ async function importGames(offset) {
 
     const game = {
       title: responseGame.name,
-      summary: responseGame.summary ? responseGame.summary : "N/A",
+      summary: responseGame.summary ? responseGame.summary : "",
       developers: developers,
       publishers: publishers,
       releaseYear: isNaN(releaseYear) ? "N/A" : releaseYear,
       platforms: platforms,
       cover: cover,
+      category: responseGame.category,
       templates: [],
     };
 

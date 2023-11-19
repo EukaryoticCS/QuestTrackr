@@ -3,23 +3,7 @@ import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import TemplateCard from "../components/TemplateCard.tsx";
 import { Link, useParams } from "react-router-dom";
-
-interface Template {
-  title: string;
-  author: string;
-  templateData: object;
-}
-
-interface Game {
-  title: string;
-  summary: string;
-  developers: string[];
-  publishers: string[];
-  releaseYear: number;
-  platforms: string[];
-  templates: Template[];
-  cover: string;
-}
+import Search from "./Search.tsx";
 
 const GameDetails = () => {
   const [details, setDetails] = useState({
@@ -34,6 +18,12 @@ const GameDetails = () => {
     cover: "",
   });
   const { gameId } = useParams();
+
+  const [userInputTitle, setUserInputTitle] = useState("");
+
+  const handleInputChange = (e) => {
+    setUserInputTitle(e.target.value);
+  };
 
   useEffect(() => {
     fetch("http://localhost:5000/api/v1/games/" + gameId)
@@ -62,51 +52,59 @@ const GameDetails = () => {
 
   return (
     <div className="p-0">
-      <QTNavBar />
-      <div className="row">
-        <div className="col-md-3 px-0 m-4">
-          <img
-            className="img-fluid card"
-            alt=""
-            src={details.cover}
-            height="300"
-          />
-        </div>
-        <div className="col md-3 m-4">
-          <h2 className="display-1">{details.title}</h2>
-          <div className="row border-primary">
-            <div className="h3">
-              {details.summary}
-              <br />
-              <br />
-              Developer(s):
-              <ul>{arrayDeveloperItems}</ul>
-              Publisher(s):
-              <ul>{arrayPublisherItems}</ul>
-              <br />
-              Release Year: {details.releaseYear}
-              <br />
-              Platforms:
-              <ul>{arrayPlatformItems}</ul>
+      <QTNavBar handleInputChange={handleInputChange} />
+      {userInputTitle !== "" ? (
+        <Search userInputTitle={userInputTitle} />
+      ) : (
+        <>
+          <div className="row">
+            <div className="col-md-3 px-0 m-4">
+              <img
+                className="img-fluid card"
+                alt=""
+                src={details.cover}
+                height="300"
+              />
+            </div>
+            <div className="col md-3 m-4">
+              <h2 className="display-1">{details.title}</h2>
+              <div className="row border-primary">
+                <div className="h3">
+                  {details.summary}
+                  <br />
+                  <br />
+                  Developer(s):
+                  <ul>{arrayDeveloperItems}</ul>
+                  Publisher(s):
+                  <ul>{arrayPublisherItems}</ul>
+                  <br />
+                  Release Year: {details.releaseYear}
+                  <br />
+                  Platforms:
+                  <ul>{arrayPlatformItems}</ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <hr />
-      <div className="row ">
-        <div className="display-1 text-center">Trackr Templates:</div>
-        <div className="card-deck">
-          {arrayTemplateItems.length > 0 ? (
-            arrayTemplateItems
-          ) : (
-            <div className="col text-center">
-              <div className="display-3 text-center">No Templates!</div>
-              <div className="display-5">Make one here:</div>
-              <Link className="btn btn-primary m-2" to="/templatecreate">Create Template</Link>
+          <hr />
+          <div className="row ">
+            <div className="display-1 text-center">Trackr Templates:</div>
+            <div className="card-deck">
+              {arrayTemplateItems.length > 0 ? (
+                arrayTemplateItems
+              ) : (
+                <div className="col text-center">
+                  <div className="display-3 text-center">No Templates!</div>
+                  <div className="display-5">Make one here:</div>
+                  <Link className="btn btn-primary m-2" to="/templatecreate">
+                    Create Template
+                  </Link>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
       <QTFooter />
     </div>
   );

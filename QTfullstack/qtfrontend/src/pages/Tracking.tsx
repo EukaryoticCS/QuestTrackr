@@ -1,15 +1,11 @@
-import React from 'react';
-import QTNavBar from '../components/QTNavBar.tsx';
-import QTFooter from '../components/QTFooter.tsx';
+import React from "react";
 
 const Tracking = () => {
   return (
     <>
-      <QTNavBar/>
-        <div>Tracking Page</div>
-      <QTFooter/>
+      <div>Tracking Page</div>
     </>
   );
-}
+};
 
 export default Tracking;
