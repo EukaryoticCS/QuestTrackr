@@ -20,7 +20,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 import Settings from "./pages/Settings.tsx";
 import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
-import Tracking from "./pages/Tracking.tsx";
+import MyTemplates from "./pages/MyTemplates.tsx";
 import { ReactFlowProvider } from "reactflow";
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
@@ -63,7 +63,7 @@ const ClerkWithRoutes = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/templatecreate" element={<TemplateCreation />} />
         <Route path="/template/:templateId" element={<TemplateDetails />} />
-        <Route path="/track" element={<Tracking />} />
+        <Route path="/mytemplates" element={<MyTemplates />} />
       </Routes>
     </ClerkProvider>
   );

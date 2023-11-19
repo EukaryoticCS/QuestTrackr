@@ -4,21 +4,19 @@ import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import TemplateExample from "../assets/jpg/templateExample.jpg";
 import { SignInButton, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Search from "./Search.tsx";
 
 const Home = () => {
-  const navigate = useNavigate();
-  const handleGoToProfile = () => navigate("/profile");
   const [userInputTitle, setUserInputTitle] = useState("");
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
-  }
+  };
 
   return (
     <>
-      <QTNavBar handleInputChange={handleInputChange}/>
+      <QTNavBar handleInputChange={handleInputChange} />
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
@@ -29,18 +27,18 @@ const Home = () => {
             </h1>
           </div>
           <div className="row my-4">
-            <div className="col-6 text-secondary h1 text-center m-auto">
-              <p>
-                Are you a <u>Completionist?</u>
+            <div className="col-7 text-secondary h1 text-center m-auto">
+              <p className="text-info">
+                Are you a <strong className="display-4 text-secondary font-weight-bold">Completionist?</strong>
                 <br />
                 <br />
-                Want to Track your game completion?
+                Want to Track your <strong className="display-4 text-secondary font-weight-bold">game completion?</strong> 
                 <br />
                 <br />
-                <strong>You've come to the right place.</strong>
+                <strong className="display-3 text-body font-weight-bold">You've come to the right place.</strong>
               </p>
             </div>
-            <div className="col-6 img-fluid float-end card">
+            <div className="col-5 img-fluid float-end card">
               <img alt="" src={TemplateExample} className="mh-50" />
             </div>
           </div>
@@ -78,12 +76,12 @@ const Home = () => {
               <h1 className="text-center">Start Tracking Now!</h1>
             </div>
             <SignedIn>
-              <button
+              <Link
                 className="btn btn-lg btn-secondary col-3 mx-auto"
-                onClick={handleGoToProfile}
+                to="/mytemplates"
               >
-                <h3>Go to Profile</h3>
-              </button>
+                <h3>Go to My Templates</h3>
+              </Link>
             </SignedIn>
             <SignedOut>
               <SignInButton>

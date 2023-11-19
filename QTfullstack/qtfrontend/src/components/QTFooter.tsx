@@ -20,11 +20,11 @@ const QTFooter = () => {
             Home
           </Link>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link to="/features" className="nav-link px-2 text-body-secondary">
             Features
           </Link>
-        </li>
+        </li> */}
         <li className="nav-item">
           <Link to="/faq" className="nav-link px-2 text-body-secondary">
             FAQs

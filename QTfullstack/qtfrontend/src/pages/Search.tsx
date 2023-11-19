@@ -11,7 +11,6 @@ interface Game {
 }
 
 const Search = ({ userInputTitle }) => {
-
   const [details, setDetails] = useState<Array<Game>>([]);
   const [page, setPage] = useState(0);
 

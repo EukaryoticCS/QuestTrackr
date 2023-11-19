@@ -54,6 +54,9 @@ function QTNavBar({handleInputChange}) {
           </ul>
           <div className="nav navbar-nav ml-auto">
             <SignedIn>
+                <Link className="nav-link px-3" to="/mytemplates">
+                  My Templates
+                </Link>
               <UserButton afterSignOutUrl="/"/>
             </SignedIn>
             <SignedOut>
