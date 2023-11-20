@@ -2,16 +2,12 @@ import { createWithEqualityFn } from "zustand/traditional";
 import {
   Connection,
   Edge,
-  EdgeChange,
   Node,
   NodeChange,
   addEdge,
   OnNodesChange,
-  OnEdgesChange,
   OnConnect,
   applyNodeChanges,
-  applyEdgeChanges,
-  XYPosition,
 } from "reactflow";
 
 export type NodeData = {
@@ -45,7 +41,7 @@ const useStore = createWithEqualityFn<RFState>(
         edges: addEdge(connection, get().edges),
       });
     },
-    onAdd: (newNode: Node, position: XYPosition) => {
+    onAdd: (newNode: Node) => {
       set({
         nodes: [...get().nodes, newNode],
       });
@@ -70,8 +66,13 @@ const useStore = createWithEqualityFn<RFState>(
           }
           return node;
         })
-      })
-    }
+      });
+    },
+    restoreNodes: (nodes: Node[]) => {
+      set ({
+        nodes: nodes
+      });
+    },
   }),
   Object.is
 );

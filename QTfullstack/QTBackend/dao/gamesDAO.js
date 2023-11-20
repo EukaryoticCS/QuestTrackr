@@ -5,7 +5,6 @@ dotenv.config();
 
 const ObjectId = mongodb.ObjectId;
 let games;
-let mobykey = process.env.MOBY_GAMES_API_KEY;
 
 export default class GamesDAO {
   static async injectDB(conn) {
@@ -106,23 +105,44 @@ export default class GamesDAO {
     }
   }
 
-  static async addTemplateToGame(gameId, template) {
+  static async addTemplateToGame(gameId, author) {
     try {
-      return await games.updateOne(
+      const templateId = new ObjectId();
+      await games.updateOne(
         { _id: new ObjectId(gameId) },
         {
           $push: {
             templates: {
-              _id: new ObjectId(),
-              title: template.title,
-              author: template.author,
+              _id: templateId,
+              title: `${author}'s Template`,
+              author: author,
+              layout: [],
               sections: [],
             },
           },
         }
       );
+      return templateId;
     } catch (e) {
       console.error(`Error adding template: ` + e.message);
+      return null;
+    }
+  }
+
+  static async updateGameTemplate(gameId, template) {
+    try {
+      return await games.updateOne(
+        {'templates._id': new ObjectId(template._id)},
+        {
+          $set: {
+            "templates.$.title": template.title,
+            "templates.$.layout": template.layout,
+            "templates.$.sections": template.sections
+          }
+        }
+      )
+    }catch (e) {
+      console.error(`Error udpating template: ` + e.message);
       return null;
     }
   }

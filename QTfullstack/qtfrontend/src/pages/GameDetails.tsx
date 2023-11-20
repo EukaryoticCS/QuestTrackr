@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import TemplateCard from "../components/TemplateCard.tsx";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Search from "./Search.tsx";
+import axios from "axios";
 
 const GameDetails = () => {
   const [details, setDetails] = useState({
@@ -14,10 +15,11 @@ const GameDetails = () => {
     publishers: [""],
     releaseYear: 0,
     platforms: [""],
-    templates: [{ title: "", author: "" }],
+    templates: [{ _id: "", title: "", author: "" }],
     cover: "",
   });
   const { gameId } = useParams();
+  const navigate = useNavigate();
 
   const [userInputTitle, setUserInputTitle] = useState("");
 
@@ -33,20 +35,34 @@ const GameDetails = () => {
       });
   }, [gameId]);
 
+  const createTemplate = useCallback(
+    async (gameId) => {
+      const author = "Eukaryotic";
+      const response = await axios.post(
+        `http://localhost:5000/api/v1/games/${gameId}/templates`,
+        { author: author }
+      );
+      const templateId = response.data.templateId;
+      navigate(`/templatecreate/${gameId}/${templateId}`);
+    },
+    [navigate]
+  );
+
   const arrayDeveloperItems = details.developers.map((developer) => (
-    <li>{developer}</li>
+    <li key={developer}>{developer}</li>
   ));
   const arrayPublisherItems = details.publishers.map((publisher) => (
-    <li>{publisher}</li>
+    <li key={publisher}>{publisher}</li>
   ));
   const arrayPlatformItems = details.platforms.map((platform) => (
-    <li>{platform}</li>
+    <li key={platform}>{platform}</li>
   ));
   const arrayTemplateItems = details.templates.map((template) => (
     <TemplateCard
+      templateId={template._id}
+      key={template.title}
       title={template.title}
       author={template.author}
-      imgUrl="templateExample.jpg"
     />
   ));
 
@@ -96,9 +112,12 @@ const GameDetails = () => {
                 <div className="col text-center">
                   <div className="display-3 text-center">No Templates!</div>
                   <div className="display-5">Make one here:</div>
-                  <Link className="btn btn-primary m-2" to="/templatecreate">
+                  <button
+                    className="btn btn-primary m-2"
+                    onClick={() => createTemplate(gameId)}
+                  >
                     Create Template
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>

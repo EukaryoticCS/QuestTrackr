@@ -29,13 +29,13 @@ const Home = () => {
           <div className="row my-4">
             <div className="col-7 text-secondary h1 text-center m-auto">
               <p className="text-info">
-                Are you a <strong className="display-4 text-secondary font-weight-bold">Completionist?</strong>
+                Are you a <strong className="h1 text-secondary font-weight-bold">Completionist?</strong>
                 <br />
                 <br />
-                Want to Track your <strong className="display-4 text-secondary font-weight-bold">game completion?</strong> 
+                Want to Track your <strong className="h1 text-secondary font-weight-bold">game completion?</strong> 
                 <br />
                 <br />
-                <strong className="display-3 text-body font-weight-bold">You've come to the right place.</strong>
+                <i className="h1 text-body" style={{fontFamily: "Arial Black"}}>You've come to the right place.</i>
               </p>
             </div>
             <div className="col-5 img-fluid float-end card">

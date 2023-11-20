@@ -74,9 +74,21 @@ export default class GamesCtrl {
     static async apiAddTemplateToGame(req, res, next) {
         try {
             const gameId = req.params.gameId
+            const author = req.body.author
+
+            const templateId = await GamesDAO.addTemplateToGame(gameId, author) 
+            res.json({ templateId: templateId })
+        } catch (e) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+
+    static async apiUpdateTemplate(req, res, next) {
+        try {
+            const gameId = req.params.gameId
             const template = req.body.templateData
 
-            await GamesDAO.addTemplateToGame(gameId, template) 
+            await GamesDAO.updateGameTemplate(gameId, template)
             res.json({ status: "success" })
         } catch (e) {
             res.status(500).json({ error: e.message })

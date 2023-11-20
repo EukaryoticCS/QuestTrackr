@@ -11,6 +11,7 @@ router.route("/:gameId").get(GamesCtrl.apiGetGameById)
 
 router.route("/:gameId/templates").get(GamesCtrl.apiGetGameTemplates)
                                 .post(GamesCtrl.apiAddTemplateToGame)
+                                .put(GamesCtrl.apiUpdateTemplate)
 
 router.route("/:gameId/templates/:templateId").get(GamesCtrl.apiGetTemplateById)
 

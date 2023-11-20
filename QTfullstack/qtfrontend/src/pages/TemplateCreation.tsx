@@ -1,13 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import ReactFlow, {
   Controls,
   Background,
-  Node,
   BackgroundVariant,
   MiniMap,
-  useNodesState,
   useReactFlow,
-  applyNodeChanges,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import TemplateTools from "../components/TemplateTools.tsx";
@@ -18,8 +15,9 @@ import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import useStore from "../components/store.tsx";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
-const flowKey: string = "example-flow";
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
   switch (node.type) {
@@ -51,11 +49,42 @@ const selector = (state) => ({
   onNodesChange: state.onNodesChange,
   onConnect: state.onConnect,
   onAdd: state.onAdd,
+  restoreNodes: state.restoreNodes,
 });
 
 function TemplateCreation() {
-  const { nodes, onNodesChange, onConnect, onAdd } = useStore(selector);
-  const { setViewport, screenToFlowPosition } = useReactFlow();
+  const { nodes, onNodesChange, onConnect, onAdd, restoreNodes } = useStore(selector);
+  const { screenToFlowPosition } = useReactFlow();
+
+  const { gameId, templateId } = useParams();
+  
+  useEffect(() => {
+    onRestore();
+  }, [])
+
+  const onSave = useCallback(async () => {
+    const response = await axios.put(
+      `http://localhost:5000/api/v1/games/${gameId}/templates`,
+      {
+        templateData: {
+          _id: templateId,
+          title: "Sample React Flow Save/Restore",
+          author: "Eukaryotic",
+          sections: [],
+          layout: nodes,
+        },
+      }
+    );
+    console.log(response.data);
+  }, [nodes, templateId, gameId]);
+
+  const onRestore = useCallback(async () => {
+    const response = await axios.get(
+      `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
+    );
+    console.log(response.data);
+    restoreNodes(response.data.template.layout);
+  }, [restoreNodes]);
 
   return (
     <div className="row min-vh-100 p-0">
@@ -72,6 +101,7 @@ function TemplateCreation() {
 
             onAdd({
               id: getNodeId(),
+              key: getNodeId(),
               position: { x: center.x, y: center.y },
               type: "shapeNode",
               data: { color: "#ffffff" },
@@ -96,6 +126,7 @@ function TemplateCreation() {
 
             onAdd({
               id: getNodeId(),
+              key: getNodeId(),
               position: { x: center.x, y: center.y },
               type: "textNode",
               data: { label: "Input Text Here", textColor: "#ffffff" },
@@ -117,6 +148,7 @@ function TemplateCreation() {
 
             onAdd({
               id: getNodeId(),
+              key: getNodeId(),
               position: { x: center.x, y: center.y },
               data: {
                 img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png",
@@ -140,6 +172,7 @@ function TemplateCreation() {
 
             onAdd({
               id: getNodeId(),
+              key: getNodeId(),
               position: { x: center.x, y: center.y },
               data: {},
               type: "checkboxNode",
@@ -161,8 +194,9 @@ function TemplateCreation() {
 
             onAdd({
               id: getNodeId(),
+              key: getNodeId(),
               position: { x: center.x, y: center.y },
-              data: { max: 20, textColor: "#ffffff", total: 20 },
+              data: { textColor: "#ffffff", total: 20 },
               type: "numberNode",
               style: {
                 fontSize: 15,
@@ -182,9 +216,15 @@ function TemplateCreation() {
 
             onAdd({
               id: getNodeId(),
+              key: getNodeId(),
               position: { x: center.x, y: center.y },
               data: {
-                options: ["", "short", "meeeeeediummmm", "loooooooooooooooooooong"],
+                options: [
+                  "N/A",
+                  "short",
+                  "meeeeeediummmm",
+                  "loooooooooooooooooooong",
+                ],
               },
               type: "dropdownNode",
               style: {
@@ -211,6 +251,10 @@ function TemplateCreation() {
           <MiniMap nodeColor={nodeColor} zoomable pannable />
           <Controls />
         </ReactFlow>
+      </div>
+      <div className="col-1 p-0 m-0">
+        <button onClick={onSave}>Save</button>
+        <button onClick={onRestore}>Restore</button>
       </div>
     </div>
   );

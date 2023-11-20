@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { NodeProps, NodeResizer, NodeToolbar } from "reactflow";
 
@@ -7,28 +7,8 @@ import useStore, { NodeData } from "../store.tsx";
 const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 
 const TextNode = ({ id, data, selected }: NodeProps<NodeData>) => {
-  // const [height, setHeight] = useState(20);
   const [fontSize, setFontSize] = useState(16);
   const updateTextColor = useStore((state) => state.updateTextColor);
-
-  // const observedDiv = useRef<HTMLInputElement>(null);
-
-  // useEffect(() => {
-  //   if (!observedDiv.current) {
-  //     return;
-  //   }
-  //   const resizeObserver = new ResizeObserver(() => {
-  //     if (observedDiv.current!.offsetHeight !== height) {
-  //       setHeight(observedDiv.current!.offsetHeight);
-  //     }
-  //   });
-
-  //   resizeObserver.observe(observedDiv.current);
-
-  //   return function cleanup() {
-  //     resizeObserver.disconnect();
-  //   };
-  // }, [height]);
 
   return (
     <>
@@ -48,6 +28,7 @@ const TextNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             {fontSizes.map((size) => {
               return (
                 <Dropdown.Item
+                  key={size}
                   onClick={() => {
                     setFontSize(size);
                   }}
@@ -106,8 +87,8 @@ const TextNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           fontSize: fontSize,
           color: data.textColor,
         }}
+        defaultValue={data.label}
       >
-        {data.label}
       </textarea>
     </>
   );

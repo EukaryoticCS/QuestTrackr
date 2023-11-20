@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import { NodeProps, NodeResizer, NodeToolbar } from "reactflow";
+import { NodeProps, NodeToolbar } from "reactflow";
 import useStore, { NodeData } from "../store.tsx";
 
 const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 
-const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
+const NumberNode = ({ id, data }: NodeProps<NodeData>) => {
   const [collected, setCollected] = useState(0);
   const [fontSize, setFontSize] = useState(16);
   const updateTextColor = useStore((state) => state.updateTextColor);
@@ -28,6 +28,7 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             {fontSizes.map((size) => {
               return (
                 <Dropdown.Item
+                  key={size}
                   onClick={() => {
                     setFontSize(size);
                   }}
@@ -69,7 +70,11 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
       </NodeToolbar>
       <div
         className="container text-center form-group"
-        style={{ fontSize: fontSize, color: data.textColor }}
+        style={{
+          fontSize: fontSize,
+          color: data.textColor,
+          width: fontSize * 12,
+        }}
       >
         <div className="row">
           <div className="col">Collected:</div>
@@ -81,9 +86,7 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             type="text"
             onChange={(e) => {
               let inputNum = parseInt(e.target.value);
-              setCollected(
-                !isNaN(inputNum) && inputNum > 0 ? inputNum : 0
-              );
+              setCollected(!isNaN(inputNum) && inputNum > 0 ? inputNum : 0);
             }}
             style={{
               fontSize: fontSize,
