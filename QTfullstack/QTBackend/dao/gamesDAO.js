@@ -51,7 +51,6 @@ export default class GamesDAO {
         .limit(gamesPerPage)
         .toArray();
 
-      console.log(gamesList);
       const totalNumGames = gamesList.length;
 
       return { gamesList, totalNumGames };

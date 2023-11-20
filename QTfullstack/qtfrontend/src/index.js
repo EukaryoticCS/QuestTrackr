@@ -62,7 +62,7 @@ const ClerkWithRoutes = () => {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/templatecreate/:gameId/:templateId" element={<TemplateCreation />} />
-        <Route path="/template/:templateId" element={<TemplateDetails />} />
+        <Route path="/:gameId/template/:templateId" element={<TemplateDetails />} />
         <Route path="/mytemplates" element={<MyTemplates />} />
       </Routes>
     </ClerkProvider>

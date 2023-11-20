@@ -63,6 +63,10 @@ function TemplateCreation() {
   }, [])
 
   const onSave = useCallback(async () => {
+    const nodeList = nodes.map((node) => ({
+      ...node,
+      selected: false,
+    }))
     const response = await axios.put(
       `http://localhost:5000/api/v1/games/${gameId}/templates`,
       {
@@ -71,7 +75,7 @@ function TemplateCreation() {
           title: "Sample React Flow Save/Restore",
           author: "Eukaryotic",
           sections: [],
-          layout: nodes,
+          layout: nodeList,
         },
       }
     );

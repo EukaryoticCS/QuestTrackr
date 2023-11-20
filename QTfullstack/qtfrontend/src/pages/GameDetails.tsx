@@ -59,6 +59,7 @@ const GameDetails = () => {
   ));
   const arrayTemplateItems = details.templates.map((template) => (
     <TemplateCard
+      gameId={gameId!}
       templateId={template._id}
       key={template.title}
       title={template.title}

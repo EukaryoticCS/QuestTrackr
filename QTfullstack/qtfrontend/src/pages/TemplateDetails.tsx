@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import Search from "./Search.tsx";
@@ -14,6 +14,7 @@ import ImageNode from "../components/Nodes/ImageNode.tsx";
 import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
+import { useParams } from "react-router-dom";
 
 function nodeColor(node) {
   switch (node.type) {
@@ -49,6 +50,18 @@ const TemplateDetails = () => {
     sections: "",
   });
   const [userInputTitle, setUserInputTitle] = useState("");
+  const { gameId, templateId } = useParams();
+
+  useEffect(() => {
+    console.log("gameId: " + gameId + " templateId: " + templateId)
+    fetch(`http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setDetails(data.template);
+      console.log(data);
+    })
+    console.log(details);
+  }, [gameId, templateId])
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
@@ -61,7 +74,7 @@ const TemplateDetails = () => {
         <Search userInputTitle={userInputTitle} />
       ) : (
         <>
-          <div className="row p-0" style={{ height: "50rem" }}>
+          <div className="row p-0" style={{ height: "38rem" }}>
             <div className="col p-0 m-0">
               <ReactFlow
                 minZoom={0.2}
