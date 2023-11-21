@@ -33,9 +33,15 @@ const About = () => {
                   <h2 className="card-title text-light">Brandon Smith</h2>
                   <h3 className="card-title text-light">Eukaryotic</h3>
                   <p className="card-text text-light">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam tincidunt diam eu mauris tempus mollis. Duis mollis
-                    augue vel mauris tincidunt sollicitudin.
+                    I'm Brandon Smith, a senior at Neumont College of Computer
+                    Science in Salt Lake City, Utah. Neumont requires students
+                    to take a class called "Capstone" where they work on a
+                    project by themselves and create it from start to finish in
+                    10 weeks. I'm a huge data nerd and I love spreadsheets. I've
+                    used spreadsheets to track my completion through the various
+                    Zelda games as I played through them, but I thought a
+                    centralized website to track game progression would be a fun
+                    choice for my Capstone project, so QuestTrackr was born.
                   </p>
                 </div>
               </div>
@@ -46,12 +52,24 @@ const About = () => {
                   <h3 className="card-title text-light">
                     Additional Information
                   </h3>
-                  <ul className="list-group list-group-flush">
+                  <ul className="list-group list-group-flush h4">
                     <li className="list-group-item bg-transparent text-light">
-                      <strong>Email:</strong> brsmith@student.neumont.edu
+                      <strong>Email:</strong> 
+                      <Link to="mailto:brsmith@student.neumont.edu">brsmith@student.neumont.edu
+                      </Link>
+                      
                     </li>
                     <li className="list-group-item bg-transparent text-light">
-                      <strong>GitHub: </strong> <Link to="https://github.com/EukaryoticCS">EukaryoticCS</Link>
+                      <strong>GitHub: </strong>{" "}
+                      <Link to="https://github.com/EukaryoticCS">
+                        EukaryoticCS
+                      </Link>
+                    </li>
+                    <li className="list-group-item bg-transparent text-light">
+                      <strong>LinkedIn: </strong>
+                      <Link to="https://www.linkedin.com/in/eukaryoticcs/">
+                        LinkedIn
+                      </Link>
                     </li>
                   </ul>
                 </div>

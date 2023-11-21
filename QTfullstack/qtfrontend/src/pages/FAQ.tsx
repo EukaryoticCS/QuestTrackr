@@ -18,7 +18,6 @@ const FAQ = () => {
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
-        
         <Accordion>
           {/* FAQ layout adapted from ChatGPT */}
           <Accordion.Item eventKey="0">
@@ -86,7 +85,9 @@ const FAQ = () => {
               Trackr Templates made by other users for that game. If there are,
               you can click on a Template to check out the details, then save it
               to your profile. If there aren't any templates (or none that you
-              like), feel free to make your own template!
+              like), feel free to make your own template! Once you've saved a
+              template to your profile, just go to your profile page, click on
+              the template, and start tracking!
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="6">

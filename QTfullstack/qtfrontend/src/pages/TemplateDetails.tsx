@@ -53,15 +53,17 @@ const TemplateDetails = () => {
   const { gameId, templateId } = useParams();
 
   useEffect(() => {
-    console.log("gameId: " + gameId + " templateId: " + templateId)
-    fetch(`http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`)
-    .then((res) => res.json())
-    .then((data) => {
-      setDetails(data.template);
-      console.log(data);
-    })
+    console.log("gameId: " + gameId + " templateId: " + templateId);
+    fetch(
+      `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setDetails(data.template);
+        console.log(data);
+      });
     console.log(details);
-  }, [gameId, templateId])
+  }, [gameId, templateId]);
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
@@ -75,7 +77,7 @@ const TemplateDetails = () => {
       ) : (
         <>
           <div className="row p-0" style={{ height: "38rem" }}>
-            <div className="col p-0 m-0">
+            <div className="col d-flex p-0 m-0">
               <ReactFlow
                 minZoom={0.2}
                 maxZoom={4}
@@ -90,6 +92,15 @@ const TemplateDetails = () => {
                 <MiniMap nodeColor={nodeColor} zoomable pannable />
                 <Controls showInteractive={false} />
               </ReactFlow>
+            </div>
+            <div className="col-sm-4 p-2 m-2 bg-dark">
+              <strong className="display-4">{details.title}</strong>
+              <h2>
+                <strong>By:</strong> {details.author}
+              </h2>
+              <div>
+                <div className="btn btn-primary">Add to Profile</div>
+              </div>
             </div>
           </div>
         </>
