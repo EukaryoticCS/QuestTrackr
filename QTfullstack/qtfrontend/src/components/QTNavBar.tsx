@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 function QTNavBar({handleInputChange}) {
 
@@ -48,7 +47,7 @@ function QTNavBar({handleInputChange}) {
             </li>
           </ul>
           <div className="nav navbar-nav ml-auto">
-            <SignedIn>
+            {/* <SignedIn>
                 <Link className="nav-link px-3" to="/mytemplates">
                   My Templates
                 </Link>
@@ -60,7 +59,7 @@ function QTNavBar({handleInputChange}) {
                   Login/Register
                 </button>
               </SignInButton>
-            </SignedOut>
+            </SignedOut> */}
           </div>
         </div>
       </div>

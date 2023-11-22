@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import TemplateExample from "../assets/jpg/templateExample.jpg";
-import { SignInButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import Search from "./Search.tsx";
 
@@ -75,7 +74,7 @@ const Home = () => {
             <div>
               <h1 className="text-center">Start Tracking Now!</h1>
             </div>
-            <SignedIn>
+            {/* <SignedIn>
               <Link
                 className="btn btn-lg btn-secondary col-3 mx-auto"
                 to="/mytemplates"
@@ -92,7 +91,7 @@ const Home = () => {
                   <h3>Login/Register</h3>
                 </button>
               </SignInButton>
-            </SignedOut>
+            </SignedOut> */}
           </div>
         </div>
       )}
