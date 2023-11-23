@@ -6,11 +6,40 @@ import games from "./api/games.route.js";
 import supertokens from "supertokens-node";
 import Session from "supertokens-node/recipe/session/index.js";
 import ThirdPartyEmailPassword from "supertokens-node/recipe/thirdpartyemailpassword/index.js";
-import { middleware, errorHandler } from "supertokens-node/framework/express/index.js";
+import EmailPassword from "supertokens-node/recipe/emailpassword/index.js";
+import {
+  middleware,
+  errorHandler,
+} from "supertokens-node/framework/express/index.js";
 import Dashboard from "supertokens-node/recipe/dashboard/index.js";
 import EmailVerification from "supertokens-node/recipe/emailverification/index.js";
 
 dotenv.config();
+
+let emailUserMap = {};
+
+async function getUserUsingEmail(email) {
+  // TODO: Check your database for if the email is associated with a user
+  // and return that user ID if it is.
+
+  // this is just a placeholder implementation
+  return emailUserMap[email];
+}
+
+async function saveEmailForUser(email, userId) {
+  // TODO: Save email and userId mapping
+
+  // this is just a placeholder implementation
+  emailUserMap[email] = userId;
+}
+
+function isInputEmail(input) {
+  return (
+    input.match(
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    ) !== null
+  );
+}
 
 supertokens.init({
   framework: "express",
@@ -28,6 +57,25 @@ supertokens.init({
   },
   recipeList: [
     ThirdPartyEmailPassword.init({
+      signUpFeature: {
+        formFields: [
+          {
+            id: "email",
+            validate: async (value) => {
+              if (typeof value !== "string") {
+                return "Please provide a string input.";
+              }
+              // since it's not an email, we check for if it's a correct username
+              if (value.length < 3) {
+                return "Usernames must be at least 3 characters long.";
+              }
+              if (!value.match(/^[a-zA-Z0-9_-]+$/)) {
+                return "Username must contain only alphanumeric, underscore or hyphen characters.";
+              }
+            },
+          },
+        ],
+      },
       // We have provided you with development keys which you can use for testing.
       // IMPORTANT: Please replace them with your own OAuth keys for production use.
       providers: [
@@ -74,9 +122,6 @@ supertokens.init({
     }),
     Session.init(), // initializes session features
     Dashboard.init(),
-    EmailVerification.init({
-      mode: "OPTIONAL",
-    }),
   ],
 });
 

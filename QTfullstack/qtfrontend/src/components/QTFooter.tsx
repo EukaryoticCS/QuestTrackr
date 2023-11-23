@@ -35,14 +35,6 @@ const QTFooter = () => {
             About
           </Link>
         </li>
-        <li className="nav-item">
-          <Link
-            to="/privacy"
-            className="nav-link px-2 text-body-secondary"
-          >
-            Privacy
-          </Link>
-        </li>
       </ul>
     </footer>
   );

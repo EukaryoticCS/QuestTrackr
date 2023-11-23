@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
+import Session from "supertokens-auth-react/recipe/session";
+import { doesSessionExist } from "supertokens-auth-react/recipe/session";
 
-function QTNavBar({handleInputChange}) {
+function QTNavBar({ handleInputChange }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    async function checkIfLoggedIn() {
+      setIsLoggedIn(await doesSessionExist());
+    }
+    checkIfLoggedIn();
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
@@ -47,19 +57,27 @@ function QTNavBar({handleInputChange}) {
             </li>
           </ul>
           <div className="nav navbar-nav ml-auto">
-            {/* <SignedIn>
+            {isLoggedIn ? (
+              <>
                 <Link className="nav-link px-3" to="/mytemplates">
                   My Templates
                 </Link>
-              <UserButton afterSignOutUrl="/"/>
-            </SignedIn>
-            <SignedOut>
-              <SignInButton>
-                <button type="button" className="btn btn-secondary">
-                  Login/Register
-                </button>
-              </SignInButton>
-            </SignedOut> */}
+                <Link
+                  to="/"
+                  className="btn nav navbar-nav ml-auto"
+                  onClick={() => {
+                    Session.signOut();
+                    setIsLoggedIn(false);
+                  }}
+                >
+                  Log out
+                </Link>
+              </>
+            ) : (
+              <Link to="/auth" className="btn btn-secondary">
+                Login/Register
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -6,13 +6,14 @@ import Home from "./pages/Home.tsx";
 import About from "./pages/About.tsx";
 import FAQ from "./pages/FAQ.tsx";
 import GameDetails from "./pages/GameDetails.tsx";
-import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 import Settings from "./pages/Settings.tsx";
 import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
 import MyTemplates from "./pages/MyTemplates.tsx";
 import { ReactFlowProvider } from "reactflow";
-import SuperTokens, { SuperTokensWrapper } from "supertokens-auth-react/index.js";
+import SuperTokens, {
+  SuperTokensWrapper,
+} from "supertokens-auth-react/index.js";
 import { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react/ui/index.js";
 import ThirdPartyEmailPassword, {
   Github,
@@ -22,7 +23,6 @@ import ThirdPartyEmailPassword, {
 } from "supertokens-auth-react/recipe/thirdpartyemailpassword/index.js";
 import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 import Session from "supertokens-auth-react/recipe/session/index.js";
-import EmailVerification from "supertokens-auth-react/recipe/emailverification/index.js";
 
 SuperTokens.init({
   appInfo: {
@@ -33,9 +33,38 @@ SuperTokens.init({
     apiBasePath: "/auth",
     websiteBasePath: "/auth",
   },
+  languageTranslations: {
+    translations: {
+      en: {
+        EMAIL_PASSWORD_EMAIL_LABEL: "Username",
+      },
+    },
+  },
   recipeList: [
     ThirdPartyEmailPassword.init({
       signInAndUpFeature: {
+        signInForm: {
+          formFields: [
+            {
+              id: "email",
+              label: "Username",
+              placeholder: "Username",
+            },
+          ],
+        },
+        signUpForm: {
+          formFields: [
+            {
+              id: "email",
+              label: "Username",
+              placeholder: "Username",
+              validate: async (input) => {
+                // the backend validates this anyway. So nothing required here
+                return undefined;
+              },
+            },
+          ],
+        },
         providers: [
           Github.init(),
           Google.init(),
@@ -45,9 +74,6 @@ SuperTokens.init({
       },
     }),
     Session.init(),
-    EmailVerification.init({
-      mode: "REQUIRED", // or "OPTIONAL"
-    }),
   ],
 });
 
@@ -69,7 +95,6 @@ root.render(
               path="/gamedetails/:gameId"
               element={<GameDetails />}
             />
-            <reactRouterDom.Route path="/privacy" element={<PrivacyPolicy />} />
             <reactRouterDom.Route path="/settings" element={<Settings />} />
             <reactRouterDom.Route
               path="/templatecreate/:gameId/:templateId"

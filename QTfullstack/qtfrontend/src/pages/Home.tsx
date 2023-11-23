@@ -1,17 +1,27 @@
-import React, { useState } from "react";
-// import "bootswatch/dist/vapor/bootstrap.min.css";
+import React, { useEffect, useState } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import TemplateExample from "../assets/jpg/templateExample.jpg";
 import { Link } from "react-router-dom";
 import Search from "./Search.tsx";
+import Session from "supertokens-auth-react/recipe/session"
+import { doesSessionExist } from "supertokens-auth-react/recipe/session";
 
 const Home = () => {
   const [userInputTitle, setUserInputTitle] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const sessionContext = Session.useSessionContext();
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
   };
+
+  useEffect(() => {
+    async function checkIfLoggedIn() {
+      setIsLoggedIn(await doesSessionExist());
+    }
+    checkIfLoggedIn();
+  }, [sessionContext]);
 
   return (
     <>
@@ -28,13 +38,24 @@ const Home = () => {
           <div className="row my-4">
             <div className="col-7 text-secondary h1 text-center m-auto">
               <p className="text-info">
-                Are you a <strong className="h1 text-secondary font-weight-bold">Completionist?</strong>
+                Are you a{" "}
+                <strong className="h1 text-secondary font-weight-bold">
+                  Completionist?
+                </strong>
                 <br />
                 <br />
-                Want to Track your <strong className="h1 text-secondary font-weight-bold">game completion?</strong> 
+                Want to Track your{" "}
+                <strong className="h1 text-secondary font-weight-bold">
+                  game completion?
+                </strong>
                 <br />
                 <br />
-                <i className="h1 text-body" style={{fontFamily: "Arial Black"}}>You've come to the right place.</i>
+                <i
+                  className="h1 text-body"
+                  style={{ fontFamily: "Arial Black" }}
+                >
+                  You've come to the right place.
+                </i>
               </p>
             </div>
             <div className="col-5 img-fluid float-end card">
@@ -74,24 +95,21 @@ const Home = () => {
             <div>
               <h1 className="text-center">Start Tracking Now!</h1>
             </div>
-            {/* <SignedIn>
+            {isLoggedIn ? (
               <Link
                 className="btn btn-lg btn-secondary col-3 mx-auto"
                 to="/mytemplates"
               >
                 <h3>Go to My Templates</h3>
               </Link>
-            </SignedIn>
-            <SignedOut>
-              <SignInButton>
-                <button
-                  type="button"
-                  className="btn btn-lg btn-secondary col-3 mx-auto"
-                >
-                  <h3>Login/Register</h3>
-                </button>
-              </SignInButton>
-            </SignedOut> */}
+            ) : (
+              <Link
+                to="/auth"
+                className="btn btn-lg btn-secondary col-3 mx-auto"
+              >
+                <h3>Login/Register</h3>
+              </Link>
+            )}
           </div>
         </div>
       )}
