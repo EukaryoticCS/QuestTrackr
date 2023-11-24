@@ -1,18 +1,27 @@
-import express from "express"
-import UsersCtrl from "./users.controller.js"
+import express from "express";
+import UsersCtrl from "./users.controller.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.route("/").get(UsersCtrl.apiGetUsers)
-                .post(UsersCtrl.apiCreateUser)
+router.route("/").get(UsersCtrl.apiGetUsers).post(UsersCtrl.apiCreateUser);
 
-router.route("/:username").get(UsersCtrl.apiGetUserByUsername)
-                        .put(UsersCtrl.apiChangeUserProfile)
+router
+  .route("/:username")
+  .get(UsersCtrl.apiGetUserByUsername)
+  .put(UsersCtrl.apiChangeUserProfile);
 
-router.route("/:username/templates").get(UsersCtrl.apiGetUserTemplates)
-                                    .post(UsersCtrl.apiAddTemplateToProfile)
+router
+  .route("/supertokens/:supertokensId")
+  .get(UsersCtrl.apiGetUserBySuperTokensId);
 
-router.route("/:username/templates/:templateId").get(UsersCtrl.apiGetTrackingTemplate)
-                                                .patch(UsersCtrl.apiTrackTemplate)
+router
+  .route("/:username/templates")
+  .get(UsersCtrl.apiGetUserTemplates)
+  .post(UsersCtrl.apiAddTemplateToProfile);
 
-export default router
+router
+  .route("/:username/templates/:templateId")
+  .get(UsersCtrl.apiGetTrackingTemplate)
+  .patch(UsersCtrl.apiTrackTemplate);
+
+export default router;

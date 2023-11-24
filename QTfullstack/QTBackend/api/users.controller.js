@@ -28,11 +28,11 @@ export default class UsersCtrl {
 
   static async apiCreateUser(req, res, next) {
     try {
-      const id = req.body.id;
+      const supertokensId = req.body.supertokensId;
       const username = req.body.username;
 
       const UserResponse = await UsersDAO.createUser(
-        new User(id, username)
+        new User(supertokensId, username)
       );
 
       res.json({ UserResponse });
@@ -45,6 +45,13 @@ export default class UsersCtrl {
     const username = req.params.username;
 
     const user = await UsersDAO.getUserByUsername(username);
+    res.json(user);
+  }
+
+  static async apiGetUserBySuperTokensId(req, res, next) {
+    const supertokensId = req.params.supertokensId;
+
+    const user = await UsersDAO.getUserBySuperTokensId(supertokensId);
     res.json(user);
   }
 

@@ -80,13 +80,10 @@ SuperTokens.init({
             context.user.loginMethods.length === 1
           ) {
             //New sign up -- add to DB
-            console.log("New user!");
-            console.log(context.user);
-            const response = await axios.post(
-              `http://localhost:5000/api/v1/users`,
-              {id: context.user.id,
-              username: context.user.emails[0]}
-            );
+            await axios.post(`http://localhost:5000/api/v1/users`, {
+              supertokensId: context.user.id,
+              username: context.user.emails[0],
+            });
           } else {
             //Sign in
           }

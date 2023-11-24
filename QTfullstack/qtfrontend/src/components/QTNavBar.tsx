@@ -4,17 +4,26 @@ import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 import Session from "supertokens-auth-react/recipe/session";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { doesSessionExist } from "supertokens-auth-react/recipe/session";
+import axios from "axios";
 
 function QTNavBar({ handleInputChange }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState();
+  const [user, setUser] = useState({username: "", profile: {profilePicture: ""}});
 
   useEffect(() => {
     async function checkIfLoggedIn() {
-      setIsLoggedIn(await doesSessionExist());
+      const userIsLoggedIn = await doesSessionExist();
+      setIsLoggedIn(userIsLoggedIn);
+
+      if (userIsLoggedIn) {
+        const userId = await Session.getUserId();
+        const response = await axios.get(
+          `http://localhost:5000/api/v1/users/supertokens/${userId}`
+        );
+        setUser(response.data);
+      }
     }
     checkIfLoggedIn();
-    
   }, []);
 
   return (
@@ -56,35 +65,39 @@ function QTNavBar({ handleInputChange }) {
               <Link className="nav-link" to="/faq">
                 FAQ
               </Link>
-              {/* Should FAQ even go here? */}
             </li>
           </ul>
-          <div className="nav navbar-nav ml-auto">
-            {isLoggedIn ? (
-              <>
-                <Link className="nav-link px-3" to="/mytemplates">
-                  My Templates
-                </Link>
-                <Link className="nav-link px-3" to={`/profile/${}`}>
-                  Profile
-                </Link>
+        </div>
+        <div className="navbar-nav ml-auto">
+          {isLoggedIn ? (
+            <ul className="navbar-nav ml-auto align-items-center">
+              <li className="nav-item">
                 <Link
-                  to="/"
-                  className="nav-link px-3"
-                  onClick={() => {
-                    Session.signOut();
-                    setIsLoggedIn(false);
-                  }}
-                >
-                  Log out
-                </Link>
-              </>
-            ) : (
-              <Link to="/auth" className="btn btn-secondary">
-                Login/Register
+                to="/"
+                className="nav-link px-3"
+                onClick={() => {
+                  Session.signOut();
+                  setIsLoggedIn(false);
+                }}
+              >
+                Logout
               </Link>
-            )}
-          </div>
+              </li>
+              
+              <Link className="nav-link px-3" to={`/profile/${user.username}`}>
+                <img
+                  alt=""
+                  src={user.profile.profilePicture}
+                  height="50"
+                  style={{ borderRadius: "50%" }}
+                />
+              </Link>
+            </ul>
+          ) : (
+            <Link to="/auth" className="btn btn-secondary">
+              Login/Register
+            </Link>
+          )}
         </div>
       </div>
     </nav>

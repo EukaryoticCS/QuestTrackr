@@ -100,7 +100,7 @@ const Home = () => {
                 className="btn btn-lg btn-secondary col-3 mx-auto"
                 to="/mytemplates"
               >
-                <h3>Go to My Templates</h3>
+                <h3>Go to My Profile</h3>
               </Link>
             ) : (
               <Link
