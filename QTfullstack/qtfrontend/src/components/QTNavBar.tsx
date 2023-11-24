@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 import Session from "supertokens-auth-react/recipe/session";
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { doesSessionExist } from "supertokens-auth-react/recipe/session";
 
 function QTNavBar({ handleInputChange }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState();
 
   useEffect(() => {
     async function checkIfLoggedIn() {
       setIsLoggedIn(await doesSessionExist());
     }
     checkIfLoggedIn();
+    
   }, []);
 
   return (
@@ -62,9 +65,12 @@ function QTNavBar({ handleInputChange }) {
                 <Link className="nav-link px-3" to="/mytemplates">
                   My Templates
                 </Link>
+                <Link className="nav-link px-3" to={`/profile/${}`}>
+                  Profile
+                </Link>
                 <Link
                   to="/"
-                  className="btn nav navbar-nav ml-auto"
+                  className="nav-link px-3"
                   onClick={() => {
                     Session.signOut();
                     setIsLoggedIn(false);

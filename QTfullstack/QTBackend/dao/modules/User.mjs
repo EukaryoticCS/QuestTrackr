@@ -1,13 +1,10 @@
 class User {
-    constructor(email, username, password) {
-        this.email = email
-        this.username = username
-        this.password = password
-        this.profile = {} //This will be an object with things like bio, age, etc.
-        this.templates = []
-        this.createdAt = new Date() //today
-        this.roles = ['user']
-    }
+  constructor(id, username) {
+    this.id = id;
+    this.username = username;
+    this.profile = {}; //This will be an object with things like bio, age, etc.
+    this.templates = [];
+  }
 }
 
-export default User
+export default User;

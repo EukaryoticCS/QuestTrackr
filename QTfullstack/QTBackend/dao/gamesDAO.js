@@ -113,6 +113,7 @@ export default class GamesDAO {
           $push: {
             templates: {
               _id: templateId,
+              gameId: gameId,
               title: `${author}'s Template`,
               author: author,
               layout: [],

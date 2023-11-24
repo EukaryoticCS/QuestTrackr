@@ -9,7 +9,7 @@ import GameDetails from "./pages/GameDetails.tsx";
 import Settings from "./pages/Settings.tsx";
 import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
-import MyTemplates from "./pages/MyTemplates.tsx";
+import Profile from "./pages/Profile.tsx";
 import { ReactFlowProvider } from "reactflow";
 import SuperTokens, {
   SuperTokensWrapper,
@@ -23,6 +23,7 @@ import ThirdPartyEmailPassword, {
 } from "supertokens-auth-react/recipe/thirdpartyemailpassword/index.js";
 import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 import Session from "supertokens-auth-react/recipe/session/index.js";
+import axios from "axios";
 
 SuperTokens.init({
   appInfo: {
@@ -72,6 +73,25 @@ SuperTokens.init({
           Apple.init(),
         ],
       },
+      onHandleEvent: async (context) => {
+        if (context.action === "SUCCESS") {
+          if (
+            context.isNewRecipeUser &&
+            context.user.loginMethods.length === 1
+          ) {
+            //New sign up -- add to DB
+            console.log("New user!");
+            console.log(context.user);
+            const response = await axios.post(
+              `http://localhost:5000/api/v1/users`,
+              {id: context.user.id,
+              username: context.user.emails[0]}
+            );
+          } else {
+            //Sign in
+          }
+        }
+      },
     }),
     Session.init(),
   ],
@@ -105,8 +125,8 @@ root.render(
               element={<TemplateDetails />}
             />
             <reactRouterDom.Route
-              path="/mytemplates"
-              element={<MyTemplates />}
+              path="/profile/:username"
+              element={<Profile />}
             />
           </reactRouterDom.Routes>
         </SuperTokensWrapper>
