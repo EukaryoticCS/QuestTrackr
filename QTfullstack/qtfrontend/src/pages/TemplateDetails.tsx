@@ -75,7 +75,7 @@ const TemplateDetails = () => {
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
-        <>
+        <div className="container-fluid">
           <div className="row p-0" style={{ height: "38rem" }}>
             <div className="col d-flex p-0 m-0">
               <ReactFlow
@@ -103,7 +103,7 @@ const TemplateDetails = () => {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
 
       <QTFooter />

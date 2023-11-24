@@ -73,7 +73,7 @@ const GameDetails = () => {
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
-        <>
+        <div className="container-fluid">
           <div className="row">
             <div className="col-md-3 px-0 m-4">
               <img
@@ -123,7 +123,7 @@ const GameDetails = () => {
               )}
             </div>
           </div>
-        </>
+        </div>
       )}
       <QTFooter />
     </div>

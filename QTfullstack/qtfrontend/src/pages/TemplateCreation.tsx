@@ -91,7 +91,7 @@ function TemplateCreation() {
   }, [restoreNodes]);
 
   return (
-    <div className="row min-vh-100 p-0">
+    <div className="row min-vh-100 p-0 container-fluid">
       <div className="d-flex col-sm-auto py-0 m-0">
         <TemplateTools
           onShapesClick={() => {

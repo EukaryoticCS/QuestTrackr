@@ -29,9 +29,9 @@ const Home = () => {
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
-        <div>
+        <div className="container-fluid">
           <div className="row">
-            <h1 className="display-1 text-body text-center m-3">
+            <h1 className="display-1 text-body text-center my-3">
               Welcome to QuestTrackr!
             </h1>
           </div>

@@ -89,7 +89,7 @@ function QTNavBar({ handleInputChange }) {
                   alt=""
                   src={user.profile.profilePicture}
                   height="50"
-                  style={{ borderRadius: "50%" }}
+                  className="rounded-circle"
                 />
               </Link>
             </ul>
