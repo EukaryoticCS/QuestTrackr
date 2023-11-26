@@ -105,24 +105,9 @@ const Tracking = () => {
                 <Controls showInteractive={false} />
               </ReactFlow>
             </div>
-            <div className="col-sm-4 p-2 m-2 bg-dark">
-              <strong className="display-4">{details.title}</strong>
-              <h2>
-                <strong>By:</strong> {details.author}
-              </h2>
-              <div>
-                <button
-                  className="btn btn-primary"
-                  onClick={handleAddToProfile}
-                >
-                  Add to Profile
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}
-
       <QTFooter />
     </>
   );

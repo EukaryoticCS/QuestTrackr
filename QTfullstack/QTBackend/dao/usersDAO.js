@@ -68,81 +68,96 @@ export default class UsersDAO {
     try {
       return await users.findOne({ supertokensId: supertokensId });
     } catch (e) {
-      console.error
+      console.error;
     }
   }
 
   static async updateUser(username, profile) {
-    return await users.findOneAndUpdate(
-      { username: username },
-      { $set: { profile: profile } }
-    );
-  }
-
-  static async getUserTemplates(username) {
-    const user = await this.getUserByUsername(username);
-    return user.templates;
-  }
-
-  static async addTemplateToProfile(username, template) {
-    template._id = new ObjectId();
-    return await users.findOneAndUpdate(
-      { username: username },
-      { $push: { templates: template } }
-    );
-  }
-
-  static async getTrackingTemplate(username, templateId) {
-    const user = await this.getUserByUsername(username);
-    const id = new ObjectId(templateId);
-    return user.templates.find((template) => id.equals(template._id));
-  }
-
-  static async trackTemplate(username, templateId, checkUpdate) {
-    const id = new ObjectId(templateId);
-    let update;
-    if (checkUpdate.selected) {
-      update = {
-        $set: {
-          "templates.$[template].sections.$[section].checks.$[check].selected":
-            checkUpdate.selected,
-        },
-      };
-    } else if (checkUpdate.completed) {
-      update = {
-        $set: {
-          "templates.$[template].sections.$[section].checks.$[check].completed":
-            checkUpdate.completed,
-        },
-      };
-    } else {
-      //if checkUpdate.collected
-      update = {
-        $set: {
-          "templates.$[template].sections.$[section].checks.$[check].collected":
-            checkUpdate.collected,
-        },
-      };
-    }
-
-    return await users.updateOne({ username: username }, update, {
-      returnOriginal: false,
-      arrayFilters: [
-        { "template._id": id },
-        { "section.title": checkUpdate.section },
-        { "check.name": checkUpdate.name },
-      ],
-    });
-  }
-
-  static async validateUserEmail(username) {
     try {
       return await users.findOneAndUpdate(
         { username: username },
-        { $set: { validate: true } }
+        { $set: { profile: profile } }
       );
     } catch (e) {
-      console.log("Error validating email in UsersDAO: " + e.message);
+      console.error("Error updating user: " + e.message);
+      return null;
+    }
+  }
+
+  static async getUserTemplates(username) {
+    //Do I still need this method?
+    try {
+      const user = await this.getUserByUsername(username);
+      return user.templates;
+    } catch (e) {
+      console.error("Error getting user templates: " + e.message);
+      return null;
+    }
+  }
+
+  static async addTemplateToProfile(username, template) {
+    try {
+      template._id = new ObjectId();
+      return await users.findOneAndUpdate(
+        { username: username },
+        { $push: { templates: template } }
+      );
+    } catch (e) {
+      console.error("Error adding template to profile: " + e.message);
+      return null;
+    }
+  }
+
+  static async getTrackingTemplate(username, templateId) {
+    try {
+      const user = await this.getUserByUsername(username);
+      const id = new ObjectId(templateId);
+      return user.templates.find((template) => id.equals(template._id));
+    } catch (e) {
+      console.error("Error getting tracking template: " + e.message);
+      return null;
+    }
+  }
+
+  static async trackTemplate(username, templateId, checkUpdate) {
+    try {
+      const id = new ObjectId(templateId);
+      let update;
+      if (checkUpdate.selected) {
+        update = {
+          $set: {
+            "templates.$[template].sections.$[section].checks.$[check].selected":
+              checkUpdate.selected,
+          },
+        };
+      } else if (checkUpdate.completed) {
+        update = {
+          $set: {
+            "templates.$[template].sections.$[section].checks.$[check].completed":
+              checkUpdate.completed,
+          },
+        };
+      } else {
+        //if checkUpdate.collected
+        update = {
+          $set: {
+            "templates.$[template].sections.$[section].checks.$[check].collected":
+              checkUpdate.collected,
+          },
+        };
+      }
+
+      return await users.updateOne({ username: username }, update, {
+        returnOriginal: false,
+        arrayFilters: [
+          { "template._id": id },
+          { "section.title": checkUpdate.section },
+          { "check.name": checkUpdate.name },
+        ],
+      });
+    } catch (e) {
+      console.error("Error adding check: " + e.message);
+      return null;
     }
   }
 }

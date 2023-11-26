@@ -94,7 +94,6 @@ export default class UsersCtrl {
       username,
       templateId
     );
-    console.log(trackingTemplate);
     res.json({ trackingTemplate });
   }
 
@@ -107,15 +106,6 @@ export default class UsersCtrl {
       await UsersDAO.trackTemplate(username, templateId, checkUpdate);
       res.json({ status: "success" });
     } catch (e) {
-      res.status(500).json({ error: e.message });
-    }
-  }
-
-  static async apiValidateUserEmail(req, res, next) {
-    try {
-      UsersDAO.validateUserEmail(req.params.username);
-      res.json({ status: "success" });
-    } catch {
       res.status(500).json({ error: e.message });
     }
   }
