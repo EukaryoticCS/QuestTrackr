@@ -21,6 +21,7 @@ async function importGames(offset) {
       "first_release_date",
       "cover.image_id",
       "category",
+      "keywords.name",
     ])
     .limit(500)
     .offset(offset)
@@ -29,6 +30,20 @@ async function importGames(offset) {
   let games = [];
 
   for (const responseGame of response.data) {
+    if (responseGame.keywords) {
+      if (
+        responseGame.keywords.some(
+          (keyword) =>
+            keyword.name == "nsfw" ||
+            keyword.name == "sexual content" ||
+            keyword.name == "fan service" ||
+            keyword.name == "nudity"
+        )
+      ) {
+        continue;
+      }
+    }
+
     const developers = [];
     const publishers = [];
 

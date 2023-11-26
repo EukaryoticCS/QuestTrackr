@@ -16,10 +16,7 @@ import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Session, {
-  doesSessionExist,
-} from "supertokens-auth-react/recipe/session";
-import { useNavigate } from "react-router-dom";
+import Session from "supertokens-auth-react/recipe/session";
 
 function nodeColor(node) {
   switch (node.type) {
@@ -46,7 +43,7 @@ const nodeTypes = {
   dropdownNode: DropdownNode,
 };
 
-const TemplateDetails = () => {
+const Tracking = () => {
   const [details, setDetails] = useState({
     _id: "",
     title: "",
@@ -55,38 +52,33 @@ const TemplateDetails = () => {
     sections: "",
   });
   const [userInputTitle, setUserInputTitle] = useState("");
-  const { gameId, templateId } = useParams();
-  const navigate = useNavigate();
+  const { username, templateId } = useParams();
 
   useEffect(() => {
     fetch(
-      `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
+      `http://localhost:5000/api/v1/users/${username}/templates/${templateId}`
     )
       .then((res) => res.json())
       .then((data) => {
-        setDetails(data.template);
+        setDetails(data.trackingTemplate);
       });
-  }, [gameId, templateId]);
+  }, [username, templateId]);
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
   };
 
   const handleAddToProfile = async () => {
-    if (await doesSessionExist()) {
-      const userId = await Session.getUserId();
-      const response = await axios.get(
-        `http://localhost:5000/api/v1/users/supertokens/${userId}`
-      );
-      axios.post(
-        `http://localhost:5000/api/v1/users/${response.data.username}/templates`,
-        {
-          templateData: { ...details, templateId: templateId },
-        }
-      );
-    } else {
-      navigate("/auth");
-    }
+    const userId = await Session.getUserId();
+    const response = await axios.get(
+      `http://localhost:5000/api/v1/users/supertokens/${userId}`
+    );
+    axios.post(
+      `http://localhost:5000/api/v1/users/${response.data.username}/templates`,
+      {
+        templateData: details,
+      }
+    );
   };
 
   return (
@@ -105,7 +97,7 @@ const TemplateDetails = () => {
                 nodes={details.layout}
                 nodesDraggable={false}
                 nodeTypes={nodeTypes}
-                elementsSelectable={false}
+                elementsSelectable={true}
                 proOptions={{ hideAttribution: true }}
               >
                 <Background variant={BackgroundVariant.Dots} />
@@ -136,4 +128,4 @@ const TemplateDetails = () => {
   );
 };
 
-export default TemplateDetails;
+export default Tracking;

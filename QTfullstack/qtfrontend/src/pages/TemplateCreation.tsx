@@ -79,14 +79,12 @@ function TemplateCreation() {
         },
       }
     );
-    console.log(response.data);
   }, [nodes, templateId, gameId]);
 
   const onRestore = useCallback(async () => {
     const response = await axios.get(
       `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
     );
-    console.log(response.data);
     restoreNodes(response.data.template.layout);
   }, [restoreNodes]);
 

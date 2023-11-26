@@ -132,23 +132,28 @@ export default class GamesDAO {
   static async updateGameTemplate(gameId, template) {
     try {
       return await games.updateOne(
-        {'templates._id': new ObjectId(template._id)},
+        { "templates._id": new ObjectId(template._id) },
         {
           $set: {
             "templates.$.title": template.title,
             "templates.$.layout": template.layout,
-            "templates.$.sections": template.sections
-          }
+            "templates.$.sections": template.sections,
+          },
         }
-      )
-    }catch (e) {
+      );
+    } catch (e) {
       console.error(`Error udpating template: ` + e.message);
       return null;
     }
   }
 
   static async getTemplateById(gameId, templateId) {
-    const game = await this.getGameByGameId(gameId);
-    return game.templates.find((template) => template._id == templateId);
+    try {
+      const game = await this.getGameByGameId(gameId);
+      return game.templates.find((template) => template._id == templateId);
+    } catch (e) {
+      console.error(`Error finding template by id: ` + e.message);
+      return null;
+    }
   }
 }

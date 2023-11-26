@@ -10,6 +10,7 @@ import Settings from "./pages/Settings.tsx";
 import TemplateCreation from "./pages/TemplateCreation.tsx";
 import TemplateDetails from "./pages/TemplateDetails.tsx";
 import Profile from "./pages/Profile.tsx";
+import Tracking from "./pages/Tracking.tsx";
 import { ReactFlowProvider } from "reactflow";
 import SuperTokens, {
   SuperTokensWrapper,
@@ -124,6 +125,10 @@ root.render(
             <reactRouterDom.Route
               path="/profile/:username"
               element={<Profile />}
+            />
+            <reactRouterDom.Route
+              path="/track/:username/:templateId"
+              element={<Tracking />}
             />
           </reactRouterDom.Routes>
         </SuperTokensWrapper>

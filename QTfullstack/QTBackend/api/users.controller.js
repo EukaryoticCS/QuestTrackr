@@ -94,6 +94,7 @@ export default class UsersCtrl {
       username,
       templateId
     );
+    console.log(trackingTemplate);
     res.json({ trackingTemplate });
   }
 

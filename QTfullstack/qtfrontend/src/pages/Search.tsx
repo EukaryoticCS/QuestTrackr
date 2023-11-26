@@ -35,7 +35,6 @@ const Search = ({ userInputTitle }) => {
         "http://localhost:5000/api/v1/games?title=" + title + "&page=" + page
       );
       setDetails([...details, ...response.data.games]);
-      console.log(details);
       setPage(page + 1);
     }
   };
@@ -54,7 +53,7 @@ const Search = ({ userInputTitle }) => {
       >
         <div className="row row-cols-4 row-cols-md-8 g-4 m-2">
           {details.map((game) => (
-            <GameCard _id={game._id} title={game.title} imgUrl={game.cover} />
+            <GameCard key={game._id} _id={game._id} title={game.title} imgUrl={game.cover} />
           ))}
         </div>
       </InfiniteScroll>

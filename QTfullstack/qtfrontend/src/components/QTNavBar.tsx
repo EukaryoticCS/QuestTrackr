@@ -9,6 +9,7 @@ import axios from "axios";
 function QTNavBar({ handleInputChange }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({username: "", profile: {profilePicture: ""}});
+  const sessionContext = useSessionContext();
 
   useEffect(() => {
     async function checkIfLoggedIn() {
@@ -24,7 +25,7 @@ function QTNavBar({ handleInputChange }) {
       }
     }
     checkIfLoggedIn();
-  }, []);
+  }, [sessionContext]);
 
   return (
     <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">

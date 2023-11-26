@@ -5,12 +5,15 @@ import TemplateExample from "../assets/jpg/templateExample.jpg";
 import { Link } from "react-router-dom";
 import Search from "./Search.tsx";
 import Session from "supertokens-auth-react/recipe/session"
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { doesSessionExist } from "supertokens-auth-react/recipe/session";
+import axios from "axios";
 
 const Home = () => {
   const [userInputTitle, setUserInputTitle] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const sessionContext = Session.useSessionContext();
+  const [user, setUser] = useState({username: "", profile: {profilePicture: ""}})
+  const sessionContext = useSessionContext();
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
@@ -18,7 +21,16 @@ const Home = () => {
 
   useEffect(() => {
     async function checkIfLoggedIn() {
-      setIsLoggedIn(await doesSessionExist());
+      const userIsLoggedIn = await doesSessionExist();
+      setIsLoggedIn(userIsLoggedIn);
+
+      if (userIsLoggedIn) {
+        const userId = await Session.getUserId();
+        const response = await axios.get(
+          `http://localhost:5000/api/v1/users/supertokens/${userId}`
+        );
+        setUser(response.data);
+      }
     }
     checkIfLoggedIn();
   }, [sessionContext]);
@@ -98,8 +110,7 @@ const Home = () => {
             {isLoggedIn ? (
               <Link
                 className="btn btn-lg btn-secondary col-3 mx-auto"
-                to="/mytemplates"
-              >
+                to={`/profile/${user.username}`}>
                 <h3>Go to My Profile</h3>
               </Link>
             ) : (

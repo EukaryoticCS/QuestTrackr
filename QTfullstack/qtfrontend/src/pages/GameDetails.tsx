@@ -61,9 +61,10 @@ const GameDetails = () => {
     <TemplateCard
       gameId={gameId!}
       templateId={template._id}
-      key={template.title}
+      key={template._id}
       title={template.title}
       author={template.author}
+      link={`/${gameId}/template/${template._id}`}
     />
   ));
 
@@ -106,22 +107,21 @@ const GameDetails = () => {
           <hr />
           <div className="row ">
             <div className="display-1 text-center">Trackr Templates:</div>
-            <div className="card-deck">
-              {arrayTemplateItems.length > 0 ? (
-                arrayTemplateItems
-              ) : (
-                <div className="col text-center">
-                  <div className="display-3 text-center">No Templates!</div>
-                  <div className="display-5">Make one here:</div>
-                  <button
-                    className="btn btn-primary m-2"
-                    onClick={() => createTemplate(gameId)}
-                  >
-                    Create Template
-                  </button>
-                </div>
-              )}
-            </div>
+
+            {arrayTemplateItems.length > 0 ? (
+              <div className="row row-cols-4">{arrayTemplateItems}</div>
+            ) : (
+              <div className="col text-center">
+                <div className="display-3 text-center">No Templates!</div>
+                <div className="display-5">Make one here:</div>
+                <button
+                  className="btn btn-primary m-2"
+                  onClick={() => createTemplate(gameId)}
+                >
+                  Create Template
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

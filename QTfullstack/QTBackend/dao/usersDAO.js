@@ -47,15 +47,29 @@ export default class UsersDAO {
   }
 
   static async createUser(user) {
-    return await users.insertOne(user);
+    try {
+      return await users.insertOne(user);
+    } catch (e) {
+      console.error(`Error creating user: ` + e.message);
+      return null;
+    }
   }
 
   static async getUserByUsername(username) {
-    return await users.findOne({ username: username });
+    try {
+      return await users.findOne({ username: username });
+    } catch (e) {
+      console.error("Error getting user by username: " + e.message);
+      return null;
+    }
   }
 
   static async getUserBySuperTokensId(supertokensId) {
-    return await users.findOne({ supertokensId: supertokensId });
+    try {
+      return await users.findOne({ supertokensId: supertokensId });
+    } catch (e) {
+      console.error
+    }
   }
 
   static async updateUser(username, profile) {
@@ -80,7 +94,8 @@ export default class UsersDAO {
 
   static async getTrackingTemplate(username, templateId) {
     const user = await this.getUserByUsername(username);
-    return user.templates.find((template) => template._id == templateId);
+    const id = new ObjectId(templateId);
+    return user.templates.find((template) => id.equals(template._id));
   }
 
   static async trackTemplate(username, templateId, checkUpdate) {
