@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import Search from "./Search.tsx";
 import QTFooter from "../components/QTFooter.tsx";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Session, { doesSessionExist } from "supertokens-auth-react/recipe/session";
 import TemplateCard from "../components/TemplateCard.tsx";
 

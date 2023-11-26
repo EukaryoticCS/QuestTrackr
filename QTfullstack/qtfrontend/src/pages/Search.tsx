@@ -53,7 +53,12 @@ const Search = ({ userInputTitle }) => {
       >
         <div className="row row-cols-4 row-cols-md-8 g-4 m-2">
           {details.map((game) => (
-            <GameCard key={game._id} _id={game._id} title={game.title} imgUrl={game.cover} />
+            <GameCard
+              key={game._id}
+              _id={game._id}
+              title={game.title}
+              imgUrl={game.cover}
+            />
           ))}
         </div>
       </InfiniteScroll>

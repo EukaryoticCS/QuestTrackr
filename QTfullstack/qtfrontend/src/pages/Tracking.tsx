@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
-import QTFooter from "../components/QTFooter.tsx";
 import Search from "./Search.tsx";
 import ReactFlow, {
   Background,
@@ -15,8 +14,6 @@ import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import Session from "supertokens-auth-react/recipe/session";
 
 function nodeColor(node) {
   switch (node.type) {
@@ -60,6 +57,8 @@ const Tracking = () => {
     )
       .then((res) => res.json())
       .then((data) => {
+        //Somehow make nodes unselectable but still interactable
+        console.log(data.trackingTemplate);
         setDetails(data.trackingTemplate);
       });
   }, [username, templateId]);
@@ -68,48 +67,35 @@ const Tracking = () => {
     setUserInputTitle(e.target.value);
   };
 
-  const handleAddToProfile = async () => {
-    const userId = await Session.getUserId();
-    const response = await axios.get(
-      `http://localhost:5000/api/v1/users/supertokens/${userId}`
-    );
-    axios.post(
-      `http://localhost:5000/api/v1/users/${response.data.username}/templates`,
-      {
-        templateData: details,
-      }
-    );
-  };
-
   return (
-    <>
+    <div
+      className="container-fluid d-flex flex-column m-0 p-0"
+      style={{ height: "100vh", width: "100vw" }}
+    >
       <QTNavBar handleInputChange={handleInputChange} />
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
-        <div className="container-fluid">
-          <div className="row p-0" style={{ height: "38rem" }}>
-            <div className="col d-flex p-0 m-0">
-              <ReactFlow
-                minZoom={0.2}
-                maxZoom={4}
-                fitView
-                nodes={details.layout}
-                nodesDraggable={false}
-                nodeTypes={nodeTypes}
-                elementsSelectable={true}
-                proOptions={{ hideAttribution: true }}
-              >
-                <Background variant={BackgroundVariant.Dots} />
-                <MiniMap nodeColor={nodeColor} zoomable pannable />
-                <Controls showInteractive={false} />
-              </ReactFlow>
-            </div>
+        <div className="row p-0 m-0 flex-grow-1">
+          <div className="p-0 m-0" style={{ height: "100%", width: "100%" }}>
+            <ReactFlow
+              minZoom={0.2}
+              maxZoom={4}
+              fitView
+              nodes={details.layout}
+              nodesDraggable={false}
+              nodeTypes={nodeTypes}
+              elementsSelectable={true}
+              proOptions={{ hideAttribution: true }}
+            >
+              <Background variant={BackgroundVariant.Dots} />
+              <MiniMap nodeColor={nodeColor} zoomable pannable />
+              <Controls showInteractive={false} />
+            </ReactFlow>
           </div>
         </div>
       )}
-      <QTFooter />
-    </>
+    </div>
   );
 };
 

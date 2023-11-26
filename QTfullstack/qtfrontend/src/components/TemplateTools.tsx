@@ -4,16 +4,23 @@ import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 
 interface Props {
-  onShapesClick: React.MouseEventHandler,
-  onTextClick: React.MouseEventHandler,
-  onImageClick: React.MouseEventHandler,
-  onCheckboxClick: React.MouseEventHandler,
-  onNumbersClick: React.MouseEventHandler,
-  onDropdownClick: React.MouseEventHandler,
+  onShapesClick: React.MouseEventHandler;
+  onTextClick: React.MouseEventHandler;
+  onImageClick: React.MouseEventHandler;
+  onCheckboxClick: React.MouseEventHandler;
+  onNumbersClick: React.MouseEventHandler;
+  onDropdownClick: React.MouseEventHandler;
   // onPercentageClick: React.MouseEventHandler
 }
 
-const TemplateTools = ({onShapesClick, onTextClick, onImageClick, onCheckboxClick, onNumbersClick, onDropdownClick}: Props) => {
+const TemplateTools = ({
+  onShapesClick,
+  onTextClick,
+  onImageClick,
+  onCheckboxClick,
+  onNumbersClick,
+  onDropdownClick,
+}: Props) => {
   return (
     <div className="d-flex flex-column bg-dark text-center justify-content-center">
       <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
@@ -224,9 +231,7 @@ const TemplateTools = ({onShapesClick, onTextClick, onImageClick, onCheckboxClic
           </Tooltip>
         }
       >
-        <button
-          className="nav-link py-3 border-bottom mt-auto mb-3"
-        >
+        <button className="nav-link py-3 border-bottom mt-auto mb-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
