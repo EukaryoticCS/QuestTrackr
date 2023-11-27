@@ -1,5 +1,5 @@
-import React from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 
@@ -10,6 +10,7 @@ interface Props {
   onCheckboxClick: React.MouseEventHandler;
   onNumbersClick: React.MouseEventHandler;
   onDropdownClick: React.MouseEventHandler;
+  handleShowTemplateSettings: React.MouseEventHandler;
   // onPercentageClick: React.MouseEventHandler
 }
 
@@ -20,7 +21,9 @@ const TemplateTools = ({
   onCheckboxClick,
   onNumbersClick,
   onDropdownClick,
+  handleShowTemplateSettings
 }: Props) => {
+
   return (
     <div className="d-flex flex-column bg-dark text-center justify-content-center">
       <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
@@ -231,7 +234,10 @@ const TemplateTools = ({
           </Tooltip>
         }
       >
-        <button className="nav-link py-3 border-bottom mt-auto mb-3">
+        <button
+          className="nav-link py-3 border-bottom mt-auto mb-3"
+          onClick={handleShowTemplateSettings}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"

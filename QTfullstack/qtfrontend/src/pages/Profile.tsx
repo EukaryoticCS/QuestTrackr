@@ -3,7 +3,9 @@ import QTNavBar from "../components/QTNavBar.tsx";
 import Search from "./Search.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import { useParams } from "react-router-dom";
-import Session, { doesSessionExist } from "supertokens-auth-react/recipe/session";
+import Session, {
+  doesSessionExist,
+} from "supertokens-auth-react/recipe/session";
 import TemplateCard from "../components/TemplateCard.tsx";
 
 const Profile = () => {
@@ -15,7 +17,16 @@ const Profile = () => {
       profilePicture: "",
       bio: "",
     },
-    templates: [{ _id: "", gameId: "", templateId: "", title: "", author: "", sections: [] }],
+    templates: [
+      {
+        _id: "",
+        gameId: "",
+        templateId: "",
+        title: "",
+        author: "",
+        sections: [],
+      },
+    ],
   });
   const { username } = useParams();
   const [userInputTitle, setUserInputTitle] = useState("");
@@ -27,15 +38,14 @@ const Profile = () => {
 
   useEffect(() => {
     async function getUserData() {
-      await fetch(`http://localhost:5000/api/v1/users/${username}`)
+      fetch(`http://localhost:5000/api/v1/users/${username}`)
         .then((res) => res.json())
         .then(async (data) => {
           setUserData(data);
-          if (await doesSessionExist() && await Session.getUserId() === data.supertokensId) {
-            setViewingOwnProfile(true);
-          } else {
-            setViewingOwnProfile(false);
-          }
+          setViewingOwnProfile(
+            (await doesSessionExist()) &&
+              (await Session.getUserId()) === data.supertokensId
+          );
         });
     }
 

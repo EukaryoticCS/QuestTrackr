@@ -45,6 +45,7 @@ const Tracking = () => {
     _id: "",
     title: "",
     author: "",
+    bgColor: "",
     layout: [],
     sections: "",
   });
@@ -72,7 +73,6 @@ const Tracking = () => {
       className="container-fluid d-flex flex-column m-0 p-0"
       style={{ height: "100vh", width: "100vw" }}
     >
-      <QTNavBar handleInputChange={handleInputChange} />
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
@@ -88,7 +88,7 @@ const Tracking = () => {
               elementsSelectable={true}
               proOptions={{ hideAttribution: true }}
             >
-              <Background variant={BackgroundVariant.Dots} />
+              <Background variant={BackgroundVariant.Dots} style={{background: details.bgColor}}/>
               <MiniMap nodeColor={nodeColor} zoomable pannable />
               <Controls showInteractive={false} />
             </ReactFlow>

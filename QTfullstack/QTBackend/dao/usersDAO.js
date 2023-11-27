@@ -98,10 +98,18 @@ export default class UsersDAO {
   static async addTemplateToProfile(username, template) {
     try {
       template._id = new ObjectId();
-      return await users.findOneAndUpdate(
-        { username: username },
-        { $push: { templates: template } }
-      );
+      const userTemplates = await this.getUserTemplates(username);
+      if (
+        !userTemplates.some((template) => template.templateId === template.id)
+      ) {
+        return await users.findOneAndUpdate(
+          { username: username },
+          { $push: { templates: template } }
+        );
+      } else {
+        console.error("User already has that template!");
+        return null;
+      }
     } catch (e) {
       console.error("Error adding template to profile: " + e.message);
       return null;

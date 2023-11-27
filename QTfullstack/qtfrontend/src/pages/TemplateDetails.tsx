@@ -51,10 +51,12 @@ const TemplateDetails = () => {
     _id: "",
     title: "",
     author: "",
+    bgColor: "",
     layout: [],
     sections: "",
   });
   const [userInputTitle, setUserInputTitle] = useState("");
+  const [userTemplateLink, setUserTemplateLink] = useState("");
   const { gameId, templateId } = useParams();
   const navigate = useNavigate();
 
@@ -68,22 +70,46 @@ const TemplateDetails = () => {
       });
   }, [gameId, templateId]);
 
+  useEffect(() => {
+    async function getUserTemplateLink() {
+      fetch(`http://localhost:5000/api/v1/users/supertokens/${await Session.getUserId()}`)
+        .then((res) => res.json())
+        .then(async (data) => {
+          console.log(data);
+          const userTemplate = data.templates.find(
+            (template) => template.templateId === details._id
+          );
+          if (userTemplate) {
+            setUserTemplateLink(
+              `/track/${data.username}/${userTemplate._id}`
+            );
+            console.log(userTemplateLink);
+          }
+        });
+    }
+    getUserTemplateLink();
+  }, [details])
+
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
   };
 
   const handleAddToProfile = async () => {
     if (await doesSessionExist()) {
-      const userId = await Session.getUserId();
-      const response = await axios.get(
-        `http://localhost:5000/api/v1/users/supertokens/${userId}`
-      );
-      axios.post(
-        `http://localhost:5000/api/v1/users/${response.data.username}/templates`,
-        {
-          templateData: { ...details, templateId: templateId },
-        }
-      );
+      if (userTemplateLink === "") {
+        const userId = await Session.getUserId();
+        const response = await axios.get(
+          `http://localhost:5000/api/v1/users/supertokens/${userId}`
+        );
+        axios.post(
+          `http://localhost:5000/api/v1/users/${response.data.username}/templates`,
+          {
+            templateData: { ...details, templateId: templateId },
+          }
+        );
+      } else {
+        navigate(userTemplateLink);
+      }
     } else {
       navigate("/auth");
     }
@@ -108,7 +134,10 @@ const TemplateDetails = () => {
                 elementsSelectable={false}
                 proOptions={{ hideAttribution: true }}
               >
-                <Background variant={BackgroundVariant.Dots} />
+                <Background
+                  variant={BackgroundVariant.Dots}
+                  style={{ background: details.bgColor }}
+                />
                 <MiniMap nodeColor={nodeColor} zoomable pannable />
                 <Controls showInteractive={false} />
               </ReactFlow>
@@ -123,7 +152,7 @@ const TemplateDetails = () => {
                   className="btn btn-primary"
                   onClick={handleAddToProfile}
                 >
-                  Add to Profile
+                  {userTemplateLink === "" ? "Add to Profile" : "Track"}
                 </button>
               </div>
             </div>

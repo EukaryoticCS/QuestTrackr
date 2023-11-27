@@ -136,6 +136,7 @@ export default class GamesDAO {
         {
           $set: {
             "templates.$.title": template.title,
+            "templates.$.bgColor": template.bgColor,
             "templates.$.layout": template.layout,
             "templates.$.sections": template.sections,
           },

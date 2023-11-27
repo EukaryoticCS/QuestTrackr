@@ -1,5 +1,5 @@
 import React from "react";
-import { NodeResizer, NodeToolbar, Position, NodeProps } from "reactflow";
+import { NodeResizer, NodeToolbar, NodeProps } from "reactflow";
 
 import useStore, { NodeData } from "../store.tsx";
 

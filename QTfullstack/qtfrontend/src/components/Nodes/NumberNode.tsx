@@ -77,8 +77,8 @@ const NumberNode = ({ id, data }: NodeProps<NodeData>) => {
         }}
       >
         <div className="row">
-          <div className="col">Collected:</div>
-          <div className="col">Remaining:</div>
+          <div className="col" style={{textShadow: "none"}}>Collected:</div>
+          <div className="col" style={{textShadow: "none"}}>Remaining:</div>
         </div>
         <div className="row" style={{ height: fontSize, color: "inherit" }}>
           <input
@@ -97,7 +97,7 @@ const NumberNode = ({ id, data }: NodeProps<NodeData>) => {
               textAlign: "center",
             }}
           />
-          <div className="col">
+          <div className="col" style={{textShadow: "none"}}>
             {collected > data.total ? 0 : data.total - collected}
           </div>
         </div>

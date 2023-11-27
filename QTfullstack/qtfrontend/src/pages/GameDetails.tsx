@@ -5,6 +5,7 @@ import TemplateCard from "../components/TemplateCard.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import Search from "./Search.tsx";
 import axios from "axios";
+import Session from "supertokens-auth-react/recipe/session";
 
 const GameDetails = () => {
   const [details, setDetails] = useState({
@@ -37,7 +38,10 @@ const GameDetails = () => {
 
   const createTemplate = useCallback(
     async (gameId) => {
-      const author = "Eukaryotic";
+      const userResponse = await axios.get(
+        `http://localhost:5000/api/v1/users/supertokens/${await Session.getUserId()}`
+      );
+      const author = userResponse.data.username;
       const response = await axios.post(
         `http://localhost:5000/api/v1/games/${gameId}/templates`,
         { author: author }
@@ -106,10 +110,21 @@ const GameDetails = () => {
           </div>
           <hr />
           <div className="row ">
-            <div className="display-1 text-center">Trackr Templates:</div>
-
             {arrayTemplateItems.length > 0 ? (
-              <div className="row row-cols-4">{arrayTemplateItems}</div>
+              <div className="col text-center">
+                <h1 className="display-1">
+                  Trackr Templates:
+                </h1>
+                <div className="row row-cols-4">{arrayTemplateItems}</div>
+                <div className="display-3 text-center">Don't like these templates?</div>
+                <div className="display-5">Make one here:</div>
+                <button
+                  className="btn btn-primary m-2"
+                  onClick={() => createTemplate(gameId)}
+                >
+                  Create Template
+                </button>
+              </div>
             ) : (
               <div className="col text-center">
                 <div className="display-3 text-center">No Templates!</div>

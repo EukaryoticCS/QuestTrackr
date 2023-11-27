@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactFlow, {
   Controls,
   Background,
@@ -17,6 +17,7 @@ import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import useStore from "../components/store.tsx";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Button, Modal } from "react-bootstrap";
 
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
@@ -53,27 +54,58 @@ const selector = (state) => ({
 });
 
 function TemplateCreation() {
-  const { nodes, onNodesChange, onConnect, onAdd, restoreNodes } = useStore(selector);
+  const { nodes, onNodesChange, onConnect, onAdd, restoreNodes } =
+    useStore(selector);
+  const [details, setDetails] = useState({
+    _id: "",
+    title: "",
+    bgColor: "",
+    author: "",
+    layout: [],
+    sections: "",
+  });
+  const [showTemplateSettings, setShowTemplateSettings] = useState(false);
   const { screenToFlowPosition } = useReactFlow();
 
   const { gameId, templateId } = useParams();
-  
+
+  let title = useRef(null);
+  let bgColor = useRef(null);
+  const handleClose = () => setShowTemplateSettings(false);
+  const handleShow = () => setShowTemplateSettings(true);
+  const handleSaveChanges = () => {
+    setDetails({
+      ...details,
+      bgColor: bgColor.current!.value,
+      title: title.current!.value
+    });
+    setShowTemplateSettings(false);
+  };
+
   useEffect(() => {
-    onRestore();
-  }, [])
+    async function getTemplate() {
+      const response = await axios.get(
+        `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
+      );
+      setDetails(response.data.template);
+      onRestore();
+    }
+    getTemplate();
+  }, []);
 
   const onSave = useCallback(async () => {
     const nodeList = nodes.map((node) => ({
       ...node,
       selected: false,
-    }))
+    }));
     const response = await axios.put(
       `http://localhost:5000/api/v1/games/${gameId}/templates`,
       {
         templateData: {
           _id: templateId,
-          title: "Sample React Flow Save/Restore",
-          author: "Eukaryotic",
+          title: details.title,
+          bgColor: details.bgColor,
+          author: details.author,
           sections: [],
           layout: nodeList,
         },
@@ -82,11 +114,8 @@ function TemplateCreation() {
   }, [nodes, templateId, gameId]);
 
   const onRestore = useCallback(async () => {
-    const response = await axios.get(
-      `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
-    );
-    restoreNodes(response.data.template.layout);
-  }, [restoreNodes]);
+    restoreNodes(details.layout);
+  }, [restoreNodes, details]);
 
   return (
     <div className="row min-vh-100 p-0 container-fluid">
@@ -200,11 +229,6 @@ function TemplateCreation() {
               position: { x: center.x, y: center.y },
               data: { textColor: "#ffffff", total: 20 },
               type: "numberNode",
-              style: {
-                fontSize: 15,
-                height: 60,
-                width: 220,
-              },
             });
           }}
           onDropdownClick={() => {
@@ -229,13 +253,9 @@ function TemplateCreation() {
                 ],
               },
               type: "dropdownNode",
-              style: {
-                fontSize: 15,
-                height: 20,
-                width: 20,
-              },
             });
           }}
+          handleShowTemplateSettings={handleShow}
         />
       </div>
       <div className="col p-0 m-0">
@@ -249,7 +269,10 @@ function TemplateCreation() {
           nodeTypes={nodeTypes}
           proOptions={{ hideAttribution: true }}
         >
-          <Background variant={BackgroundVariant.Dots} />
+          <Background
+            variant={BackgroundVariant.Dots}
+            style={{background: details.bgColor}}
+          />
           <MiniMap nodeColor={nodeColor} zoomable pannable />
           <Controls />
         </ReactFlow>
@@ -258,6 +281,38 @@ function TemplateCreation() {
         <button onClick={onSave}>Save</button>
         <button onClick={onRestore}>Restore</button>
       </div>
+
+      <Modal show={showTemplateSettings} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Template Settings</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form>
+            <div className="form-group">
+              <label htmlFor="title">Template Title:</label>
+              <input
+                ref={title}
+                type="text"
+                placeholder="Enter title here"
+                defaultValue={details.title}
+                name="title"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="bgcolor">Background color:</label>
+              <input type="color" name="bgColor" defaultValue={details.bgColor} ref={bgColor}/>
+            </div>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="info" onClick={handleSaveChanges}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
