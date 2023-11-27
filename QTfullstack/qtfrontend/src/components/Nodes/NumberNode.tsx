@@ -73,16 +73,20 @@ const NumberNode = ({ id, data }: NodeProps<NodeData>) => {
         style={{
           fontSize: fontSize,
           color: data.textColor,
-          width: fontSize * 12,
         }}
       >
-        <div className="row">
-          <div className="col" style={{textShadow: "none"}}>Collected:</div>
-          <div className="col" style={{textShadow: "none"}}>Remaining:</div>
+        <div className="row p-0">
+          <div className="col-6 " style={{ textShadow: "none" }}>
+            Collected:
+          </div>
+          <div className="col-6 " style={{ textShadow: "none" }}>
+            Remaining:
+          </div>
         </div>
-        <div className="row" style={{ height: fontSize, color: "inherit" }}>
+        <div className="row p-0" style={{ height: fontSize, color: "inherit" }}>
           <input
-            className="col"
+            id="collected"
+            className="col-6"
             type="text"
             onChange={(e) => {
               let inputNum = parseInt(e.target.value);
@@ -97,7 +101,11 @@ const NumberNode = ({ id, data }: NodeProps<NodeData>) => {
               textAlign: "center",
             }}
           />
-          <div className="col" style={{textShadow: "none"}}>
+          <div
+            id="remaining"
+            className="col-6"
+            style={{ textShadow: "none" }}
+          >
             {collected > data.total ? 0 : data.total - collected}
           </div>
         </div>

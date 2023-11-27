@@ -107,6 +107,7 @@ const TemplateDetails = () => {
             templateData: { ...details, templateId: templateId },
           }
         );
+        navigate(`/profile/${response.data.username}`);
       } else {
         navigate(userTemplateLink);
       }
@@ -132,6 +133,7 @@ const TemplateDetails = () => {
                 nodesDraggable={false}
                 nodeTypes={nodeTypes}
                 elementsSelectable={false}
+                zoomOnDoubleClick={false}
                 proOptions={{ hideAttribution: true }}
               >
                 <Background

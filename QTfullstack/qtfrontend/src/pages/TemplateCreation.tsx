@@ -111,7 +111,7 @@ function TemplateCreation() {
         },
       }
     );
-  }, [nodes, templateId, gameId]);
+  }, [nodes, templateId, gameId, details.author, details.title, details.bgColor]);
 
   const onRestore = useCallback(async () => {
     restoreNodes(details.layout);
@@ -267,6 +267,7 @@ function TemplateCreation() {
           onNodesChange={onNodesChange}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
+          zoomOnDoubleClick={false}
           proOptions={{ hideAttribution: true }}
         >
           <Background

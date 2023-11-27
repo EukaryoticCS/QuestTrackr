@@ -86,6 +86,7 @@ const Tracking = () => {
               nodesDraggable={false}
               nodeTypes={nodeTypes}
               elementsSelectable={true}
+              zoomOnDoubleClick={false}
               proOptions={{ hideAttribution: true }}
             >
               <Background variant={BackgroundVariant.Dots} style={{background: details.bgColor}}/>
