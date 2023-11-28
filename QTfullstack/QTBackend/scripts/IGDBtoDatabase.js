@@ -63,7 +63,7 @@ async function importGames(offset) {
     }
 
     let releaseYear = "N/A";
-    if (response.first_release_date) {
+    if (responseGame.first_release_date) {
       try {
         releaseYear = new Date(
           responseGame.first_release_date * 1000
