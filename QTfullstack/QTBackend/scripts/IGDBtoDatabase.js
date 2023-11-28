@@ -164,7 +164,6 @@ async function deleteAllButOOT() {
 }
 
 async function dumpDatabase() {
-  await deleteAllButOOT();
   while (offset < 300000) {
     await importGames(offset);
     offset += 500;
