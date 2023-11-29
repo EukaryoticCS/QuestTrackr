@@ -6,6 +6,7 @@ import ReactFlow, {
   BackgroundVariant,
   Controls,
   MiniMap,
+  useOnSelectionChange,
 } from "reactflow";
 import ShapeNode from "../components/Nodes/ShapeNode.tsx";
 import TextNode from "../components/Nodes/TextNode.tsx";
@@ -49,7 +50,6 @@ const Tracking = () => {
     layout: [],
     sections: "",
   });
-  const [userInputTitle, setUserInputTitle] = useState("");
   const { username, templateId } = useParams();
 
   useEffect(() => {
@@ -64,38 +64,33 @@ const Tracking = () => {
       });
   }, [username, templateId]);
 
-  const handleInputChange = (e) => {
-    setUserInputTitle(e.target.value);
-  };
-
   return (
     <div
       className="container-fluid d-flex flex-column m-0 p-0"
       style={{ height: "100vh", width: "100vw" }}
     >
-      {userInputTitle !== "" ? (
-        <Search userInputTitle={userInputTitle} />
-      ) : (
-        <div className="row p-0 m-0 flex-grow-1">
-          <div className="p-0 m-0" style={{ height: "100%", width: "100%" }}>
-            <ReactFlow
-              minZoom={0.2}
-              maxZoom={4}
-              fitView
-              nodes={details.layout}
-              nodesDraggable={false}
-              nodeTypes={nodeTypes}
-              elementsSelectable={true}
-              zoomOnDoubleClick={false}
-              proOptions={{ hideAttribution: true }}
-            >
-              <Background variant={BackgroundVariant.Dots} style={{background: details.bgColor}}/>
-              <MiniMap nodeColor={nodeColor} zoomable pannable />
-              <Controls showInteractive={false} />
-            </ReactFlow>
-          </div>
+      <div className="row p-0 m-0 flex-grow-1">
+        <div className="p-0 m-0" style={{ height: "100%", width: "100%" }}>
+          <ReactFlow
+            minZoom={0.2}
+            maxZoom={4}
+            fitView
+            nodes={details.layout}
+            nodesDraggable={false}
+            nodeTypes={nodeTypes}
+            elementsSelectable={true}
+            zoomOnDoubleClick={false}
+            proOptions={{ hideAttribution: true }}
+          >
+            <Background
+              variant={BackgroundVariant.Dots}
+              style={{ background: details.bgColor }}
+            />
+            <MiniMap nodeColor={nodeColor} zoomable pannable />
+            <Controls showInteractive={false} />
+          </ReactFlow>
         </div>
-      )}
+      </div>
     </div>
   );
 };

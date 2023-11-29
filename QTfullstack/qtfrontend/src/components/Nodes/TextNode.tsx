@@ -9,10 +9,11 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 const TextNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   const [fontSize, setFontSize] = useState(16);
   const updateTextColor = useStore((state) => state.updateTextColor);
+  const updateText = useStore((state) => state.updateText);
 
   return (
     <>
-      <NodeToolbar className="nav" align="center">
+      <NodeToolbar className="nav" align="center" isVisible={selected && data.selectable}>
         <button
           className="btn btn-primary"
           onClick={() => {
@@ -87,7 +88,10 @@ const TextNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           fontSize: fontSize,
           color: data.textColor,
         }}
-        defaultValue={data.label}
+        value={data.text}
+        onChange={(e) => updateText(id, e.target.value)}
+        spellCheck={false}
+        disabled={!data.selectable}
       >
       </textarea>
     </>

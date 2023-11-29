@@ -14,7 +14,9 @@ export type NodeData = {
   label: string;
   color: string;
   textColor: string;
+  text: string;
   total: number;
+  selectable: boolean;
 };
 
 export type RFState = {
@@ -24,6 +26,7 @@ export type RFState = {
   onConnect: OnConnect;
   updateNodeColor: (nodeId: string, color: string) => void;
   updateTextColor: (nodeId: string, color: string) => void;
+  updateText: (nodeId: string, text: string) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -67,6 +70,16 @@ const useStore = createWithEqualityFn<RFState>(
           return node;
         })
       });
+    },
+    updateText: (nodeId: string, text: string) => {
+      set ({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = {...node.data, text}
+          }
+          return node;
+        })
+      })
     },
     restoreNodes: (nodes: Node[]) => {
       set ({

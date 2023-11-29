@@ -10,11 +10,11 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
     <>
       <NodeResizer
         color="ff0071"
-        isVisible={selected}
+        isVisible={selected && data.selectable}
         minWidth={20}
         minHeight={20}
       />
-      <NodeToolbar className="nav" align="center">
+      <NodeToolbar className="nav" align="center" isVisible={selected && data.selectable}>
           <input
             className="form-control form-control-color"
             defaultValue={data.color}

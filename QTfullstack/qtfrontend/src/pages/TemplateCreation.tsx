@@ -48,13 +48,12 @@ const nodeTypes = {
 const selector = (state) => ({
   nodes: state.nodes,
   onNodesChange: state.onNodesChange,
-  onConnect: state.onConnect,
   onAdd: state.onAdd,
   restoreNodes: state.restoreNodes,
 });
 
 function TemplateCreation() {
-  const { nodes, onNodesChange, onConnect, onAdd, restoreNodes } =
+  const { nodes, onNodesChange, onAdd, restoreNodes } =
     useStore(selector);
   const [details, setDetails] = useState({
     _id: "",
@@ -88,7 +87,6 @@ function TemplateCreation() {
         `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
       );
       setDetails(response.data.template);
-      onRestore();
     }
     getTemplate();
   }, []);
@@ -119,7 +117,7 @@ function TemplateCreation() {
 
   return (
     <div className="row min-vh-100 p-0 container-fluid">
-      <div className="d-flex col-sm-auto py-0 m-0">
+      <div className="d-flex col-sm-auto py-0 pe-0 m-0">
         <TemplateTools
           onShapesClick={() => {
             const reactFlowContainer = document.querySelector(".react-flow");
@@ -135,7 +133,7 @@ function TemplateCreation() {
               key: getNodeId(),
               position: { x: center.x, y: center.y },
               type: "shapeNode",
-              data: { color: "#ffffff" },
+              data: { color: "#ffffff", selectable: true},
               style: {
                 border: "1px solid black",
                 borderRadius: 15,
@@ -160,7 +158,7 @@ function TemplateCreation() {
               key: getNodeId(),
               position: { x: center.x, y: center.y },
               type: "textNode",
-              data: { label: "Input Text Here", textColor: "#ffffff" },
+              data: { textColor: "#000000", text: "Input Text Here", selectable: true },
               style: {
                 fontSize: 15,
                 height: 30,
@@ -183,6 +181,7 @@ function TemplateCreation() {
               position: { x: center.x, y: center.y },
               data: {
                 img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png",
+                selectable: true
               },
               type: "imageNode",
               style: {
@@ -205,7 +204,7 @@ function TemplateCreation() {
               id: getNodeId(),
               key: getNodeId(),
               position: { x: center.x, y: center.y },
-              data: {},
+              data: { selectable: true },
               type: "checkboxNode",
               style: {
                 fontSize: 15,
@@ -227,7 +226,7 @@ function TemplateCreation() {
               id: getNodeId(),
               key: getNodeId(),
               position: { x: center.x, y: center.y },
-              data: { textColor: "#ffffff", total: 20 },
+              data: { textColor: "#ffffff", total: 20, selectable: true },
               type: "numberNode",
             });
           }}
@@ -251,6 +250,7 @@ function TemplateCreation() {
                   "meeeeeediummmm",
                   "loooooooooooooooooooong",
                 ],
+                selectable: true
               },
               type: "dropdownNode",
             });
@@ -265,7 +265,6 @@ function TemplateCreation() {
           fitView
           nodes={nodes}
           onNodesChange={onNodesChange}
-          onConnect={onConnect}
           nodeTypes={nodeTypes}
           zoomOnDoubleClick={false}
           proOptions={{ hideAttribution: true }}

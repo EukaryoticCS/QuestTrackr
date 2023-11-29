@@ -5,14 +5,14 @@ import useStore, { NodeData } from "../store.tsx";
 
 const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 
-const NumberNode = ({ id, data }: NodeProps<NodeData>) => {
+const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   const [collected, setCollected] = useState(0);
   const [fontSize, setFontSize] = useState(16);
   const updateTextColor = useStore((state) => state.updateTextColor);
 
   return (
     <>
-      <NodeToolbar className="nav" align="center">
+      <NodeToolbar className="nav" align="center" isVisible={selected && data.selectable}>
         <button
           className="nav-item btn btn-primary"
           onClick={() => {

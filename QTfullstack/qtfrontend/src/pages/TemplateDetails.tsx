@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import Search from "./Search.tsx";
@@ -20,6 +20,7 @@ import Session, {
   doesSessionExist,
 } from "supertokens-auth-react/recipe/session";
 import { useNavigate } from "react-router-dom";
+import useStore from "../components/store.tsx";
 
 function nodeColor(node) {
   switch (node.type) {
@@ -46,19 +47,34 @@ const nodeTypes = {
   dropdownNode: DropdownNode,
 };
 
+const selector = (state) => ({
+  nodes: state.nodes,
+  onNodesChange: state.onNodesChange,
+  onConnect: state.onConnect,
+  onAdd: state.onAdd,
+  restoreNodes: state.restoreNodes,
+});
+
 const TemplateDetails = () => {
   const [details, setDetails] = useState({
     _id: "",
     title: "",
     author: "",
     bgColor: "",
-    layout: [],
+    layout: [{ id: "", key: "", position: {}, type: "", data: { text: "" } }],
     sections: "",
   });
   const [userInputTitle, setUserInputTitle] = useState("");
   const [userTemplateLink, setUserTemplateLink] = useState("");
   const { gameId, templateId } = useParams();
   const navigate = useNavigate();
+
+  const { nodes, onNodesChange, onConnect, onAdd, restoreNodes } =
+    useStore(selector);
+
+  const onRestore = useMemo(() => {
+    restoreNodes(details.layout);
+  }, [restoreNodes, details]);
 
   useEffect(() => {
     fetch(
@@ -72,23 +88,21 @@ const TemplateDetails = () => {
 
   useEffect(() => {
     async function getUserTemplateLink() {
-      fetch(`http://localhost:5000/api/v1/users/supertokens/${await Session.getUserId()}`)
+      fetch(
+        `http://localhost:5000/api/v1/users/supertokens/${await Session.getUserId()}`
+      )
         .then((res) => res.json())
         .then(async (data) => {
-          console.log(data);
           const userTemplate = data.templates.find(
             (template) => template.templateId === details._id
           );
           if (userTemplate) {
-            setUserTemplateLink(
-              `/track/${data.username}/${userTemplate._id}`
-            );
-            console.log(userTemplateLink);
+            setUserTemplateLink(`/track/${data.username}/${userTemplate._id}`);
           }
         });
     }
     getUserTemplateLink();
-  }, [details])
+  }, [details]);
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
@@ -101,10 +115,20 @@ const TemplateDetails = () => {
         const response = await axios.get(
           `http://localhost:5000/api/v1/users/supertokens/${userId}`
         );
-        axios.post(
+        await axios.post(
           `http://localhost:5000/api/v1/users/${response.data.username}/templates`,
           {
-            templateData: { ...details, templateId: templateId },
+            templateData: {
+              ...details,
+              templateId: templateId,
+              layout: details.layout.map((node) => ({
+                ...node,
+                data: {
+                  ...node.data,
+                  selectable: false,
+                },
+              })),
+            },
           }
         );
         navigate(`/profile/${response.data.username}`);
@@ -119,30 +143,34 @@ const TemplateDetails = () => {
   return (
     <>
       <QTNavBar handleInputChange={handleInputChange} />
-      {userInputTitle !== "" ? (
+      {nodes.length === 0 ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
         <div className="container-fluid">
           <div className="row p-0" style={{ height: "38rem" }}>
             <div className="col d-flex p-0 m-0">
-              <ReactFlow
-                minZoom={0.2}
-                maxZoom={4}
-                fitView
-                nodes={details.layout}
-                nodesDraggable={false}
-                nodeTypes={nodeTypes}
-                elementsSelectable={false}
-                zoomOnDoubleClick={false}
-                proOptions={{ hideAttribution: true }}
-              >
-                <Background
-                  variant={BackgroundVariant.Dots}
-                  style={{ background: details.bgColor }}
-                />
-                <MiniMap nodeColor={nodeColor} zoomable pannable />
-                <Controls showInteractive={false} />
-              </ReactFlow>
+              {details._id === "" ? (
+                <div></div>
+              ) : (
+                <ReactFlow
+                  minZoom={0.2}
+                  maxZoom={4}
+                  fitView
+                  nodes={nodes}
+                  nodesDraggable={false}
+                  nodeTypes={nodeTypes}
+                  elementsSelectable={false}
+                  zoomOnDoubleClick={false}
+                  proOptions={{ hideAttribution: true }}
+                >
+                  <Background
+                    variant={BackgroundVariant.Dots}
+                    style={{ background: details.bgColor }}
+                  />
+                  <MiniMap nodeColor={nodeColor} zoomable pannable />
+                  <Controls showInteractive={false} />
+                </ReactFlow>
+              )}
             </div>
             <div className="col-sm-4 p-2 m-2 bg-dark">
               <strong className="display-4">{details.title}</strong>

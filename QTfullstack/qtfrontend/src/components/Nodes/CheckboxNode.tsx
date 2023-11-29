@@ -4,7 +4,7 @@ import { NodeToolbar } from "reactflow";
 const CheckboxNode = ({ data, selected }) => {
   return (
     <>
-      <NodeToolbar className="nav" align="center">
+      <NodeToolbar className="nav" align="center" isVisible={selected && data.selectable}>
           <button className="btn btn-primary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
