@@ -115,6 +115,7 @@ export default class GamesDAO {
               _id: templateId,
               gameId: gameId,
               bgColor: "#000000",
+              snapToGrid: true,
               title: `${author}'s Template`,
               author: author,
               layout: [],

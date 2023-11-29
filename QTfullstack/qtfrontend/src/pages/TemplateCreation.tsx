@@ -23,7 +23,7 @@ import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import useStore from "../components/store.tsx";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Button, Modal, Offcanvas } from "react-bootstrap";
+import { Alert, Button, Modal, Offcanvas } from "react-bootstrap";
 
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
@@ -64,18 +64,21 @@ function TemplateCreation() {
     _id: "",
     title: "",
     bgColor: "",
+    snapToGrid: false,
     author: "",
     layout: [],
     sections: "",
   });
   const [showTemplateSettings, setShowTemplateSettings] = useState(false);
   const [showNodeSettings, setShowNodeSettings] = useState(false);
+  const [showSavedAlert, setShowSavedAlert] = useState(false);
   const { screenToFlowPosition } = useReactFlow();
 
   const { gameId, templateId } = useParams();
 
   let title = useRef(null);
   let bgColor = useRef(null);
+  let snapToGrid = useRef(null);
   const handleCloseTemplateSettings = () => setShowTemplateSettings(false);
   const handleShowTemplateSettings = () => setShowTemplateSettings(true);
   const handleSaveChanges = () => {
@@ -83,12 +86,19 @@ function TemplateCreation() {
       ...details,
       bgColor: bgColor.current!.value,
       title: title.current!.value,
+      snapToGrid: snapToGrid.current!.checked,
     });
     setShowTemplateSettings(false);
   };
   const handleHideNodeSettings = () => setShowNodeSettings(false);
   const toggleShowNodeSettings = (node) => {
     setShowNodeSettings((s) => !s);
+  };
+  const handleShowSavedAlert = () => {
+    setShowSavedAlert(true);
+    window.setTimeout(() => {
+      setShowSavedAlert(false);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -102,6 +112,7 @@ function TemplateCreation() {
   }, []);
 
   const onSave = useCallback(async () => {
+    handleShowSavedAlert();
     const nodeList = nodes.map((node) => ({
       ...node,
       selected: false,
@@ -113,6 +124,7 @@ function TemplateCreation() {
           _id: templateId,
           title: details.title,
           bgColor: details.bgColor,
+          snapToGrid: details.snapToGrid,
           author: details.author,
           sections: [],
           layout: nodeList,
@@ -126,11 +138,8 @@ function TemplateCreation() {
     details.author,
     details.title,
     details.bgColor,
+    details.snapToGrid,
   ]);
-
-  const startRestore = useMemo(async () => {
-    restoreNodes(details.layout);
-  }, [restoreNodes, details]);
 
   const onRestore = useCallback(async () => {
     restoreNodes(details.layout);
@@ -190,8 +199,8 @@ function TemplateCreation() {
               },
               style: {
                 fontSize: 15,
-                height: 30,
-                width: 150,
+                height: 40,
+                width: 140,
               },
             });
           }}
@@ -237,8 +246,8 @@ function TemplateCreation() {
               type: "checkboxNode",
               style: {
                 fontSize: 15,
-                height: 15,
-                width: 15,
+                height: 20,
+                width: 20,
               },
             });
           }}
@@ -284,6 +293,7 @@ function TemplateCreation() {
               type: "dropdownNode",
             });
           }}
+          handleShowSavedAlert={onSave}
           handleShowTemplateSettings={handleShowTemplateSettings}
         />
       </div>
@@ -295,6 +305,8 @@ function TemplateCreation() {
           nodes={nodes}
           onNodesChange={onNodesChange}
           nodeTypes={nodeTypes}
+          snapToGrid={details.snapToGrid}
+          snapGrid={[20, 20]}
           zoomOnDoubleClick={false}
           proOptions={{ hideAttribution: true }}
         >
@@ -305,11 +317,6 @@ function TemplateCreation() {
           <MiniMap nodeColor={nodeColor} zoomable pannable />
           <Controls />
         </ReactFlow>
-      </div>
-      <div className="col-1 p-0 m-0">
-        <button onClick={onSave}>Save</button>
-        <button onClick={onRestore}>Restore</button>
-        <button onClick={toggleShowNodeSettings}>Node Settings</button>
       </div>
 
       <Modal
@@ -330,15 +337,32 @@ function TemplateCreation() {
                 placeholder="Enter title here"
                 defaultValue={details.title}
                 name="title"
+                className="form-control"
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="bgcolor">Background color:</label>
+            <div className="form-group form-row">
+              <label htmlFor="bgcolor" className="form-label">
+                Background color:
+              </label>
               <input
                 type="color"
                 name="bgColor"
                 defaultValue={details.bgColor}
                 ref={bgColor}
+                className="form-control form-control-color"
+              />
+            </div>
+            <div className="form-check form-check-inline">
+              <label htmlFor="snapToGrid" className="form-check-label">
+                Snap to Grid?
+              </label>
+              <input
+                type="checkbox"
+                id="snapToGrid"
+                defaultChecked={details.snapToGrid}
+                ref={snapToGrid}
+                className="form-check-input"
+                style={{ height: 20, width: 20 }}
               />
             </div>
           </form>
@@ -370,6 +394,40 @@ function TemplateCreation() {
         </Offcanvas.Header>
         <Offcanvas.Body>Hello World</Offcanvas.Body>
       </Offcanvas>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          position: "fixed",
+          top: "10px",
+          width: "100%",
+          zIndex: "9999",
+        }}
+      >
+        <Alert
+          variant="success"
+          dismissible
+          show={showSavedAlert}
+          style={{ width: "fit-content" }}
+          className="text-black"
+        >
+          <div className="d-flex row justify-content-between">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              fill="black"
+              className="bi bi-floppy col"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11 2H9v3h2z" />
+              <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
+            </svg>
+            <div className="col h5">Saved!</div>
+          </div>
+        </Alert>
+      </div>
     </div>
   );
 }
