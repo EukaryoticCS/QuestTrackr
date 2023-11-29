@@ -78,7 +78,6 @@ const Tracking = () => {
             nodes={details.layout}
             nodesDraggable={false}
             nodeTypes={nodeTypes}
-            elementsSelectable={true}
             zoomOnDoubleClick={false}
             proOptions={{ hideAttribution: true }}
           >

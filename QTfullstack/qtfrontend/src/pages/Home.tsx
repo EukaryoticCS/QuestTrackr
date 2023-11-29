@@ -75,7 +75,7 @@ const Home = () => {
             </div>
           </div>
           <div className="row m-auto card-deck">
-            <div className="card bg-primary">
+            <div className="card bg-primary bg-gradient">
               <div className="card-header text-center m-auto h2">
                 Create Trackr Templates
               </div>
@@ -84,7 +84,7 @@ const Home = () => {
                 Trackr Templates for all your favorite games!
               </div>
             </div>
-            <div className="card bg-secondary">
+            <div className="card bg-secondary bg-gradient">
               <div className="card-header text-center m-auto h2">
                 Track your Progress
               </div>
@@ -93,7 +93,7 @@ const Home = () => {
                 as you play through a game!
               </div>
             </div>
-            <div className="card bg-info">
+            <div className="card bg-info bg-gradient">
               <div className="card-header text-center m-auto h2">
                 Show off to Friends!
               </div>

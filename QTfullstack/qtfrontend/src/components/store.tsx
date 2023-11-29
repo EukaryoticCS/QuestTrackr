@@ -17,6 +17,7 @@ export type NodeData = {
   text: string;
   total: number;
   selectable: boolean;
+  openNodeSettings: Function;
 };
 
 export type RFState = {

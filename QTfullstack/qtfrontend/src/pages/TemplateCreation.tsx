@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
 import ReactFlow, {
   Controls,
   Background,
@@ -17,7 +23,7 @@ import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import useStore from "../components/store.tsx";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Offcanvas } from "react-bootstrap";
 
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
@@ -53,8 +59,7 @@ const selector = (state) => ({
 });
 
 function TemplateCreation() {
-  const { nodes, onNodesChange, onAdd, restoreNodes } =
-    useStore(selector);
+  const { nodes, onNodesChange, onAdd, restoreNodes } = useStore(selector);
   const [details, setDetails] = useState({
     _id: "",
     title: "",
@@ -64,21 +69,26 @@ function TemplateCreation() {
     sections: "",
   });
   const [showTemplateSettings, setShowTemplateSettings] = useState(false);
+  const [showNodeSettings, setShowNodeSettings] = useState(false);
   const { screenToFlowPosition } = useReactFlow();
 
   const { gameId, templateId } = useParams();
 
   let title = useRef(null);
   let bgColor = useRef(null);
-  const handleClose = () => setShowTemplateSettings(false);
-  const handleShow = () => setShowTemplateSettings(true);
+  const handleCloseTemplateSettings = () => setShowTemplateSettings(false);
+  const handleShowTemplateSettings = () => setShowTemplateSettings(true);
   const handleSaveChanges = () => {
     setDetails({
       ...details,
       bgColor: bgColor.current!.value,
-      title: title.current!.value
+      title: title.current!.value,
     });
     setShowTemplateSettings(false);
+  };
+  const handleHideNodeSettings = () => setShowNodeSettings(false);
+  const toggleShowNodeSettings = (node) => {
+    setShowNodeSettings((s) => !s);
   };
 
   useEffect(() => {
@@ -109,7 +119,18 @@ function TemplateCreation() {
         },
       }
     );
-  }, [nodes, templateId, gameId, details.author, details.title, details.bgColor]);
+  }, [
+    nodes,
+    templateId,
+    gameId,
+    details.author,
+    details.title,
+    details.bgColor,
+  ]);
+
+  const startRestore = useMemo(async () => {
+    restoreNodes(details.layout);
+  }, [restoreNodes, details]);
 
   const onRestore = useCallback(async () => {
     restoreNodes(details.layout);
@@ -133,7 +154,11 @@ function TemplateCreation() {
               key: getNodeId(),
               position: { x: center.x, y: center.y },
               type: "shapeNode",
-              data: { color: "#ffffff", selectable: true},
+              data: {
+                color: "#ffffff",
+                selectable: true,
+                openNodeSettings: toggleShowNodeSettings,
+              },
               style: {
                 border: "1px solid black",
                 borderRadius: 15,
@@ -158,7 +183,11 @@ function TemplateCreation() {
               key: getNodeId(),
               position: { x: center.x, y: center.y },
               type: "textNode",
-              data: { textColor: "#000000", text: "Input Text Here", selectable: true },
+              data: {
+                textColor: "#000000",
+                text: "Input Text Here",
+                selectable: true,
+              },
               style: {
                 fontSize: 15,
                 height: 30,
@@ -181,7 +210,7 @@ function TemplateCreation() {
               position: { x: center.x, y: center.y },
               data: {
                 img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png",
-                selectable: true
+                selectable: true,
               },
               type: "imageNode",
               style: {
@@ -250,12 +279,12 @@ function TemplateCreation() {
                   "meeeeeediummmm",
                   "loooooooooooooooooooong",
                 ],
-                selectable: true
+                selectable: true,
               },
               type: "dropdownNode",
             });
           }}
-          handleShowTemplateSettings={handleShow}
+          handleShowTemplateSettings={handleShowTemplateSettings}
         />
       </div>
       <div className="col p-0 m-0">
@@ -271,7 +300,7 @@ function TemplateCreation() {
         >
           <Background
             variant={BackgroundVariant.Dots}
-            style={{background: details.bgColor}}
+            style={{ background: details.bgColor }}
           />
           <MiniMap nodeColor={nodeColor} zoomable pannable />
           <Controls />
@@ -280,9 +309,14 @@ function TemplateCreation() {
       <div className="col-1 p-0 m-0">
         <button onClick={onSave}>Save</button>
         <button onClick={onRestore}>Restore</button>
+        <button onClick={toggleShowNodeSettings}>Node Settings</button>
       </div>
 
-      <Modal show={showTemplateSettings} onHide={handleClose} centered>
+      <Modal
+        show={showTemplateSettings}
+        onHide={handleCloseTemplateSettings}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>Template Settings</Modal.Title>
         </Modal.Header>
@@ -300,12 +334,17 @@ function TemplateCreation() {
             </div>
             <div className="form-group">
               <label htmlFor="bgcolor">Background color:</label>
-              <input type="color" name="bgColor" defaultValue={details.bgColor} ref={bgColor}/>
+              <input
+                type="color"
+                name="bgColor"
+                defaultValue={details.bgColor}
+                ref={bgColor}
+              />
             </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCloseTemplateSettings}>
             Close
           </Button>
           <Button variant="info" onClick={handleSaveChanges}>
@@ -313,6 +352,24 @@ function TemplateCreation() {
           </Button>
         </Modal.Footer>
       </Modal>
+      <Offcanvas
+        show={showNodeSettings}
+        onHide={handleHideNodeSettings}
+        scroll={true}
+        backdrop={false}
+        placement="end"
+        className="bg-primary text-dark h3"
+        style={{ textShadow: "none" }}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>
+            <div className="h1 fw-bold" style={{ textShadow: "none" }}>
+              Node Settings
+            </div>
+          </Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>Hello World</Offcanvas.Body>
+      </Offcanvas>
     </div>
   );
 }

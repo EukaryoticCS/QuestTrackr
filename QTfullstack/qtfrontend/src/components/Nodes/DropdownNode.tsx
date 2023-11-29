@@ -22,7 +22,7 @@ const DropdownNode = ({ data, selected }) => {
           </svg>
         </button>
       </NodeToolbar>
-      <Dropdown drop="down-centered">
+      <Dropdown drop="down-centered" style={{zIndex: 50000}}>
         <Dropdown.Toggle
           style={{
             width:

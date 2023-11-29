@@ -11,12 +11,14 @@ interface Props {
 
 const TemplateCard = (props: Props) => {
   return (
-    <Link to={props.link} className="card">
-      <div className="card-header h4">
-        <div className="card-title">{props.title}</div>
-        <div className="card-body"></div>
-        <div className="card-footer">
-          <div className="">By: {props.author}</div>
+    <Link to={props.link} className="col ">
+      <div className="card bg-primary bg-gradient">
+        <div className="card-header h4">
+          <div className="card-title">{props.title}</div>
+          <div className="card-body"></div>
+          <div className="card-footer">
+            <div className="">By: {props.author}</div>
+          </div>
         </div>
       </div>
     </Link>

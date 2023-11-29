@@ -21,7 +21,7 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             type="color"
             onChange={(e) => updateNodeColor(id, e.target.value)}
           />
-          <button className="btn btn-primary">
+          <button className="btn btn-primary" onClick={data.openNodeSettings}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

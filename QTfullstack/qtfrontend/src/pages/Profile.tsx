@@ -75,7 +75,7 @@ const Profile = () => {
       ) : (
         <div className="container-fluid row h-100">
           <div className="col-md-8 flex-column">
-            <div className="d-flex flex-row">
+            <div className="d-flex flex-row py-3">
               <div style={{ height: 200 }}>
                 <img
                   className="img-fluid h-100 card img-thumbnail rounded-circle"
@@ -90,7 +90,7 @@ const Profile = () => {
             </div>
             <div className="flex-row">
               {userData.templates.length > 0 ? (
-                <div className="row row-cols-2 g-x-3">{arrayTemplateItems}</div>
+                <div className="row row-cols-2 g-2 ">{arrayTemplateItems}</div>
               ) : (
                 <div className="col text-center my-2">
                   <p className="display-2">
