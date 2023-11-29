@@ -38,7 +38,7 @@ const TemplateTools = ({
             key="shapes"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`}>
+              <Tooltip id={`tooltip-shapes`} style={{position:"fixed"}}>
                 <h4 className="m-auto ">Shapes</h4>
               </Tooltip>
             }
@@ -65,7 +65,7 @@ const TemplateTools = ({
             key="text"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-text`}>
+              <Tooltip id={`tooltip-text`} style={{position:"fixed"}}>
                 <h4 className="m-auto">Text</h4>
               </Tooltip>
             }
@@ -92,7 +92,7 @@ const TemplateTools = ({
             key="images"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-images`}>
+              <Tooltip id={`tooltip-images`} style={{position:"fixed"}}>
                 <h4 className="m-auto">Images</h4>
               </Tooltip>
             }
@@ -120,7 +120,7 @@ const TemplateTools = ({
             key="checkboxes"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-checkboxes`}>
+              <Tooltip id={`tooltip-checkboxes`} style={{position:"fixed"}}>
                 <h4 className="m-auto">Checkboxes</h4>
               </Tooltip>
             }
@@ -148,7 +148,7 @@ const TemplateTools = ({
             key="numbers"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-numbers`}>
+              <Tooltip id={`tooltip-numbers`} style={{position:"fixed"}}>
                 <h4 className="m-auto">Numbers</h4>
               </Tooltip>
             }
@@ -175,7 +175,7 @@ const TemplateTools = ({
             key="dropdowns"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-dropdowns`}>
+              <Tooltip id={`tooltip-dropdowns`} style={{position:"fixed"}}>
                 <h4 className="m-auto">Dropdowns</h4>
               </Tooltip>
             }
@@ -203,7 +203,7 @@ const TemplateTools = ({
             key="percentages"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-percentages`}>
+              <Tooltip id={`tooltip-percentages`} style={{position:"fixed"}}>
                 <h4 className="m-auto">Percentages</h4>
               </Tooltip>
             }
@@ -230,7 +230,7 @@ const TemplateTools = ({
         key="save"
         placement="right"
         overlay={
-          <Tooltip id={`tooltip-save`}>
+          <Tooltip id={`tooltip-save`} style={{position:"fixed"}}>
             <h4 className="m-auto">Save</h4>
           </Tooltip>
         }
@@ -256,7 +256,7 @@ const TemplateTools = ({
         key="settings"
         placement="right"
         overlay={
-          <Tooltip id={`tooltip-settings`}>
+          <Tooltip id={`tooltip-settings`} style={{position:"fixed"}}>
             <h4 className="m-auto ">Settings</h4>
           </Tooltip>
         }

@@ -92,6 +92,7 @@ function TemplateCreation() {
   };
   const handleHideNodeSettings = () => setShowNodeSettings(false);
   const toggleShowNodeSettings = (node) => {
+    
     setShowNodeSettings((s) => !s);
   };
   const handleShowSavedAlert = () => {
@@ -164,7 +165,7 @@ function TemplateCreation() {
               position: { x: center.x, y: center.y },
               type: "shapeNode",
               data: {
-                color: "#ffffff",
+                color: "#000000",
                 selectable: true,
                 openNodeSettings: toggleShowNodeSettings,
               },
@@ -323,6 +324,7 @@ function TemplateCreation() {
         show={showTemplateSettings}
         onHide={handleCloseTemplateSettings}
         centered
+        style={{ position: "fixed" }}
       >
         <Modal.Header closeButton>
           <Modal.Title>Template Settings</Modal.Title>
@@ -383,7 +385,7 @@ function TemplateCreation() {
         backdrop={false}
         placement="end"
         className="bg-primary text-dark h3"
-        style={{ textShadow: "none" }}
+        style={{ textShadow: "none", position: "fixed" }}
       >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
@@ -407,7 +409,6 @@ function TemplateCreation() {
       >
         <Alert
           variant="success"
-          dismissible
           show={showSavedAlert}
           style={{ width: "fit-content" }}
           className="text-black"
