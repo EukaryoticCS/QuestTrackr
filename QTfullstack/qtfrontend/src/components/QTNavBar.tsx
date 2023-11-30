@@ -47,15 +47,13 @@ function QTNavBar({ handleInputChange }) {
         </button>
         <div className="collapse navbar-collapse" id="navbarColor01">
           <ul className="navbar-nav me-auto">
-            <li className="nav-item mx-4">
-              <form className="d-flex">
+            <li className="nav-item mx-3 col-9">
                 <input
-                  className="form-control mx-sm-2"
+                  className="form-control"
                   type="search"
                   onChange={handleInputChange}
-                  placeholder="Search"
+                  placeholder="Search Your Favorite Games..."
                 />
-              </form>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/about">

@@ -92,7 +92,7 @@ function TemplateCreation() {
   };
   const handleHideNodeSettings = () => setShowNodeSettings(false);
   const toggleShowNodeSettings = (node) => {
-    
+
     setShowNodeSettings((s) => !s);
   };
   const handleShowSavedAlert = () => {
@@ -165,7 +165,7 @@ function TemplateCreation() {
               position: { x: center.x, y: center.y },
               type: "shapeNode",
               data: {
-                color: "#000000",
+                color: "#ffffff",
                 selectable: true,
                 openNodeSettings: toggleShowNodeSettings,
               },

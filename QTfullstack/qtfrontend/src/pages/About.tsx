@@ -68,7 +68,7 @@ const About = () => {
                     <li className="list-group-item bg-transparent text-light">
                       <strong>LinkedIn: </strong>
                       <Link to="https://www.linkedin.com/in/eukaryoticcs/">
-                        LinkedIn
+                        eukaryoticcs
                       </Link>
                     </li>
                   </ul>

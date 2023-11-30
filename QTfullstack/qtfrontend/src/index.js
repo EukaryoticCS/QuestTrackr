@@ -21,6 +21,7 @@ import ThirdPartyEmailPassword, {
   Google,
   Facebook,
   Apple,
+  Discord,
 } from "supertokens-auth-react/recipe/thirdpartyemailpassword/index.js";
 import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 import Session from "supertokens-auth-react/recipe/session/index.js";
@@ -72,6 +73,7 @@ SuperTokens.init({
           Google.init(),
           Facebook.init(),
           Apple.init(),
+          Discord.init(),
         ],
       },
       onHandleEvent: async (context) => {

@@ -22,9 +22,11 @@ export type NodeData = {
 
 export type RFState = {
   nodes: Node<NodeData>[];
+  selectedNode: Node<NodeData>;
   edges: Edge[];
   onNodesChange: OnNodesChange;
   onConnect: OnConnect;
+  updateSelectedNode: (node: Node<NodeData>) => void;
   updateNodeColor: (nodeId: string, color: string) => void;
   updateTextColor: (nodeId: string, color: string) => void;
   updateText: (nodeId: string, text: string) => void;
@@ -35,6 +37,19 @@ const useStore = createWithEqualityFn<RFState>(
   (set, get) => ({
     nodes: [],
     edges: [],
+    selectedNode: {
+      id: "",
+      position: { x: 0, y: 0 },
+      data: {
+        label: "",
+        color: "",
+        textColor: "",
+        text: "",
+        total: 20,
+        selectable: false,
+        openNodeSettings: () => {},
+      },
+    },
     onNodesChange: (changes: NodeChange[]) => {
       set({
         nodes: applyNodeChanges(changes, get().nodes),
@@ -50,6 +65,11 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: [...get().nodes, newNode],
       });
     },
+    updateSelectedNode: (node: Node<NodeData>) => {
+      set({
+        selectedNode: node
+      })
+    },
     updateNodeColor: (nodeId: string, color: string) => {
       set({
         nodes: get().nodes.map((node) => {
@@ -63,28 +83,28 @@ const useStore = createWithEqualityFn<RFState>(
       });
     },
     updateTextColor: (nodeId: string, textColor: string) => {
-      set ({
+      set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = {...node.data, textColor}
+            node.data = { ...node.data, textColor };
           }
           return node;
-        })
+        }),
       });
     },
     updateText: (nodeId: string, text: string) => {
-      set ({
+      set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = {...node.data, text}
+            node.data = { ...node.data, text };
           }
           return node;
-        })
-      })
+        }),
+      });
     },
     restoreNodes: (nodes: Node[]) => {
-      set ({
-        nodes: nodes
+      set({
+        nodes: nodes,
       });
     },
   }),
