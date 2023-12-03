@@ -17,7 +17,7 @@ import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import useStore from "../components/store.tsx";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Alert, Button, Dropdown, Modal, Offcanvas } from "react-bootstrap";
+import { Alert, Button, Modal, Offcanvas } from "react-bootstrap";
 
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
@@ -134,6 +134,11 @@ function TemplateCreation() {
       checks: [],
     }));
 
+    const index = sectionList.findIndex((section) => section.name === "Total");
+    if (index === -1) {
+      sectionList.push({ name: "Total", checks: [] });
+    }
+
     nodes.forEach((node) => {
       let check;
       switch (node.type) {
@@ -165,6 +170,12 @@ function TemplateCreation() {
         (section) => section.name === node.data.section
       );
       foundSection.checks.push(check);
+      if (foundSection.name !== "Total") {
+        //Adds all checks to the "Total" section
+        sectionList
+          .find((section) => section.name === "Total")
+          .checks.push(check);
+      }
     });
 
     return sectionList;

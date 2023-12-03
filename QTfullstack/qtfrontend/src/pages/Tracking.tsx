@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import QTNavBar from "../components/QTNavBar.tsx";
-import Search from "./Search.tsx";
 import ReactFlow, {
   Background,
   BackgroundVariant,
   Controls,
   MiniMap,
-  useOnSelectionChange,
 } from "reactflow";
 import ShapeNode from "../components/Nodes/ShapeNode.tsx";
 import TextNode from "../components/Nodes/TextNode.tsx";
@@ -58,7 +55,6 @@ const Tracking = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        //Somehow make nodes unselectable but still interactable
         console.log(data.trackingTemplate);
         setDetails(data.trackingTemplate);
       });

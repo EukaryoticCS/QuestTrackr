@@ -22,7 +22,7 @@ const Search = ({ userInputTitle }) => {
 
   useEffect(() => {
     debounce(userInputTitle);
-  }, [userInputTitle]);
+  }, [userInputTitle, debounce]);
 
   useEffect(() => {
     setDetails([]);

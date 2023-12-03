@@ -15,7 +15,7 @@ interface Props {
   // onPercentageClick: React.MouseEventHandler
 }
 
-const TemplateTools = ({
+const TrackingTools = ({
   onShapesClick,
   onTextClick,
   onImageClick,
@@ -282,4 +282,4 @@ const TemplateTools = ({
   );
 };
 
-export default TemplateTools;
+export default TrackingTools;
