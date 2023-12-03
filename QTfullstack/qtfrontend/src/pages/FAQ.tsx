@@ -18,7 +18,7 @@ const FAQ = () => {
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
-        <Accordion>
+        <Accordion className="h3">
           {/* FAQ layout adapted from ChatGPT */}
           <Accordion.Item eventKey="0">
             <Accordion.Header>What is QuestTrackr?</Accordion.Header>

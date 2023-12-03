@@ -69,7 +69,7 @@ const TemplateDetails = () => {
   const { gameId, templateId } = useParams();
   const navigate = useNavigate();
 
-  const { nodes, onNodesChange, onConnect, onAdd, restoreNodes } =
+  const { nodes, restoreNodes } =
     useStore(selector);
 
   const onRestore = useMemo(() => {

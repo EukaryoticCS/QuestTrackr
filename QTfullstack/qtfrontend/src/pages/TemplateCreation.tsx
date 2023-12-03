@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-} from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import ReactFlow, {
   Controls,
   Background,
@@ -23,7 +17,7 @@ import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import useStore from "../components/store.tsx";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Alert, Button, Modal, Offcanvas } from "react-bootstrap";
+import { Alert, Button, Dropdown, Modal, Offcanvas } from "react-bootstrap";
 
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
@@ -51,15 +45,28 @@ const nodeTypes = {
   dropdownNode: DropdownNode,
 };
 
+// const sections = ["Total", "Inventory", "Quests", "Achievements"];
+
 const selector = (state) => ({
   nodes: state.nodes,
   onNodesChange: state.onNodesChange,
   onAdd: state.onAdd,
   restoreNodes: state.restoreNodes,
+  selectedNode: state.selectedNode,
+  updateSelectedNode: state.updateSelectedNode,
+  updateSection: state.updateSection,
 });
 
 function TemplateCreation() {
-  const { nodes, onNodesChange, onAdd, restoreNodes } = useStore(selector);
+  const {
+    nodes,
+    onNodesChange,
+    onAdd,
+    restoreNodes,
+    selectedNode,
+    updateSelectedNode,
+    // updateSection,
+  } = useStore(selector);
   const [details, setDetails] = useState({
     _id: "",
     title: "",
@@ -84,17 +91,24 @@ function TemplateCreation() {
   const handleSaveChanges = () => {
     setDetails({
       ...details,
+      //@ts-ignore
       bgColor: bgColor.current!.value,
+      //@ts-ignore
       title: title.current!.value,
+      //@ts-ignore
       snapToGrid: snapToGrid.current!.checked,
     });
     setShowTemplateSettings(false);
   };
   const handleHideNodeSettings = () => setShowNodeSettings(false);
-  const toggleShowNodeSettings = (node) => {
 
-    setShowNodeSettings((s) => !s);
+  const updateNodeSettings = (node) => {
+    updateSelectedNode(node);
+    setShowNodeSettings(true);
   };
+
+  useEffect(() => {}, []);
+
   const handleShowSavedAlert = () => {
     setShowSavedAlert(true);
     window.setTimeout(() => {
@@ -110,7 +124,51 @@ function TemplateCreation() {
       setDetails(response.data.template);
     }
     getTemplate();
+    onRestore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const nodesIntoSections = useCallback(() => {
+    const sectionList = nodes.map((node) => ({
+      name: node.data.section,
+      checks: [],
+    }));
+
+    nodes.forEach((node) => {
+      let check;
+      switch (node.type) {
+        case "checkboxNode":
+          check = {
+            id: node.id,
+            type: "checkbox",
+            completed: false,
+          };
+          break;
+        case "dropdownNode":
+          check = {
+            id: node.id,
+            type: "dropdown",
+            options: node.data.options,
+            selected: node.data.options[0],
+          };
+          break;
+        case "numberNode":
+          check = {
+            id: node.id,
+            type: "number",
+            total: node.data.total,
+            collected: 0,
+          };
+          break;
+      }
+      const foundSection = sectionList.find(
+        (section) => section.name === node.data.section
+      );
+      foundSection.checks.push(check);
+    });
+
+    return sectionList;
+  }, [nodes]);
 
   const onSave = useCallback(async () => {
     handleShowSavedAlert();
@@ -118,28 +176,26 @@ function TemplateCreation() {
       ...node,
       selected: false,
     }));
-    const response = await axios.put(
-      `http://localhost:5000/api/v1/games/${gameId}/templates`,
-      {
-        templateData: {
-          _id: templateId,
-          title: details.title,
-          bgColor: details.bgColor,
-          snapToGrid: details.snapToGrid,
-          author: details.author,
-          sections: [],
-          layout: nodeList,
-        },
-      }
-    );
+    await axios.put(`http://localhost:5000/api/v1/games/${gameId}/templates`, {
+      templateData: {
+        _id: templateId,
+        title: details.title,
+        bgColor: details.bgColor,
+        snapToGrid: details.snapToGrid,
+        author: details.author,
+        sections: nodesIntoSections(),
+        layout: nodeList,
+      },
+    });
   }, [
     nodes,
-    templateId,
     gameId,
-    details.author,
+    templateId,
     details.title,
     details.bgColor,
     details.snapToGrid,
+    details.author,
+    nodesIntoSections,
   ]);
 
   const onRestore = useCallback(async () => {
@@ -167,7 +223,7 @@ function TemplateCreation() {
               data: {
                 color: "#ffffff",
                 selectable: true,
-                openNodeSettings: toggleShowNodeSettings,
+                section: "Total",
               },
               style: {
                 border: "1px solid black",
@@ -194,12 +250,12 @@ function TemplateCreation() {
               position: { x: center.x, y: center.y },
               type: "textNode",
               data: {
-                textColor: "#000000",
+                textColor: "#ffffff",
+                fontSize: 16,
                 text: "Input Text Here",
                 selectable: true,
               },
               style: {
-                fontSize: 15,
                 height: 40,
                 width: 140,
               },
@@ -220,6 +276,7 @@ function TemplateCreation() {
               position: { x: center.x, y: center.y },
               data: {
                 img: "https://cdn.wikimg.net/en/zeldawiki/images/3/3a/LA_Shield_Sprite.png",
+                updateNodeSettings: updateNodeSettings,
                 selectable: true,
               },
               type: "imageNode",
@@ -243,7 +300,11 @@ function TemplateCreation() {
               id: getNodeId(),
               key: getNodeId(),
               position: { x: center.x, y: center.y },
-              data: { selectable: true },
+              data: {
+                selectable: true,
+                updateNodeSettings: updateNodeSettings,
+                section: "Total",
+              },
               type: "checkboxNode",
               style: {
                 fontSize: 15,
@@ -265,7 +326,14 @@ function TemplateCreation() {
               id: getNodeId(),
               key: getNodeId(),
               position: { x: center.x, y: center.y },
-              data: { textColor: "#ffffff", total: 20, selectable: true },
+              data: {
+                textColor: "#ffffff",
+                total: 20,
+                selectable: true,
+                updateNodeSettings: updateNodeSettings,
+                fontSize: 16,
+                section: "Total",
+              },
               type: "numberNode",
             });
           }}
@@ -290,6 +358,8 @@ function TemplateCreation() {
                   "loooooooooooooooooooong",
                 ],
                 selectable: true,
+                updateNodeSettings: updateNodeSettings,
+                section: "Total",
               },
               type: "dropdownNode",
             });
@@ -394,7 +464,30 @@ function TemplateCreation() {
             </div>
           </Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>Hello World</Offcanvas.Body>
+        <Offcanvas.Body>
+          <div className="col-12">
+            Node ID: {selectedNode.id}
+            {/* <Dropdown drop="down-centered" style={{ zIndex: 50000 }}>
+              <Dropdown.Toggle variant="primary">
+                {selectedNode.data.section}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {sections.map((option: string) => {
+                  return (
+                    <Dropdown.Item
+                      key={option}
+                      onClick={() => {
+                        updateSection(selectedNode.id, option);
+                      }}
+                    >
+                      {option}
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown> */}
+          </div>
+        </Offcanvas.Body>
       </Offcanvas>
       <div
         style={{

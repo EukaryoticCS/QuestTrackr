@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Search from "./Search.tsx";
 import axios from "axios";
 import Session from "supertokens-auth-react/recipe/session";
+import { doesSessionExist } from "supertokens-auth-react/recipe/session";
 
 const GameDetails = () => {
   const [details, setDetails] = useState({
@@ -38,7 +39,8 @@ const GameDetails = () => {
 
   const createTemplate = useCallback(
     async (gameId) => {
-      const userResponse = await axios.get(
+      if (await doesSessionExist()) {
+        const userResponse = await axios.get(
         `http://localhost:5000/api/v1/users/supertokens/${await Session.getUserId()}`
       );
       const author = userResponse.data.username;
@@ -48,6 +50,10 @@ const GameDetails = () => {
       );
       const templateId = response.data.templateId;
       navigate(`/templatecreate/${gameId}/${templateId}`);
+      } else {
+        navigate(`/auth`);
+      }
+      
     },
     [navigate]
   );

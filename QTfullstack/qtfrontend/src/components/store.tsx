@@ -15,9 +15,11 @@ export type NodeData = {
   color: string;
   textColor: string;
   text: string;
+  fontSize: number;
   total: number;
   selectable: boolean;
-  openNodeSettings: Function;
+  updateNodeSettings: Function;
+  section: string;
 };
 
 export type RFState = {
@@ -30,6 +32,8 @@ export type RFState = {
   updateNodeColor: (nodeId: string, color: string) => void;
   updateTextColor: (nodeId: string, color: string) => void;
   updateText: (nodeId: string, text: string) => void;
+  updateFontSize: (nodeId: string, fontSize: number) => void;
+  updateSection: (nodeId: string, section: string) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -45,9 +49,11 @@ const useStore = createWithEqualityFn<RFState>(
         color: "",
         textColor: "",
         text: "",
+        fontSize: 16,
         total: 20,
         selectable: false,
-        openNodeSettings: () => {},
+        updateNodeSettings: () => {},
+        section: "",
       },
     },
     onNodesChange: (changes: NodeChange[]) => {
@@ -67,8 +73,8 @@ const useStore = createWithEqualityFn<RFState>(
     },
     updateSelectedNode: (node: Node<NodeData>) => {
       set({
-        selectedNode: node
-      })
+        selectedNode: node,
+      });
     },
     updateNodeColor: (nodeId: string, color: string) => {
       set({
@@ -77,7 +83,6 @@ const useStore = createWithEqualityFn<RFState>(
             // it's important to create a new object here, to inform React Flow about the cahnges
             node.data = { ...node.data, color };
           }
-
           return node;
         }),
       });
@@ -97,6 +102,26 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, text };
+          }
+          return node;
+        }),
+      });
+    },
+    updateFontSize: (nodeId: string, fontSize: number) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, fontSize };
+          }
+          return node;
+        }),
+      });
+    },
+    updateSection: (nodeId: string, section: string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, section };
           }
           return node;
         }),

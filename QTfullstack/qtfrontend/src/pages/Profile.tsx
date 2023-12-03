@@ -128,7 +128,7 @@ const Profile = () => {
                   <p className="card-text h2 text-center">
                     Average Completion Rate:
                   </p>
-                  <p className="card-text h2 text-center">100%</p>
+                  <p className="card-text h2 text-center">0%</p>
                 </div>
               </div>
             </div>

@@ -106,6 +106,7 @@ root.render(
             {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [
               ThirdPartyEmailPasswordPreBuiltUI,
             ])}
+            
             <reactRouterDom.Route path="/*" element={<Home />} exact />
             <reactRouterDom.Route path="/about" element={<About />} />
             <reactRouterDom.Route path="/faq" element={<FAQ />} />
