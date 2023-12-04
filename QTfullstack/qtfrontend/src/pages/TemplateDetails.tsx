@@ -1,4 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  // useMemo
+} from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
 import Search from "./Search.tsx";
@@ -69,12 +73,14 @@ const TemplateDetails = () => {
   const { gameId, templateId } = useParams();
   const navigate = useNavigate();
 
-  const { nodes, restoreNodes } =
-    useStore(selector);
+  const {
+    nodes,
+    // restoreNodes
+  } = useStore(selector);
 
-  const onRestore = useMemo(() => {
-    restoreNodes(details.layout);
-  }, [restoreNodes, details]);
+  // const onRestore = useMemo(() => {
+  //   restoreNodes(details.layout);
+  // }, [restoreNodes, details]);
 
   useEffect(() => {
     fetch(
