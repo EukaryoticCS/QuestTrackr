@@ -118,9 +118,7 @@ const Profile = () => {
               <div className="card bg-secondary">
                 <div className="card-body">
                   <p className="card-text h2 text-center">Completed:</p>
-                  <p className="card-text h2 text-center">
-                    {userData.templates.length}
-                  </p>
+                  <p className="card-text h2 text-center">0</p>
                 </div>
               </div>
               <div className="card bg-info">

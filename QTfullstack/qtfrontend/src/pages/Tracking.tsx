@@ -12,6 +12,7 @@ import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import { useParams } from "react-router-dom";
+import TrackingTools from "../components/TrackingTools.tsx";
 
 function nodeColor(node) {
   switch (node.type) {
@@ -45,7 +46,7 @@ const Tracking = () => {
     author: "",
     bgColor: "",
     layout: [],
-    sections: "",
+    sections: [],
   });
   const { username, templateId } = useParams();
 
@@ -62,29 +63,30 @@ const Tracking = () => {
 
   return (
     <div
-      className="container-fluid d-flex flex-column m-0 p-0"
+      className="row min-vh-100 p-0 container-fluid"
       style={{ height: "100vh", width: "100vw" }}
     >
-      <div className="row p-0 m-0 flex-grow-1">
-        <div className="p-0 m-0" style={{ height: "100%", width: "100%" }}>
-          <ReactFlow
-            minZoom={0.2}
-            maxZoom={4}
-            fitView
-            nodes={details.layout}
-            nodesDraggable={false}
-            nodeTypes={nodeTypes}
-            zoomOnDoubleClick={false}
-            proOptions={{ hideAttribution: true }}
-          >
-            <Background
-              variant={BackgroundVariant.Dots}
-              style={{ background: details.bgColor }}
-            />
-            <MiniMap nodeColor={nodeColor} zoomable pannable />
-            <Controls showInteractive={false} />
-          </ReactFlow>
-        </div>
+      <div className="d-flex col-sm-auto py-0 pe-0 m-0">
+        <TrackingTools handleShowSavedAlert={() => {}} />
+      </div>
+      <div className="col p-0 m-0" style={{ height: "100%", width: "100%" }}>
+        <ReactFlow
+          minZoom={0.2}
+          maxZoom={4}
+          fitView
+          nodes={details.layout}
+          nodesDraggable={false}
+          nodeTypes={nodeTypes}
+          zoomOnDoubleClick={false}
+          proOptions={{ hideAttribution: true }}
+        >
+          <Background
+            variant={BackgroundVariant.Dots}
+            style={{ background: details.bgColor }}
+          />
+          <MiniMap nodeColor={nodeColor} zoomable pannable />
+          <Controls showInteractive={false} />
+        </ReactFlow>
       </div>
     </div>
   );

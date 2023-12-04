@@ -7,10 +7,10 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 const sections = ["Total", "Inventory", "Quests", "Achievements"];
 
 const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
-  const [collected, setCollected] = useState(0);
   const [fontSize, setFontSize] = useState(16);
   const updateTextColor = useStore((state) => state.updateTextColor);
   const updateSection = useStore((state) => state.updateSection);
+  const updateCollected = useStore((state) => state.updateCollected);
 
   // const handleUpdateNodeSettings = () => {
   //   data.updateNodeSettings({ id, data, selected });
@@ -18,7 +18,11 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
 
   return (
     <>
-      <NodeToolbar className="nav" align="center" isVisible={selected && data.selectable}>
+      <NodeToolbar
+        className="nav"
+        align="center"
+        isVisible={selected && data.selectable}
+      >
         <button
           className="nav-item btn btn-primary"
           onClick={() => {
@@ -113,8 +117,11 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             type="text"
             onChange={(e) => {
               let inputNum = parseInt(e.target.value);
-              setCollected(!isNaN(inputNum) && inputNum > 0 ? inputNum : 0);
+              console.log(inputNum);
+              data.collected = !isNaN(inputNum) && inputNum > 0 ? inputNum : 0;
+              updateCollected(id, !isNaN(inputNum) && inputNum > 0 ? inputNum : 0);
             }}
+            defaultValue={data.collected}
             style={{
               fontSize: fontSize,
               background: "none",
@@ -124,12 +131,8 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
               textAlign: "center",
             }}
           />
-          <div
-            id="remaining"
-            className="col-6"
-            style={{ textShadow: "none" }}
-          >
-            {collected > data.total ? 0 : data.total - collected}
+          <div id="remaining" className="col-6" style={{ textShadow: "none" }}>
+            {data.collected > data.total ? 0 : data.total - data.collected}
           </div>
         </div>
       </div>

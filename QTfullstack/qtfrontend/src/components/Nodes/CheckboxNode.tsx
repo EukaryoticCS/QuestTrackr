@@ -10,6 +10,11 @@ const CheckboxNode = ({ id, data, selected }) => {
   //   data.updateNodeSettings({ id, data, selected });
   // };
   const updateSection = useStore((state) => state.updateSection);
+  const updateChecked = useStore((state) => state.updateChecked);
+
+  const handleCheckboxClick = () => {
+    updateChecked(id, !data.checked);
+  }
 
   return (
     <>
@@ -50,7 +55,7 @@ const CheckboxNode = ({ id, data, selected }) => {
         </Dropdown>
       </NodeToolbar>
       <div className="text-center">
-        <input type="checkbox" />
+        <input type="checkbox" checked={data.checked} onChange={handleCheckboxClick}/>
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { NodeToolbar } from "reactflow";
 import useStore from "../store.tsx";
@@ -6,12 +6,11 @@ import useStore from "../store.tsx";
 const sections = ["Total", "Inventory", "Quests", "Achievements"];
 
 const DropdownNode = ({ id, data, selected }) => {
-  const [selectedOption, setSelectedOption] = useState("");
-
   // const handleUpdateNodeSettings = () => {
   //   data.updateNodeSettings({ id, data, selected });
   // };
   const updateSection = useStore((state) => state.updateSection);
+  const updateSelected = useStore((state) => state.updateSelected);
 
   return (
     <>
@@ -55,11 +54,11 @@ const DropdownNode = ({ id, data, selected }) => {
         <Dropdown.Toggle
           style={{
             width:
-              Math.max(...data.options.map((option) => option.length)) * 10, //This is CRAZY
+              Math.max(...data.options.map((option) => option.length)) * 20, //This is CRAZY
           }}
           variant="primary"
         >
-          {selectedOption}
+          {data.selected}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {data.options.map((option: string) => {
@@ -67,7 +66,7 @@ const DropdownNode = ({ id, data, selected }) => {
               <Dropdown.Item
                 key={option}
                 onClick={() => {
-                  setSelectedOption(option);
+                  updateSelected(id, option);
                 }}
               >
                 {option}

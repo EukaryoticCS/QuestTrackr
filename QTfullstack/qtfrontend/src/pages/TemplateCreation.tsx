@@ -129,10 +129,15 @@ function TemplateCreation() {
   }, []);
 
   const nodesIntoSections = useCallback(() => {
-    const sectionList = nodes.map((node) => ({
-      name: node.data.section,
-      checks: [],
-    }));
+    const uniqueSections = [...new Set(nodes.map((node) => node.data.section))];
+
+    const sectionList: any[] = [];
+    uniqueSections.forEach((section) => {
+      sectionList.push({
+        name: section,
+        checks: [],
+      });
+    });
 
     const index = sectionList.findIndex((section) => section.name === "Total");
     if (index === -1) {
@@ -165,16 +170,20 @@ function TemplateCreation() {
             collected: 0,
           };
           break;
+        default:
+          break;
       }
-      const foundSection = sectionList.find(
-        (section) => section.name === node.data.section
-      );
-      foundSection.checks.push(check);
-      if (foundSection.name !== "Total") {
-        //Adds all checks to the "Total" section
-        sectionList
-          .find((section) => section.name === "Total")
-          .checks.push(check);
+      if (check) {
+        const foundSection = sectionList.find(
+          (section) => section.name === node.data.section
+        );
+        foundSection.checks.push(check);
+        if (foundSection.name !== "Total") {
+          //Adds all checks to the "Total" section
+          sectionList
+            .find((section) => section.name === "Total")
+            .checks.push(check);
+        }
       }
     });
 
@@ -315,6 +324,7 @@ function TemplateCreation() {
                 selectable: true,
                 updateNodeSettings: updateNodeSettings,
                 section: "Total",
+                checked: false,
               },
               type: "checkboxNode",
               style: {
@@ -344,6 +354,7 @@ function TemplateCreation() {
                 updateNodeSettings: updateNodeSettings,
                 fontSize: 16,
                 section: "Total",
+                collected: 0,
               },
               type: "numberNode",
             });
@@ -364,13 +375,14 @@ function TemplateCreation() {
               data: {
                 options: [
                   "N/A",
-                  "short",
-                  "meeeeeediummmm",
-                  "loooooooooooooooooooong",
+                  "Lv1",
+                  "Lv2",
+                  "Lv3",
                 ],
                 selectable: true,
                 updateNodeSettings: updateNodeSettings,
                 section: "Total",
+                selected: "N/A"
               },
               type: "dropdownNode",
             });

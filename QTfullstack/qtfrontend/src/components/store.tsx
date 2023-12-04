@@ -20,6 +20,9 @@ export type NodeData = {
   selectable: boolean;
   updateNodeSettings: Function;
   section: string;
+  checked: boolean;
+  selected: string;
+  collected: number;
 };
 
 export type RFState = {
@@ -34,6 +37,9 @@ export type RFState = {
   updateText: (nodeId: string, text: string) => void;
   updateFontSize: (nodeId: string, fontSize: number) => void;
   updateSection: (nodeId: string, section: string) => void;
+  updateChecked: (nodeId: string, checked: boolean) => void;
+  updateSelected: (nodeId: string, selected: string) => void;
+  updateCollected: (nodeId: string, collected: number) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -54,6 +60,9 @@ const useStore = createWithEqualityFn<RFState>(
         selectable: false,
         updateNodeSettings: () => {},
         section: "",
+        checked: false,
+        selected: "N/A",
+        collected: 0
       },
     },
     onNodesChange: (changes: NodeChange[]) => {
@@ -122,6 +131,36 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, section };
+          }
+          return node;
+        }),
+      });
+    },
+    updateChecked: (nodeId: string, checked: boolean) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, checked };
+          }
+          return node;
+        }),
+      });
+    },
+    updateSelected: (nodeId: string, selected: string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, selected };
+          }
+          return node;
+        }),
+      });
+    },
+    updateCollected: (nodeId: string, collected: number) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, collected };
           }
           return node;
         }),
