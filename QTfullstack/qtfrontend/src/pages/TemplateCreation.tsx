@@ -128,67 +128,73 @@ function TemplateCreation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const nodesIntoSections = useCallback(() => {
-    const uniqueSections = [...new Set(nodes.map((node) => node.data.section))];
+  const nodesIntoSections = useCallback(
+    () => {
+      // const uniqueSections = [...new Set(nodes.map((node) => node.data.section))];
 
-    const sectionList: any[] = [];
-    uniqueSections.forEach((section) => {
-      sectionList.push({
-        name: section,
-        checks: [],
-      });
-    });
+      // const sectionList: any[] = [];
+      // uniqueSections.forEach((section) => {
+      //   sectionList.push({
+      //     name: section,
+      //     checks: [],
+      //   });
+      // });
 
-    const index = sectionList.findIndex((section) => section.name === "Total");
-    if (index === -1) {
-      sectionList.push({ name: "Total", checks: [] });
-    }
+      // const index = sectionList.findIndex((section) => section.name === "Total");
+      // if (index === -1) {
+      //   sectionList.push({ name: "Total", checks: [] });
+      // }
 
-    nodes.forEach((node) => {
-      let check;
-      switch (node.type) {
-        case "checkboxNode":
-          check = {
-            id: node.id,
-            type: "checkbox",
-            completed: false,
-          };
-          break;
-        case "dropdownNode":
-          check = {
-            id: node.id,
-            type: "dropdown",
-            options: node.data.options,
-            selected: node.data.options[0],
-          };
-          break;
-        case "numberNode":
-          check = {
-            id: node.id,
-            type: "number",
-            total: node.data.total,
-            collected: 0,
-          };
-          break;
-        default:
-          break;
-      }
-      if (check) {
-        const foundSection = sectionList.find(
-          (section) => section.name === node.data.section
-        );
-        foundSection.checks.push(check);
-        if (foundSection.name !== "Total") {
-          //Adds all checks to the "Total" section
-          sectionList
-            .find((section) => section.name === "Total")
-            .checks.push(check);
-        }
-      }
-    });
+      // nodes.forEach((node) => {
+      //   let check;
+      //   switch (node.type) {
+      //     case "checkboxNode":
+      //       check = {
+      //         id: node.id,
+      //         type: "checkbox",
+      //         completed: false,
+      //       };
+      //       break;
+      //     case "dropdownNode":
+      //       check = {
+      //         id: node.id,
+      //         type: "dropdown",
+      //         options: node.data.options,
+      //         selected: node.data.options[0],
+      //       };
+      //       break;
+      //     case "numberNode":
+      //       check = {
+      //         id: node.id,
+      //         type: "number",
+      //         total: node.data.total,
+      //         collected: 0,
+      //       };
+      //       break;
+      //     default:
+      //       break;
+      //   }
+      //   if (check) {
+      //     const foundSection = sectionList.find(
+      //       (section) => section.name === node.data.section
+      //     );
+      //     foundSection.checks.push(check);
+      //     if (foundSection.name !== "Total") {
+      //       //Adds all checks to the "Total" section
+      //       sectionList
+      //         .find((section) => section.name === "Total")
+      //         .checks.push(check);
+      //     }
+      //   }
+      // });
 
-    return sectionList;
-  }, [nodes]);
+      // return sectionList;
+      return [];
+    },
+    [
+      //nodes
+    ]
+  );
 
   const onSave = useCallback(async () => {
     handleShowSavedAlert();
@@ -373,16 +379,11 @@ function TemplateCreation() {
               key: getNodeId(),
               position: { x: center.x, y: center.y },
               data: {
-                options: [
-                  "N/A",
-                  "Lv1",
-                  "Lv2",
-                  "Lv3",
-                ],
+                options: ["N/A", "Lv1", "Lv2", "Lv3"],
                 selectable: true,
                 updateNodeSettings: updateNodeSettings,
                 section: "Total",
-                selected: "N/A"
+                selected: "N/A",
               },
               type: "dropdownNode",
             });
