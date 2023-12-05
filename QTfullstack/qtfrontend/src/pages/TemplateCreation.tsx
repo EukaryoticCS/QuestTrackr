@@ -107,8 +107,6 @@ function TemplateCreation() {
     setShowNodeSettings(true);
   };
 
-  useEffect(() => {}, []);
-
   const handleShowSavedAlert = () => {
     setShowSavedAlert(true);
     window.setTimeout(() => {
@@ -207,8 +205,6 @@ function TemplateCreation() {
         _id: templateId,
         title: details.title,
         bgColor: details.bgColor,
-        snapToGrid: details.snapToGrid,
-        author: details.author,
         sections: nodesIntoSections(),
         layout: nodeList,
       },
@@ -219,8 +215,6 @@ function TemplateCreation() {
     templateId,
     details.title,
     details.bgColor,
-    details.snapToGrid,
-    details.author,
     nodesIntoSections,
   ]);
 

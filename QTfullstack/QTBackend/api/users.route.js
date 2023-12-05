@@ -22,6 +22,6 @@ router
 router
   .route("/:username/templates/:templateId")
   .get(UsersCtrl.apiGetTrackingTemplate)
-  .patch(UsersCtrl.apiTrackTemplate);
+  .put(UsersCtrl.apiTrackTemplate);
 
 export default router;

@@ -127,42 +127,47 @@ export default class UsersDAO {
     }
   }
 
-  static async trackTemplate(username, templateId, checkUpdate) {
+  static async trackTemplate(username, template) {
     try {
-      const id = new ObjectId(templateId);
-      let update;
-      if (checkUpdate.selected) {
-        update = {
+      return await users.updateOne(
+        { "templates._id": new ObjectId(template._id) },
+        {
           $set: {
-            "templates.$[template].sections.$[section].checks.$[check].selected":
-              checkUpdate.selected,
+            "templates.$.layout": template.layout,
           },
-        };
-      } else if (checkUpdate.completed) {
-        update = {
-          $set: {
-            "templates.$[template].sections.$[section].checks.$[check].completed":
-              checkUpdate.completed,
-          },
-        };
-      } else {
-        //if checkUpdate.collected
-        update = {
-          $set: {
-            "templates.$[template].sections.$[section].checks.$[check].collected":
-              checkUpdate.collected,
-          },
-        };
-      }
+        }
+      );
+      // let update;
+      // switch (typeof newValue) {
+      //   case "string":
+      //     update = {
+      //       $set: {
+      //         "templates.$[template].layout.$[node].data.selected": newValue,
+      //       },
+      //     };
+      //     break;
+      //   case "number":
+      //     update = {
+      //       $set: {
+      //         "templates.$[template].layout.$[node].data.collected": newValue,
+      //       },
+      //     };
+      //     break;
+      //   case "boolean":
+      //     update = {
+      //       $set: {
+      //         "templates.$[template].layout.$[node].data.checked": newValue,
+      //       },
+      //     };
+      // }
 
-      return await users.updateOne({ username: username }, update, {
-        returnOriginal: false,
-        arrayFilters: [
-          { "template._id": id },
-          { "section.title": checkUpdate.section },
-          { "check.name": checkUpdate.name },
-        ],
-      });
+      // return await users.updateOne({ username: username }, update, {
+      //   returnOriginal: false,
+      //   arrayFilters: [
+      //     { "template._id": id },
+      //     { "node.id": nodeId },
+      //   ],
+      // });
     } catch (e) {
       console.error("Error adding check: " + e.message);
       return null;

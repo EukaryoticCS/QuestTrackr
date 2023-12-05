@@ -7,10 +7,12 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 const sections = ["Total", "Inventory", "Quests", "Achievements"];
 
 const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
-  const [fontSize, setFontSize] = useState(16);
+  const [collected, setCollected] = useState(data.collected);
+
   const updateTextColor = useStore((state) => state.updateTextColor);
   const updateSection = useStore((state) => state.updateSection);
   const updateCollected = useStore((state) => state.updateCollected);
+  const updateFontSize = useStore((state) => state.updateFontSize);
 
   // const handleUpdateNodeSettings = () => {
   //   data.updateNodeSettings({ id, data, selected });
@@ -26,21 +28,21 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
         <button
           className="nav-item btn btn-primary"
           onClick={() => {
-            if (fontSizes.indexOf(fontSize) + 1 < fontSizes.length)
-              setFontSize(fontSizes[fontSizes.indexOf(fontSize) + 1]);
+            if (fontSizes.indexOf(data.fontSize) + 1 < fontSizes.length)
+              updateFontSize(id, fontSizes[fontSizes.indexOf(data.fontSize) + 1]);
           }}
         >
           +
         </button>
         <Dropdown className="nav-item">
-          <Dropdown.Toggle variant="primary">{fontSize}</Dropdown.Toggle>
+          <Dropdown.Toggle variant="primary">{data.fontSize}</Dropdown.Toggle>
           <Dropdown.Menu className="w-100">
             {fontSizes.map((size) => {
               return (
                 <Dropdown.Item
                   key={size}
                   onClick={() => {
-                    setFontSize(size);
+                    updateFontSize(id, size);
                   }}
                 >
                   {size}
@@ -52,8 +54,8 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
         <button
           className="nav-item btn btn-primary"
           onClick={() => {
-            if (fontSizes.indexOf(fontSize) - 1 >= 0)
-              setFontSize(fontSizes[fontSizes.indexOf(fontSize) - 1]);
+            if (fontSizes.indexOf(data.fontSize) - 1 >= 0)
+              updateFontSize(id, fontSizes[fontSizes.indexOf(data.fontSize) - 1]);
           }}
         >
           -
@@ -98,7 +100,7 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
       <div
         className="container text-center form-group"
         style={{
-          fontSize: fontSize,
+          fontSize: data.fontSize,
           color: data.textColor,
         }}
       >
@@ -110,20 +112,19 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             Remaining:
           </div>
         </div>
-        <div className="row p-0" style={{ height: fontSize, color: "inherit" }}>
+        <div className="row p-0" style={{ height: data.fontSize, color: "inherit" }}>
           <input
             id="collected"
             className="col-6"
             type="text"
             onChange={(e) => {
               let inputNum = parseInt(e.target.value);
-              console.log(inputNum);
-              data.collected = !isNaN(inputNum) && inputNum > 0 ? inputNum : 0;
               updateCollected(id, !isNaN(inputNum) && inputNum > 0 ? inputNum : 0);
+              setCollected(!isNaN(inputNum) && inputNum > 0 ? inputNum : 0);
             }}
-            defaultValue={data.collected}
+            defaultValue={collected}
             style={{
-              fontSize: fontSize,
+              fontSize: data.fontSize,
               background: "none",
               outline: "none",
               border: "none",
@@ -132,7 +133,7 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
             }}
           />
           <div id="remaining" className="col-6" style={{ textShadow: "none" }}>
-            {data.collected > data.total ? 0 : data.total - data.collected}
+            {collected > data.total ? 0 : data.total - collected}
           </div>
         </div>
       </div>

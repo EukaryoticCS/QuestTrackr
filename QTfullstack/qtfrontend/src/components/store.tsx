@@ -40,6 +40,7 @@ export type RFState = {
   updateChecked: (nodeId: string, checked: boolean) => void;
   updateSelected: (nodeId: string, selected: string) => void;
   updateCollected: (nodeId: string, collected: number) => void;
+  restoreNodes: (nodes: Node[]) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions

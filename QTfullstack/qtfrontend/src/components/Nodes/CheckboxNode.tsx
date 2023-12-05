@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { NodeToolbar } from "reactflow";
 import useStore from "../store.tsx";
@@ -6,6 +6,7 @@ import useStore from "../store.tsx";
 const sections = ["Total", "Inventory", "Quests", "Achievements"];
 
 const CheckboxNode = ({ id, data, selected }) => {
+  const [checked, setChecked] = useState(data.checked);
   // const handleUpdateNodeSettings = () => {
   //   data.updateNodeSettings({ id, data, selected });
   // };
@@ -14,6 +15,7 @@ const CheckboxNode = ({ id, data, selected }) => {
 
   const handleCheckboxClick = () => {
     updateChecked(id, !data.checked);
+    setChecked(!data.checked);
   }
 
   return (
@@ -55,7 +57,7 @@ const CheckboxNode = ({ id, data, selected }) => {
         </Dropdown>
       </NodeToolbar>
       <div className="text-center">
-        <input type="checkbox" checked={data.checked} onChange={handleCheckboxClick}/>
+        <input type="checkbox" checked={checked} onChange={handleCheckboxClick}/>
       </div>
     </>
   );

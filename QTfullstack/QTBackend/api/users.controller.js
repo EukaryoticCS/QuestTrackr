@@ -100,10 +100,9 @@ export default class UsersCtrl {
   static async apiTrackTemplate(req, res, next) {
     try {
       const username = req.params.username;
-      const templateId = req.params.templateId;
-      const checkUpdate = req.body.checkUpdate;
-
-      await UsersDAO.trackTemplate(username, templateId, checkUpdate);
+      const template = req.body.templateData;
+      
+      await UsersDAO.trackTemplate(username, template);
       res.json({ status: "success" });
     } catch (e) {
       res.status(500).json({ error: e.message });
