@@ -1,6 +1,7 @@
 import React, {
   useState,
   useEffect,
+  useCallback,
   // useMemo
 } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
@@ -51,36 +52,21 @@ const nodeTypes = {
   dropdownNode: DropdownNode,
 };
 
-const selector = (state) => ({
-  nodes: state.nodes,
-  onNodesChange: state.onNodesChange,
-  onConnect: state.onConnect,
-  onAdd: state.onAdd,
-  restoreNodes: state.restoreNodes,
-});
-
 const TemplateDetails = () => {
+  const nodes = useStore((state) => state.nodes);
+  const restoreNodes = useStore((state) => state.restoreNodes);
   const [details, setDetails] = useState({
     _id: "",
     title: "",
     author: "",
     bgColor: "",
-    layout: [{ id: "", key: "", position: {}, type: "", data: { text: "" } }],
+    layout: [],
     sections: "",
   });
   const [userInputTitle, setUserInputTitle] = useState("");
   const [userTemplateLink, setUserTemplateLink] = useState("");
   const { gameId, templateId } = useParams();
   const navigate = useNavigate();
-
-  const {
-    nodes,
-    // restoreNodes
-  } = useStore(selector);
-
-  // const onRestore = useMemo(() => {
-  //   restoreNodes(details.layout);
-  // }, [restoreNodes, details]);
 
   useEffect(() => {
     fetch(
@@ -110,6 +96,14 @@ const TemplateDetails = () => {
     getUserTemplateLink();
   }, [details]);
 
+  const onRestore = useCallback(async () => {
+    restoreNodes(details.layout);
+  }, [details, restoreNodes]);
+
+  useEffect(() => {
+    onRestore();
+  }, [details.layout, onRestore])
+
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
   };
@@ -128,8 +122,10 @@ const TemplateDetails = () => {
               ...details,
               templateId: templateId,
               layout: details.layout.map((node) => ({
+                //@ts-ignore
                 ...node,
                 data: {
+                  //@ts-ignore
                   ...node.data,
                   selectable: false,
                 },

@@ -222,6 +222,10 @@ function TemplateCreation() {
     restoreNodes(details.layout);
   }, [restoreNodes, details]);
 
+  useEffect(() => {
+    onRestore();
+  }, [details.layout, onRestore])
+
   return (
     <div className="row min-vh-100 p-0 container-fluid">
       <div className="d-flex col-sm-auto py-0 pe-0 m-0">

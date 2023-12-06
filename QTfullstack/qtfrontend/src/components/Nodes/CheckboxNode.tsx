@@ -14,8 +14,8 @@ const CheckboxNode = ({ id, data, selected }) => {
   const updateChecked = useStore((state) => state.updateChecked);
 
   const handleCheckboxClick = () => {
-    updateChecked(id, !data.checked);
-    setChecked(!data.checked);
+    updateChecked(id, !checked);
+    setChecked(!checked);
   }
 
   return (
