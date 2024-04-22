@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { Dropdown } from "react-bootstrap";
-import { NodeToolbar } from "reactflow";
-import useStore from "../store.tsx";
+import { NodeProps, NodeResizer, NodeToolbar } from "reactflow";
 
-const sections = ["Total", "Inventory", "Quests", "Achievements"];
+import useStore, { NodeData } from "../store.tsx";
 
-const DropdownNode = ({ id, data, selected }) => {
-  const [selectedOption, setSelectedOption] = useState(data.selected);
-  // const handleUpdateNodeSettings = () => {
-  //   data.updateNodeSettings({ id, data, selected });
-  // };
-  const updateSection = useStore((state) => state.updateSection);
-  const updateSelected = useStore((state) => state.updateSelected);
+const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
+
+const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
+  const updateTextColor = useStore((state) => state.updateTextColor);
+  const updateText = useStore((state) => state.updateText);
+  const updateFontSize = useStore((state) => state.updateFontSize);
 
   const handleUpdateNodeSettings = () => {
-    data.updateNodeSettings({ id, data, selected, type: "dropdownNode" });
+    data.updateNodeSettings({ id, data, selected, type: "percentageNode" });
   };
 
   return (
@@ -24,23 +22,53 @@ const DropdownNode = ({ id, data, selected }) => {
         align="center"
         isVisible={selected && data.selectable}
       >
-        <Dropdown drop="down-centered" style={{ zIndex: 50000 }}>
-          <Dropdown.Toggle variant="primary">{data.section}</Dropdown.Toggle>
-          <Dropdown.Menu>
-            {sections.map((option: string) => {
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            if (fontSizes.indexOf(data.fontSize) + 1 < fontSizes.length)
+              updateFontSize(
+                id,
+                fontSizes[fontSizes.indexOf(data.fontSize) + 1]
+              );
+          }}
+        >
+          +
+        </button>
+        <Dropdown drop="down-centered" className="">
+          <Dropdown.Toggle variant="primary">{data.fontSize}</Dropdown.Toggle>
+          <Dropdown.Menu className="w-100">
+            {fontSizes.map((size) => {
               return (
                 <Dropdown.Item
-                  key={option}
+                  key={size}
                   onClick={() => {
-                    updateSection(id, option);
+                    updateFontSize(id, size);
                   }}
                 >
-                  {option}
+                  {size}
                 </Dropdown.Item>
               );
             })}
           </Dropdown.Menu>
         </Dropdown>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            if (fontSizes.indexOf(data.fontSize) - 1 >= 0)
+              updateFontSize(
+                id,
+                fontSizes[fontSizes.indexOf(data.fontSize) - 1]
+              );
+          }}
+        >
+          -
+        </button>
+        <input
+          className="form-control form-control-color"
+          defaultValue={data.textColor}
+          type="color"
+          onChange={(e) => updateTextColor(id, e.target.value)}
+        />
         <button className="btn btn-primary" onClick={handleUpdateNodeSettings}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -55,34 +83,14 @@ const DropdownNode = ({ id, data, selected }) => {
           </svg>
         </button>
       </NodeToolbar>
-      <Dropdown drop="down-centered" style={{ zIndex: 50000 }}>
-        <Dropdown.Toggle
-          style={{
-            width:
-              Math.max(...data.options.map((option) => option.length)) * 20, //This is CRAZY
-          }}
-          variant="primary"
-        >
-          {selectedOption}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {data.options.map((option: string) => {
-            return (
-              <Dropdown.Item
-                key={option}
-                onClick={() => {
-                  updateSelected(id, option);
-                  setSelectedOption(option);
-                }}
-              >
-                {option}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown.Menu>
-      </Dropdown>
+      <NodeResizer
+        color="ff0071"
+        isVisible={selected}
+        minWidth={20}
+        // minHeight={height}
+      />
     </>
   );
 };
 
-export default DropdownNode;
+export default PercentageNode;

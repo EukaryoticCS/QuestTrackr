@@ -13,8 +13,19 @@ import {
 } from "supertokens-node/framework/express/index.js";
 import Dashboard from "supertokens-node/recipe/dashboard/index.js";
 import EmailVerification from "supertokens-node/recipe/emailverification/index.js";
+import { S3, S3Client } from "@aws-sdk/client-s3";
+import bodyParser from "body-parser";
+import mulitparty from "multiparty";
+import fs from "fs";
+import {fileTypeFromBuffer} from "file-type";
 
 dotenv.config();
+
+const s3 = new S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: 'us-east-2',
+});
 
 let emailUserMap = {};
 
@@ -127,14 +138,52 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ type: ["application/json", "text/plain"] }));
 app.use(middleware());
+app.use(bodyParser.json());
 
 app.use("/api/v1/users", users);
 app.use("/api/v1/games", games);
 
 app.use("/login", function (req, res, next) {
   res.render("login");
+});
+
+const uploadFile = (buffer, name, type) => {
+  const params = {
+    Body: buffer,
+    Bucket: 'questtrackr',
+    ContentType: type.mime,
+    Key: `${name}.${type.ext}`,
+  };
+  return s3.putObject(params);
+};
+
+app.post("/upload", async (req, res) => {
+  const form = new mulitparty.Form();
+  form.parse(req, async (error, fields, files) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+    try {
+      const path = files.file[0].path;
+      const buffer = fs.readFileSync(path);
+      const type = await fileTypeFromBuffer(buffer);
+
+      const fileName = "templateImages/" + Date.now().toString() + files.file[0].originalFilename;
+
+      let split = fileName.split(".");
+      split.pop();
+      const fileNameNoFileType = split.join("");
+
+      await uploadFile(buffer, fileNameNoFileType, type);
+      return res.status(200).send("https://questtrackr.s3.us-east-2.amazonaws.com/" + fileName);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  });
 });
 
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }));

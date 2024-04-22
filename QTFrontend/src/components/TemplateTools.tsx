@@ -10,9 +10,9 @@ interface Props {
   onCheckboxClick: React.MouseEventHandler;
   onNumbersClick: React.MouseEventHandler;
   onDropdownClick: React.MouseEventHandler;
+  onPercentageClick: React.MouseEventHandler;
   handleShowTemplateSettings: React.MouseEventHandler;
   handleShowSavedAlert: React.MouseEventHandler;
-  // onPercentageClick: React.MouseEventHandler
 }
 
 const TemplateTools = ({
@@ -22,6 +22,7 @@ const TemplateTools = ({
   onCheckboxClick,
   onNumbersClick,
   onDropdownClick,
+  onPercentageClick,
   handleShowTemplateSettings,
   handleShowSavedAlert,
 }: Props) => {
@@ -210,7 +211,7 @@ const TemplateTools = ({
           >
             <button
               className="nav-link py-3 border-bottom m-auto"
-              // onClick={onPercentageClick}
+              onClick={onPercentageClick}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

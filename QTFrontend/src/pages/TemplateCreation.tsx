@@ -5,6 +5,7 @@ import ReactFlow, {
   BackgroundVariant,
   MiniMap,
   useReactFlow,
+  useOnSelectionChange,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import TemplateTools from "../components/TemplateTools.tsx";
@@ -14,10 +15,11 @@ import ImageNode from "../components/Nodes/ImageNode.tsx";
 import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
+import PercentageNode from "../components/Nodes/PercentageNode.tsx";
 import useStore from "../components/store.tsx";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Alert, Button, Modal, Offcanvas } from "react-bootstrap";
+import { Alert, Button, Form, Modal, Offcanvas } from "react-bootstrap";
 
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
@@ -43,6 +45,7 @@ const nodeTypes = {
   checkboxNode: CheckboxNode,
   numberNode: NumberNode,
   dropdownNode: DropdownNode,
+  percentageNode: PercentageNode,
 };
 
 // const sections = ["Total", "Inventory", "Quests", "Achievements"];
@@ -55,6 +58,7 @@ const selector = (state) => ({
   selectedNode: state.selectedNode,
   updateSelectedNode: state.updateSelectedNode,
   updateSection: state.updateSection,
+  updateImage: state.updateImage,
 });
 
 function TemplateCreation() {
@@ -65,6 +69,7 @@ function TemplateCreation() {
     restoreNodes,
     selectedNode,
     updateSelectedNode,
+    updateImage,
     // updateSection,
   } = useStore(selector);
   const [details, setDetails] = useState({
@@ -87,10 +92,15 @@ function TemplateCreation() {
   let bgColor = useRef(null);
   let snapToGrid = useRef(null);
   const handleCloseTemplateSettings = () => setShowTemplateSettings(false);
-  const handleShowTemplateSettings = () => setShowTemplateSettings(true);
+  const handleShowTemplateSettings = () => {
+    setShowTemplateSettings(true);
+  };
   const handleSaveChanges = () => {
+    console.log(details);
+    // console.log("color: " + bgColor.current!.value);
     setDetails({
       ...details,
+      layout: nodes,
       //@ts-ignore
       bgColor: bgColor.current!.value,
       //@ts-ignore
@@ -98,12 +108,23 @@ function TemplateCreation() {
       //@ts-ignore
       snapToGrid: snapToGrid.current!.checked,
     });
+
+    console.log(details);
     setShowTemplateSettings(false);
   };
   const handleHideNodeSettings = () => setShowNodeSettings(false);
 
+  useOnSelectionChange({
+    onChange: ({ nodes }) => {
+      if (nodes.length === 1) {
+        updateSelectedNode(nodes[0]);
+      }
+    },
+  });
+
   const updateNodeSettings = (node) => {
     updateSelectedNode(node);
+    console.log(node);
     setShowNodeSettings(true);
   };
 
@@ -114,6 +135,29 @@ function TemplateCreation() {
     }, 2000);
   };
 
+  const uploadNewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length === 1) {
+      let formData = new FormData();
+      formData.append("file", e.target.files[0], e.target.files[0].name);
+      const response = await axios.post(
+        `http://localhost:5000/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const imageURL = response.data;
+
+      updateImage(selectedNode.id, imageURL);
+    }
+  };
+
+  useEffect(() => {
+    console.log(bgColor.current);
+  }, [bgColor]);
+
   useEffect(() => {
     async function getTemplate() {
       const response = await axios.get(
@@ -122,79 +166,74 @@ function TemplateCreation() {
       setDetails(response.data.template);
     }
     getTemplate();
-    onRestore();
+    // onRestore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const nodesIntoSections = useCallback(
-    () => {
-      // const uniqueSections = [...new Set(nodes.map((node) => node.data.section))];
+  const nodesIntoSections = useCallback(() => {
+    const uniqueSections = [...new Set(nodes.map((node) => node.data.section))];
 
-      // const sectionList: any[] = [];
-      // uniqueSections.forEach((section) => {
-      //   sectionList.push({
-      //     name: section,
-      //     checks: [],
-      //   });
-      // });
+    const sectionList: any[] = [];
+    uniqueSections.forEach((section) => {
+      sectionList.push({
+        name: section,
+        checks: [],
+      });
+    });
 
-      // const index = sectionList.findIndex((section) => section.name === "Total");
-      // if (index === -1) {
-      //   sectionList.push({ name: "Total", checks: [] });
-      // }
+    const index = sectionList.findIndex((section) => section.name === "Total");
+    if (index === -1) {
+      sectionList.push({ name: "Total", checks: [] });
+    }
 
-      // nodes.forEach((node) => {
-      //   let check;
-      //   switch (node.type) {
-      //     case "checkboxNode":
-      //       check = {
-      //         id: node.id,
-      //         type: "checkbox",
-      //         completed: false,
-      //       };
-      //       break;
-      //     case "dropdownNode":
-      //       check = {
-      //         id: node.id,
-      //         type: "dropdown",
-      //         options: node.data.options,
-      //         selected: node.data.options[0],
-      //       };
-      //       break;
-      //     case "numberNode":
-      //       check = {
-      //         id: node.id,
-      //         type: "number",
-      //         total: node.data.total,
-      //         collected: 0,
-      //       };
-      //       break;
-      //     default:
-      //       break;
-      //   }
-      //   if (check) {
-      //     const foundSection = sectionList.find(
-      //       (section) => section.name === node.data.section
-      //     );
-      //     foundSection.checks.push(check);
-      //     if (foundSection.name !== "Total") {
-      //       //Adds all checks to the "Total" section
-      //       sectionList
-      //         .find((section) => section.name === "Total")
-      //         .checks.push(check);
-      //     }
-      //   }
-      // });
+    nodes.forEach((node) => {
+      let check;
+      switch (node.type) {
+        case "checkboxNode":
+          check = {
+            id: node.id,
+            type: "checkbox",
+            completed: false,
+          };
+          break;
+        case "dropdownNode":
+          check = {
+            id: node.id,
+            type: "dropdown",
+            options: node.data.options,
+            selected: node.data.options[0],
+          };
+          break;
+        case "numberNode":
+          check = {
+            id: node.id,
+            type: "number",
+            total: node.data.total,
+            collected: 0,
+          };
+          break;
+        default:
+          break;
+      }
+      if (check) {
+        const foundSection = sectionList.find(
+          (section) => section.name === node.data.section
+        );
+        foundSection.checks.push(check);
+        if (foundSection.name !== "Total") {
+          //Adds all checks to the "Total" section
+          sectionList
+            .find((section) => section.name === "Total")
+            .checks.push(check);
+        }
+      }
+    });
 
-      // return sectionList;
-      return [];
-    },
-    [
-      //nodes
-    ]
-  );
+    return sectionList;
+  }, [nodes]);
 
   const onSave = useCallback(async () => {
+    console.log("Saving...");
     handleShowSavedAlert();
     const nodeList = nodes.map((node) => ({
       ...node,
@@ -219,12 +258,13 @@ function TemplateCreation() {
   ]);
 
   const onRestore = useCallback(async () => {
+    console.log("Restoring nodes...");
     restoreNodes(details.layout);
   }, [restoreNodes, details]);
 
   useEffect(() => {
     onRestore();
-  }, [details.layout, onRestore])
+  }, [details.layout, onRestore]);
 
   return (
     <div className="row min-vh-100 p-0 container-fluid">
@@ -248,6 +288,7 @@ function TemplateCreation() {
                 color: "#ffffff",
                 selectable: true,
                 section: "Total",
+                updateNodeSettings: updateNodeSettings,
               },
               style: {
                 border: "1px solid black",
@@ -277,6 +318,7 @@ function TemplateCreation() {
                 textColor: "#ffffff",
                 fontSize: 16,
                 text: "Input Text Here",
+                updateNodeSettings: updateNodeSettings,
                 selectable: true,
               },
               style: {
@@ -385,6 +427,27 @@ function TemplateCreation() {
               },
               type: "dropdownNode",
             });
+          }}
+          onPercentageClick={() => {
+            const reactFlowContainer = document.querySelector(".react-flow");
+            const reactFlowBounds = reactFlowContainer?.getBoundingClientRect();
+
+            const center = screenToFlowPosition({
+              x: reactFlowBounds!.width * 0.5,
+              y: reactFlowBounds!.height * 0.5,
+            });
+
+            onAdd({
+              id: getNodeId(),
+              key: getNodeId(),
+              position: { x: center.x, y: center.y },
+              data: {
+                selectable: true,
+                updateNodeSettings: updateNodeSettings,
+                section: "Total",
+              },
+              type: "percentageNode",
+            })
           }}
           handleShowSavedAlert={onSave}
           handleShowTemplateSettings={handleShowTemplateSettings}
@@ -508,6 +571,19 @@ function TemplateCreation() {
                 })}
               </Dropdown.Menu>
             </Dropdown> */}
+            {selectedNode.type === "imageNode" && (
+              <Form>
+                <Form.Group controlId="formFile" className="mb-3">
+                  <Form.Control
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      uploadNewImage(e)
+                    }
+                  />
+                </Form.Group>
+              </Form>
+            )}
           </div>
         </Offcanvas.Body>
       </Offcanvas>

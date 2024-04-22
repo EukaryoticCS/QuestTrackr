@@ -23,6 +23,7 @@ export type NodeData = {
   checked: boolean;
   selected: string;
   collected: number;
+  img: string;
 };
 
 export type RFState = {
@@ -40,6 +41,7 @@ export type RFState = {
   updateChecked: (nodeId: string, checked: boolean) => void;
   updateSelected: (nodeId: string, selected: string) => void;
   updateCollected: (nodeId: string, collected: number) => void;
+  updateImage: (nodeId: string, imageURL: string) => void;
   restoreNodes: (nodes: Node[]) => void;
 };
 
@@ -63,7 +65,8 @@ const useStore = createWithEqualityFn<RFState>(
         section: "",
         checked: false,
         selected: "N/A",
-        collected: 0
+        collected: 0,
+        img: "",
       },
     },
     onNodesChange: (changes: NodeChange[]) => {
@@ -166,6 +169,16 @@ const useStore = createWithEqualityFn<RFState>(
           return node;
         }),
       });
+    },
+    updateImage: (nodeId: string, img: string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, img}
+          }
+          return node;
+        })
+      })
     },
     restoreNodes: (nodes: Node[]) => {
       set({

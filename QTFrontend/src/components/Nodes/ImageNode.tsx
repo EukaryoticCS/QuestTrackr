@@ -3,12 +3,16 @@ import { NodeResizer, NodeToolbar } from "reactflow";
 
 const ImageNode = ({ id, data, selected }) => {
   const handleUpdateNodeSettings = () => {
-    data.updateNodeSettings({ id, data, selected });
+    data.updateNodeSettings({ id, data, selected, type: "imageNode" });
   };
 
   return (
     <>
-      <NodeToolbar className="nav" align="center" isVisible={selected && data.selectable}>
+      <NodeToolbar
+        className="nav"
+        align="center"
+        isVisible={selected && data.selectable}
+      >
         <button className="btn btn-primary" onClick={handleUpdateNodeSettings}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
