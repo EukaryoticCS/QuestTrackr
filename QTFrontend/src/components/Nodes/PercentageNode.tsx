@@ -7,9 +7,11 @@ import useStore, { NodeData } from "../store.tsx";
 const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 
 const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
+  let sections = useStore((state) => state.sections);
+
   const updateTextColor = useStore((state) => state.updateTextColor);
-  const updateText = useStore((state) => state.updateText);
   const updateFontSize = useStore((state) => state.updateFontSize);
+  const updateSection = useStore((state) => state.updateSection);
 
   const handleUpdateNodeSettings = () => {
     data.updateNodeSettings({ id, data, selected, type: "percentageNode" });
@@ -69,6 +71,23 @@ const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           type="color"
           onChange={(e) => updateTextColor(id, e.target.value)}
         />
+        <Dropdown drop="down-centered" style={{ zIndex: 50000 }}>
+          <Dropdown.Toggle variant="primary">{data.section}</Dropdown.Toggle>
+          <Dropdown.Menu>
+            {sections.map((option: string) => {
+              return (
+                <Dropdown.Item
+                  key={option}
+                  onClick={() => {
+                    updateSection(id, option);
+                  }}
+                >
+                  {option}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
         <button className="btn btn-primary" onClick={handleUpdateNodeSettings}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -89,6 +108,20 @@ const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
         minWidth={20}
         // minHeight={height}
       />
+      <div
+        className="text-center"
+        style={{
+          height: "100%",
+          width: "100%",
+          overflow: "hidden",
+          border: "none",
+          outline: "none",
+          fontSize: data.fontSize,
+          color: data.textColor,
+        }}
+      >
+        {data.percentage}%
+      </div>
     </>
   );
 };

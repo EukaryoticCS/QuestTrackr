@@ -4,11 +4,12 @@ import { NodeProps, NodeToolbar } from "reactflow";
 import useStore, { NodeData } from "../store.tsx";
 
 const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
-const sections = ["Total", "Inventory", "Quests", "Achievements"];
 
 const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   const [collected, setCollected] = useState(data.collected);
 
+  let sections = useStore((state) => state.sections);
+  
   const updateTextColor = useStore((state) => state.updateTextColor);
   const updateSection = useStore((state) => state.updateSection);
   const updateCollected = useStore((state) => state.updateCollected);

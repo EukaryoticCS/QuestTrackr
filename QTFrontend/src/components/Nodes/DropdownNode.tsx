@@ -3,13 +3,9 @@ import { Dropdown } from "react-bootstrap";
 import { NodeToolbar } from "reactflow";
 import useStore from "../store.tsx";
 
-const sections = ["Total", "Inventory", "Quests", "Achievements"];
-
 const DropdownNode = ({ id, data, selected }) => {
   const [selectedOption, setSelectedOption] = useState(data.selected);
-  // const handleUpdateNodeSettings = () => {
-  //   data.updateNodeSettings({ id, data, selected });
-  // };
+  let sections = useStore((state) => state.sections);
   const updateSection = useStore((state) => state.updateSection);
   const updateSelected = useStore((state) => state.updateSelected);
 

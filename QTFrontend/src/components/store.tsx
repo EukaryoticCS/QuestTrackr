@@ -24,12 +24,14 @@ export type NodeData = {
   selected: string;
   collected: number;
   img: string;
+  percentage: number;
 };
 
 export type RFState = {
   nodes: Node<NodeData>[];
   selectedNode: Node<NodeData>;
   edges: Edge[];
+  sections: string[];
   onNodesChange: OnNodesChange;
   onConnect: OnConnect;
   updateSelectedNode: (node: Node<NodeData>) => void;
@@ -50,6 +52,7 @@ const useStore = createWithEqualityFn<RFState>(
   (set, get) => ({
     nodes: [],
     edges: [],
+    sections: ["Total", "Inventory", "Quests", "Achievements"],
     selectedNode: {
       id: "",
       position: { x: 0, y: 0 },
@@ -67,6 +70,7 @@ const useStore = createWithEqualityFn<RFState>(
         selected: "N/A",
         collected: 0,
         img: "",
+        percentage: 0,
       },
     },
     onNodesChange: (changes: NodeChange[]) => {
@@ -175,6 +179,16 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, img}
+          }
+          return node;
+        })
+      })
+    },
+    updatePercentage: (nodeId: string, percentage: number) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, percentage}
           }
           return node;
         })

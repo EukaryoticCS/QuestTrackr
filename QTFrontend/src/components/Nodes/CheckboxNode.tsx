@@ -3,13 +3,9 @@ import { Dropdown } from "react-bootstrap";
 import { NodeToolbar } from "reactflow";
 import useStore from "../store.tsx";
 
-const sections = ["Total", "Inventory", "Quests", "Achievements"];
-
 const CheckboxNode = ({ id, data, selected }) => {
   const [checked, setChecked] = useState(data.checked);
-  // const handleUpdateNodeSettings = () => {
-  //   data.updateNodeSettings({ id, data, selected });
-  // };
+  let sections = useStore((state) => state.sections);
   const updateSection = useStore((state) => state.updateSection);
   const updateChecked = useStore((state) => state.updateChecked);
 
