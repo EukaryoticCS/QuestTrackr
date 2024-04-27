@@ -17,7 +17,7 @@ This project is the end result of my Capstone class, in which students are taske
   * Sign up with user/pass or use Google or other OAuth
 * Massive video game database
   * Powered by IGDB, QuestTrackr has a continually updating database of 250,000+ games -- basically any video game you can think of
-  * Searchable with fuzzy searching and infinite scroll, allowing you to very easily find the game you're thinking of
+  * Searchable with fuzzy searching and infinite scroll, allowing you to very easily find any game
 * Highly customizable template creation
   * Create tracking templates for all of your favorite games
   * DrawIO/Canva-style drag-and-drop interface
