@@ -119,7 +119,7 @@ export default class GamesDAO {
               title: `${author}'s Template`,
               author: author,
               layout: [],
-              sections: [],
+              sections: ["Total", "Inventory", "Quests", "Achievements"],
             },
           },
         }

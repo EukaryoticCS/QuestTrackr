@@ -45,6 +45,9 @@ export type RFState = {
   updateCollected: (nodeId: string, collected: number) => void;
   updateImage: (nodeId: string, imageURL: string) => void;
   restoreNodes: (nodes: Node[]) => void;
+  deleteSection: (section: string) => void;
+  addSection: (section: string) => void;
+  restoreSections: (sections: string[]) => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -52,7 +55,7 @@ const useStore = createWithEqualityFn<RFState>(
   (set, get) => ({
     nodes: [],
     edges: [],
-    sections: ["Total", "Inventory", "Quests", "Achievements"],
+    sections: [],
     selectedNode: {
       id: "",
       position: { x: 0, y: 0 },
@@ -198,6 +201,23 @@ const useStore = createWithEqualityFn<RFState>(
       set({
         nodes: nodes,
       });
+    },
+    deleteSection: (section: string) => {
+      set({
+        sections: get().sections.filter((sec) => 
+          sec !== section
+        )
+      })
+    },
+    addSection: (section: string) => {
+      set({
+        sections: [...get().sections, section]
+      })
+    },
+    restoreSections: (sections: string[]) => {
+      set({
+        sections: sections,
+      })
     },
   }),
   Object.is
