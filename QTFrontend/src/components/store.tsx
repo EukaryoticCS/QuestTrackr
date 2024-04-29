@@ -23,6 +23,7 @@ export type NodeData = {
   checked: boolean;
   selected: string;
   collected: number;
+  options: string[];
   img: string;
   percentage: number;
 };
@@ -43,6 +44,9 @@ export type RFState = {
   updateChecked: (nodeId: string, checked: boolean) => void;
   updateSelected: (nodeId: string, selected: string) => void;
   updateCollected: (nodeId: string, collected: number) => void;
+  addDropdownOption: (nodeId: string, option: string) => void;
+  editDropdownOption: (nodeId: string, option: string) => void;
+  deleteDropdownOption: (nodeId: string, option: string) => void;
   updateImage: (nodeId: string, imageURL: string) => void;
   restoreNodes: (nodes: Node[]) => void;
   deleteSection: (section: string) => void;
@@ -72,6 +76,7 @@ const useStore = createWithEqualityFn<RFState>(
         checked: false,
         selected: "N/A",
         collected: 0,
+        options: ["N/A"],
         img: "",
         percentage: 0,
       },
@@ -177,25 +182,50 @@ const useStore = createWithEqualityFn<RFState>(
         }),
       });
     },
+    addDropdownOption: (nodeId: string, option: string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId && !node.data.options.includes(option)) {
+            node.data.options.push(option);
+          }
+          return node;
+        }),
+      });
+    },
+    editDropdownOption: (nodeId: string, option: string) => {},
+    deleteDropdownOption: (nodeId: string, option: string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.data.selected === option) {
+            get().updateSelected(node.id, "N/A");
+          }
+          if (node.id === nodeId) {
+            const index = node.data.options.indexOf(option);
+            node.data.options.splice(index, 1);
+          }
+          return node;
+        }),
+      });
+    },
     updateImage: (nodeId: string, img: string) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = { ...node.data, img}
+            node.data = { ...node.data, img };
           }
           return node;
-        })
-      })
+        }),
+      });
     },
     updatePercentage: (nodeId: string, percentage: number) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = { ...node.data, percentage}
+            node.data = { ...node.data, percentage };
           }
           return node;
-        })
-      })
+        }),
+      });
     },
     restoreNodes: (nodes: Node[]) => {
       set({
@@ -204,20 +234,18 @@ const useStore = createWithEqualityFn<RFState>(
     },
     deleteSection: (section: string) => {
       set({
-        sections: get().sections.filter((sec) => 
-          sec !== section
-        )
-      })
+        sections: get().sections.filter((sec) => sec !== section),
+      });
     },
     addSection: (section: string) => {
       set({
-        sections: [...get().sections, section]
-      })
+        sections: [...get().sections, section],
+      });
     },
     restoreSections: (sections: string[]) => {
       set({
         sections: sections,
-      })
+      });
     },
   }),
   Object.is
