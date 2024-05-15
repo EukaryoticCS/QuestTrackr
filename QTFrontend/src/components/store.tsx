@@ -51,6 +51,7 @@ export type RFState = {
   restoreNodes: (nodes: Node[]) => void;
   deleteSection: (section: string) => void;
   addSection: (section: string) => void;
+  renameSection: (section: string, newName: string) => void;
   restoreSections: (sections: string[]) => void;
 };
 
@@ -196,12 +197,12 @@ const useStore = createWithEqualityFn<RFState>(
     deleteDropdownOption: (nodeId: string, option: string) => {
       set({
         nodes: get().nodes.map((node) => {
-          if (node.data.selected === option) {
-            get().updateSelected(node.id, "N/A");
-          }
           if (node.id === nodeId) {
             const index = node.data.options.indexOf(option);
             node.data.options.splice(index, 1);
+            if (node.data.selected === option) {
+              get().updateSelected(nodeId, "N/A");
+            }
           }
           return node;
         }),
@@ -241,6 +242,16 @@ const useStore = createWithEqualityFn<RFState>(
       set({
         sections: [...get().sections, section],
       });
+    },
+    renameSection: (section: string, newName: string) => {
+      set({
+        sections: get().sections.map((sec) => {
+          if (sec === section) {
+            sec = newName;
+          }
+          return sec;
+        }),
+      })
     },
     restoreSections: (sections: string[]) => {
       set({

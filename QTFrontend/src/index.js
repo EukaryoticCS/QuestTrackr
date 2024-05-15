@@ -68,10 +68,6 @@ SuperTokens.init({
           ],
         },
         providers: [
-          Github.init(),
-          Google.init(),
-          Facebook.init(),
-          Apple.init(),
         ],
       },
       onHandleEvent: async (context) => {
