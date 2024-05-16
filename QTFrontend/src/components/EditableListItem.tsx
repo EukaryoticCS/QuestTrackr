@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button, ListGroup, Stack } from "react-bootstrap";
+import { Button, Stack } from "react-bootstrap";
 
 const EditableListItem = ({ text, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);

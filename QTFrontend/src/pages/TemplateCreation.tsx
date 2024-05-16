@@ -413,6 +413,10 @@ function TemplateCreation() {
                 section: "Total",
                 selected: "N/A",
               },
+              style: {
+                height: 20,
+                width: 40,
+              },
               type: "dropdownNode",
             });
           }}
@@ -436,6 +440,10 @@ function TemplateCreation() {
                 percentage: 0,
                 updateNodeSettings: updateNodeSettings,
                 section: "Total",
+              },
+              style: {
+                height: 20,
+                width: 40,
               },
               type: "percentageNode",
             });

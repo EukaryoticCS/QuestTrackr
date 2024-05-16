@@ -16,12 +16,7 @@ import SuperTokens, {
   SuperTokensWrapper,
 } from "supertokens-auth-react/index.js";
 import { getSuperTokensRoutesForReactRouterDom } from "supertokens-auth-react/ui/index.js";
-import ThirdPartyEmailPassword, {
-  Github,
-  Google,
-  Facebook,
-  Apple,
-} from "supertokens-auth-react/recipe/thirdpartyemailpassword/index.js";
+import ThirdPartyEmailPassword from "supertokens-auth-react/recipe/thirdpartyemailpassword/index.js";
 import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 import Session from "supertokens-auth-react/recipe/session/index.js";
 import axios from "axios";

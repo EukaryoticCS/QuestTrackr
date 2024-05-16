@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import { NodeToolbar } from "reactflow";
+import { NodeToolbar, NodeResizer } from "reactflow";
 import useStore from "../store.tsx";
 
 const DropdownNode = ({ id, data, selected }) => {
@@ -51,11 +51,31 @@ const DropdownNode = ({ id, data, selected }) => {
           </svg>
         </button>
       </NodeToolbar>
-      <Dropdown drop="down-centered" style={{ zIndex: 50000 }}>
+      <NodeResizer
+        color="ff0071"
+        isVisible={selected && data.selectable}
+        minWidth={
+          Math.max(...data.options.map((option) => option.length)) * 8 + 40
+        }
+        minHeight={40}
+      />
+      <Dropdown
+        drop="down-centered"
+        style={{
+          zIndex: 50000,
+          width: "100%",
+          height: "100%",
+          minWidth:
+            Math.max(...data.options.map((option) => option.length)) * 8 + 40,
+        }}
+      >
         <Dropdown.Toggle
           style={{
-            width:
-              Math.max(...data.options.map((option) => option.length)) * 20, //This is CRAZY
+            width: "100%",
+            height: "100%",
+            minWidth:
+              Math.max(...data.options.map((option) => option.length)) * 8 +
+              40, //This is CRAZY
           }}
           variant="primary"
         >

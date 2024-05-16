@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import { NodeToolbar } from "reactflow";
+import { NodeToolbar, NodeResizer } from "reactflow";
 import useStore from "../store.tsx";
 
 const CheckboxNode = ({ id, data, selected }) => {
@@ -56,11 +56,18 @@ const CheckboxNode = ({ id, data, selected }) => {
           </svg>
         </button>
       </NodeToolbar>
-      <div className="text-center">
+      <NodeResizer
+        color="ff0071"
+        isVisible={selected}
+        minWidth={20}
+        // minHeight={height}
+      />
+      <div className="text-center" style={{ width: "100%", height: "100%" }}>
         <input
           type="checkbox"
           checked={checked}
           onChange={handleCheckboxClick}
+          style={{ width: "100%", height: "100%" }}
         />
       </div>
     </>
