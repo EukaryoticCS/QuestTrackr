@@ -15,7 +15,7 @@ import Dashboard from "supertokens-node/recipe/dashboard/index.js";
 import EmailVerification from "supertokens-node/recipe/emailverification/index.js";
 import { S3, S3Client } from "@aws-sdk/client-s3";
 import bodyParser from "body-parser";
-import mulitparty from "multiparty";
+import multiparty from "multiparty";
 import fs from "fs";
 import {fileTypeFromBuffer} from "file-type";
 
@@ -160,7 +160,7 @@ const uploadFile = (buffer, name, type) => {
 };
 
 app.post("/upload", async (req, res) => {
-  const form = new mulitparty.Form();
+  const form = new multiparty.Form();
   form.parse(req, async (error, fields, files) => {
     if (error) {
       console.log(error);

@@ -44,6 +44,7 @@ export type RFState = {
   updateChecked: (nodeId: string, checked: boolean) => void;
   updateSelected: (nodeId: string, selected: string) => void;
   updateCollected: (nodeId: string, collected: number) => void;
+  updatePercentage: (check: Node) => void;
   addDropdownOption: (nodeId: string, option: string) => void;
   editDropdownOption: (nodeId: string, option: string) => void;
   deleteDropdownOption: (nodeId: string, option: string) => void;
@@ -158,6 +159,7 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, checked };
+            get().updatePercentage(node);
           }
           return node;
         }),
@@ -168,6 +170,7 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, selected };
+            get().updatePercentage(node);
           }
           return node;
         }),
@@ -178,6 +181,49 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, collected };
+            get().updatePercentage(node);
+          }
+          return node;
+        }),
+      });
+    },
+    updatePercentage: (check: Node) => {
+      //THIS IS BAD, REMOVE IT
+      set({
+        nodes: get().nodes.map((node) => {
+          if (
+            node.type === "percentageNode" &&
+            (node.data.section === check.data.section ||
+              node.data.section === "Total")
+          ) {
+            let sectionTotal = 0;
+            let sectionChecked = 0;
+            get().nodes.map((check) => {
+              switch (check.type) {
+                case "checkboxNode":
+                  sectionTotal++;
+                  if (check.data.checked) {
+                    sectionChecked++;
+                  }
+                  break;
+                case "dropdownNode":
+                  sectionTotal += check.data.options.length;
+                  sectionChecked += check.data.options.indexOf(
+                    check.data.selected
+                  );
+                  break;
+                case "numberNode":
+                  sectionTotal += check.data.total;
+                  sectionChecked += check.data.collected;
+                  break;
+                default:
+                  break;
+              }
+              return check;
+            });
+            node.data.percentage = Math.floor(
+              (sectionChecked / sectionTotal) * 100
+            );
           }
           return node;
         }),
@@ -218,16 +264,16 @@ const useStore = createWithEqualityFn<RFState>(
         }),
       });
     },
-    updatePercentage: (nodeId: string, percentage: number) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            node.data = { ...node.data, percentage };
-          }
-          return node;
-        }),
-      });
-    },
+    // updatePercentage: (nodeId: string, percentage: number) => {
+    //   set({
+    //     nodes: get().nodes.map((node) => {
+    //       if (node.id === nodeId) {
+    //         node.data = { ...node.data, percentage };
+    //       }
+    //       return node;
+    //     }),
+    //   });
+    // },
     restoreNodes: (nodes: Node[]) => {
       set({
         nodes: nodes,
@@ -251,7 +297,7 @@ const useStore = createWithEqualityFn<RFState>(
           }
           return sec;
         }),
-      })
+      });
     },
     restoreSections: (sections: string[]) => {
       set({

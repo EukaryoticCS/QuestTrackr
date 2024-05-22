@@ -11,6 +11,7 @@ import ImageNode from "../components/Nodes/ImageNode.tsx";
 import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
+import PercentageNode from "../components/Nodes/PercentageNode.tsx";
 import { useParams } from "react-router-dom";
 import TrackingTools from "../components/TrackingTools.tsx";
 import { Alert } from "react-bootstrap";
@@ -28,6 +29,8 @@ function nodeColor(node) {
     case "numberNode":
     case "dropdownNode":
       return "#59A5D8";
+    case "percentageNode":
+      return "#42bcf5";
     default:
       return "#FFFFFF";
   }
@@ -40,6 +43,7 @@ const nodeTypes = {
   checkboxNode: CheckboxNode,
   numberNode: NumberNode,
   dropdownNode: DropdownNode,
+  percentageNode: PercentageNode,
 };
 
 const Tracking = () => {
@@ -112,7 +116,7 @@ const Tracking = () => {
 
   useEffect(() => {
     onRestore();
-  }, [details.layout, onRestore])
+  }, [details.layout, onRestore]);
 
   return (
     <div

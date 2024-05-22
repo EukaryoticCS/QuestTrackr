@@ -598,6 +598,16 @@ function TemplateCreation() {
               </Form>
             )}
             {selectedNode.type === "percentageNode" && <div></div>}
+            {selectedNode.type === "numberNode" && (
+              <>
+                <input
+                  id="collected"
+                  className="col-6"
+                  type="text"
+                  defaultValue={selectedNode.data.total}
+                />
+              </>
+            )}
             {selectedNode.type === "dropdownNode" && (
               <>
                 <InputGroup className="mb-3">
