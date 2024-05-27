@@ -115,7 +115,7 @@ const Profile = () => {
                   </p>
                 </div>
               </div>
-              <div className="card bg-secondary">
+              {/* <div className="card bg-secondary">
                 <div className="card-body">
                   <p className="card-text h2 text-center">Completed:</p>
                   <p className="card-text h2 text-center">0</p>
@@ -128,7 +128,7 @@ const Profile = () => {
                   </p>
                   <p className="card-text h2 text-center">0%</p>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

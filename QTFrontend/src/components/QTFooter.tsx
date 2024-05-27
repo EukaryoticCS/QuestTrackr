@@ -5,7 +5,7 @@ import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
 const QTFooter = () => {
   return (
     <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top container-fluid">
-      <p className="col-md-5 mb-0 text-body-secondary">© 2023 Eukaryotic. All Rights Reserved. Game metadata is provided by <Link to="http://igdb.com">IGDB</Link>.</p>
+      <p className="col-md-5 mb-0 text-body-secondary">© 2024 Eukaryotic. All Rights Reserved. Game metadata is provided by <Link to="http://igdb.com">IGDB</Link>.</p>
 
       <Link
         to="/"
@@ -20,11 +20,6 @@ const QTFooter = () => {
             Home
           </Link>
         </li>
-        {/* <li className="nav-item">
-          <Link to="/features" className="nav-link px-2 text-body-secondary">
-            Features
-          </Link>
-        </li> */}
         <li className="nav-item">
           <Link to="/faq" className="nav-link px-2 text-body-secondary">
             FAQs

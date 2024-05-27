@@ -44,16 +44,18 @@ export type RFState = {
   updateChecked: (nodeId: string, checked: boolean) => void;
   updateSelected: (nodeId: string, selected: string) => void;
   updateCollected: (nodeId: string, collected: number) => void;
+  updateTotal: (nodeId: string, total: number) => void;
   updatePercentage: (check: Node) => void;
   addDropdownOption: (nodeId: string, option: string) => void;
   editDropdownOption: (nodeId: string, option: string) => void;
   deleteDropdownOption: (nodeId: string, option: string) => void;
   updateImage: (nodeId: string, imageURL: string) => void;
   restoreNodes: (nodes: Node[]) => void;
-  deleteSection: (section: string) => void;
-  addSection: (section: string) => void;
-  renameSection: (section: string, newName: string) => void;
+  deleteSection: (sectionName: string) => void;
+  addSection: (sectionName: string) => void;
+  renameSection: (sectionName: string, newName: string) => void;
   restoreSections: (sections: string[]) => void;
+  getNodesBySection: (section: string) => Node[];
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -159,7 +161,6 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, checked };
-            get().updatePercentage(node);
           }
           return node;
         }),
@@ -170,7 +171,6 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, selected };
-            get().updatePercentage(node);
           }
           return node;
         }),
@@ -181,21 +181,65 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, collected };
-            get().updatePercentage(node);
+          }
+          return node;
+        }),
+      });
+    },
+    updateTotal: (nodeId: string, total: number) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, total };
           }
           return node;
         }),
       });
     },
     updatePercentage: (check: Node) => {
-      //THIS IS BAD, REMOVE IT
+      //THIS IS BAD, REMOVE IT -- Remove from state???
       set({
         nodes: get().nodes.map((node) => {
           if (
             node.type === "percentageNode" &&
-            (node.data.section === check.data.section ||
-              node.data.section === "Total")
+            node.data.section === check.data.section
           ) {
+            let sectionTotal = 0;
+            let sectionChecked = 0;
+            get().nodes.map((check) => {
+              switch (check.type) {
+                case "checkboxNode":
+                  if (check.data.section === node.data.section) {
+                    sectionTotal++;
+                    if (check.data.checked) {
+                      sectionChecked++;
+                    }
+                  }
+                  break;
+                case "dropdownNode":
+                  if (check.data.section === node.data.section) {
+                    sectionTotal += check.data.options.length - 1;
+                    sectionChecked += check.data.options.indexOf(
+                      check.data.selected
+                    );
+                  }
+                  break;
+                case "numberNode":
+                  if (check.data.section === node.data.section) {
+                    sectionTotal += check.data.total;
+                    sectionChecked += check.data.collected;
+                  }
+                  break;
+                default:
+                  break;
+              }
+              return check;
+            });
+            node.data.percentage = Math.floor(
+              (sectionChecked / sectionTotal) * 100
+            );
+          }
+          if (node.type === "percentageNode" && node.data.section === "Total") {
             let sectionTotal = 0;
             let sectionChecked = 0;
             get().nodes.map((check) => {
@@ -207,7 +251,7 @@ const useStore = createWithEqualityFn<RFState>(
                   }
                   break;
                 case "dropdownNode":
-                  sectionTotal += check.data.options.length;
+                  sectionTotal += check.data.options.length - 1;
                   sectionChecked += check.data.options.indexOf(
                     check.data.selected
                   );
@@ -279,9 +323,9 @@ const useStore = createWithEqualityFn<RFState>(
         nodes: nodes,
       });
     },
-    deleteSection: (section: string) => {
+    deleteSection: (sectionName: string) => {
       set({
-        sections: get().sections.filter((sec) => sec !== section),
+        sections: get().sections.filter((sec) => sec !== sectionName),
       });
     },
     addSection: (section: string) => {
@@ -289,10 +333,10 @@ const useStore = createWithEqualityFn<RFState>(
         sections: [...get().sections, section],
       });
     },
-    renameSection: (section: string, newName: string) => {
+    renameSection: (sectionName: string, newName: string) => {
       set({
         sections: get().sections.map((sec) => {
-          if (sec === section) {
+          if (sec === sectionName) {
             sec = newName;
           }
           return sec;
@@ -304,6 +348,12 @@ const useStore = createWithEqualityFn<RFState>(
         sections: sections,
       });
     },
+    getNodesBySection: (section: string) => {
+      if (section === "Total") {
+        return get().nodes.filter((node) => node.data.section);
+      }
+      return get().nodes.filter((node) => node.data.section === section);
+    }
   }),
   Object.is
 );

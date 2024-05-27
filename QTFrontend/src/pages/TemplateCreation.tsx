@@ -70,6 +70,7 @@ const selector = (state) => ({
   updateSelectedNode: state.updateSelectedNode,
   updateSection: state.updateSection,
   updateImage: state.updateImage,
+  updateTotal: state.updateTotal,
   deleteSection: state.deleteSection,
   addSection: state.addSection,
   renameSection: state.renameSection,
@@ -90,6 +91,7 @@ function TemplateCreation() {
     updateSelectedNode,
     updateSection,
     updateImage,
+    updateTotal,
     deleteSection,
     addSection,
     renameSection,
@@ -119,6 +121,7 @@ function TemplateCreation() {
   let snapToGrid = useRef(null);
   let newSection = useRef(null);
   let newOption = useRef(null);
+  let setTotal = useRef(null);
   const handleCloseTemplateSettings = () => setShowTemplateSettings(false);
   const handleShowTemplateSettings = () => {
     console.log(details);
@@ -126,7 +129,6 @@ function TemplateCreation() {
   };
   const handleSaveChanges = () => {
     if (title.current !== null && title.current !== "") {
-      console.log(sections);
       setDetails({
         ...details,
         layout: nodes,
@@ -414,8 +416,8 @@ function TemplateCreation() {
                 selected: "N/A",
               },
               style: {
-                height: 20,
-                width: 40,
+                height: 40,
+                width: 80,
               },
               type: "dropdownNode",
             });
@@ -600,12 +602,34 @@ function TemplateCreation() {
             {selectedNode.type === "percentageNode" && <div></div>}
             {selectedNode.type === "numberNode" && (
               <>
-                <input
-                  id="collected"
-                  className="col-6"
-                  type="text"
-                  defaultValue={selectedNode.data.total}
-                />
+                <Form.Control
+                    defaultValue={selectedNode.data.total}
+                    placeholder="Total to collect"
+                    aria-label="Total"
+                    aria-describedby="set-total"
+                    ref={setTotal}
+                  />
+                <Button 
+                variant="success"
+                id="set-total"
+                onClick={() => {
+                  //@ts-ignore
+                  const total = setTotal.current.value;
+                  updateTotal(selectedNode.id, total);
+                }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="black"
+                    className="bi bi-floppy col"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M11 2H9v3h2z" />
+                    <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
+                  </svg>
+                </Button>
               </>
             )}
             {selectedNode.type === "dropdownNode" && (
@@ -624,6 +648,7 @@ function TemplateCreation() {
                       //@ts-ignore
                       const option = newOption.current.value;
                       addDropdownOption(selectedNode.id, option);
+                      
                     }}
                   >
                     +

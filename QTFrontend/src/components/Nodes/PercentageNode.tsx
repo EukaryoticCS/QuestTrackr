@@ -8,6 +8,7 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 
 const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   let sections = useStore((state) => state.sections);
+  let sectionNodes = useStore((state) => state.getNodesBySection(data.section))
 
   const updateTextColor = useStore((state) => state.updateTextColor);
   const updateFontSize = useStore((state) => state.updateFontSize);
@@ -16,6 +17,32 @@ const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   const handleUpdateNodeSettings = () => {
     data.updateNodeSettings({ id, data, selected, type: "percentageNode" });
   };
+
+  const {total, obtained} = sectionNodes.reduce((acc, node) => {
+    switch (node.type) {
+      case "checkboxNode":
+        acc.total++;
+        if (node.data.checked) {
+          acc.obtained++;
+        }
+        break;
+      case "dropdownNode":
+        acc.total += node.data.options.length - 1;
+        acc.obtained += node.data.options.indexOf(
+          node.data.selected
+        );
+        break;
+      case "numberNode":
+        acc.total += node.data.total;
+        acc.obtained += node.data.collected;
+        break;
+      default:
+        break;
+    }
+    return acc;
+  }, {total: 0, obtained: 0});
+
+  const percentage = total === 0 ? 0 : (obtained / total) * 100;
 
   return (
     <>
@@ -120,7 +147,7 @@ const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           color: data.textColor,
         }}
       >
-        {data.percentage}%
+        {Math.floor(percentage)}%
       </div>
     </>
   );

@@ -78,25 +78,6 @@ const Tracking = () => {
         },
       }
     );
-    // let newValue;
-    // switch (node.type) {
-    //   case "dropdownNode":
-    //     newValue = node.data.selected;
-    //     break;
-    //   case "numberNode":
-    //     newValue = node.data.collected;
-    //     break;
-    //   case "checkboxNode":
-    //     newValue = node.data.checked;
-    //     break;
-    // }
-    // await axios.put(
-    //   `http://localhost:5000/api/v1/users/${username}/templates/${templateId}`,
-    //   {
-    //     nodeId: node.id,
-    //     newValue: newValue,
-    //   }
-    // );
   }, [templateId, username, details._id, nodes]);
 
   const onRestore = useCallback(async () => {
