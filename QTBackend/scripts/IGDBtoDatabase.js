@@ -6,11 +6,27 @@ const ObjectId = mongodb.ObjectId;
 dotenv.config();
 
 let offset = 0;
+let itemsProcessed = 0;
+let targetItems = 300000;
+const maxConcurrentImports = 5;
+const batchSize = 500;
+let totalItemsProcessed = 0;
+let dbCalls = 0;
+let totalDBCalls = 600;
 
-async function importGames(offset) {
+function dispose(client) {
+  console.log("Total db calls: " + dbCalls);
+  if (++dbCalls >= totalDBCalls) {
+    console.log("All batches sent!");
+    client.close();
+  }
+}
+
+async function importGames(offset, client) {
   const response = await igdb
     .default(process.env.TWITCH_CLIENT_ID, process.env.TWITCH_APP_ACCESS_TOKEN)
     .fields([
+      "id",
       "name",
       "summary",
       "platforms.name",
@@ -97,6 +113,7 @@ async function importGames(offset) {
     }
 
     const game = {
+      IGDBId: responseGame.id,
       title: responseGame.name,
       summary: responseGame.summary ? responseGame.summary : "",
       developers: developers,
@@ -105,50 +122,56 @@ async function importGames(offset) {
       platforms: platforms,
       cover: cover,
       category: responseGame.category,
-      templates: [],
     };
 
     games.push(game);
   }
-  addFiveHundredGames(games);
+  const insertedCount = await addFiveHundredGames(games, client);
+  return insertedCount;
 }
 
-async function addGame(game) {
-  const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
-  try {
-    const database = client.db("QTDatabase");
-    const games = database.collection("games");
-
-    await games.insertOne(game);
-  } catch (e) {
-    console.log(e.message);
-  } finally {
-    await client.close();
-  }
-}
-
-async function addFiveHundredGames(inputGames) {
+async function addFiveHundredGames(inputGames, client) {
   if (inputGames.length > 0) {
-    console.log("Adding batch " + offset / 500 + "!");
-    const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
+    // console.log("Adding batch " + offset / 500 + "!");
     try {
       const database = client.db("QTDatabase");
       const games = database.collection("games");
 
-      await games.insertMany(inputGames);
+      const bulkOps = inputGames.map((game) => ({
+        updateOne: {
+          filter: { IGDBId: game.IGDBId },
+          update: {
+            $set: {
+              title: game.name,
+              summary: game.summary ? game.summary : "",
+              developers: game.developers,
+              publishers: game.publishers,
+              releaseYear: isNaN(game.releaseYear) ? "N/A" : game.releaseYear,
+              platforms: game.platforms,
+              cover: game.cover,
+              category: game.category,
+            },
+            $setOnInsert: { IGDBId: game.IGDBId, templates: [] },
+          },
+          upsert: true,
+        },
+      }));
+
+      const result = await games.bulkWrite(bulkOps).then(dispose());
+
+      return result.matchedCount + result.upsertedCount;
     } catch (e) {
-      console.log(e.message);
-    } finally {
-      await client.close();
+      console.log(e);
     }
-  } else {
-    console.log("Batch " + offset / 500 + " is empty!");
   }
+  // else {
+  //   // console.log("Batch " + offset / 500 + " is empty!");
+  //   // totalDBCalls = (offset / 500) - 1;
+  // }
 }
 
-async function deleteAllButTLOZ() {
+async function deleteAllButTLOZ(client) {
   console.log("Deleting all but TLOZ!");
-  const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
   try {
     const database = client.db("QTDatabase");
     const games = database.collection("games");
@@ -158,16 +181,31 @@ async function deleteAllButTLOZ() {
     });
   } catch (e) {
     console.log(e.message);
-  } finally {
-    await client.close();
   }
 }
 
 async function dumpDatabase() {
-  await deleteAllButTLOZ();
-  while (offset < 300000) {
-    await importGames(offset);
-    offset += 500;
+  const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
+  // await deleteAllButTLOZ(client);
+  while (true) {
+    const importPromises = [];
+
+    for (let i = 0; i < maxConcurrentImports; i++) {
+      offset += batchSize;
+      importPromises.push(importGames(offset, client));
+    }
+
+    const results = await Promise.all(importPromises);
+
+    const itemsProcessed = results.reduce((acc, val) => acc + val, 0);
+    totalItemsProcessed += itemsProcessed;
+
+    console.log(`Processed ${totalItemsProcessed} games so far.`);
+
+    if (itemsProcessed === 0) {
+      //No more items in IGDB!
+      break;
+    }
   }
 }
 

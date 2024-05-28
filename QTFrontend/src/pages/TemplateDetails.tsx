@@ -19,7 +19,7 @@ import ImageNode from "../components/Nodes/ImageNode.tsx";
 import CheckboxNode from "../components/Nodes/CheckboxNode.tsx";
 import NumberNode from "../components/Nodes/NumberNode.tsx";
 import DropdownNode from "../components/Nodes/DropdownNode.tsx";
-import PercentageNode from "../components/Nodes/PercentageNode.tsx"
+import PercentageNode from "../components/Nodes/PercentageNode.tsx";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Session, {
@@ -40,7 +40,7 @@ function nodeColor(node) {
     case "dropdownNode":
       return "#59A5D8";
     case "percentageNode":
-      return "#42bcf5"
+      return "#42bcf5";
     default:
       return "#FFFFFF";
   }
@@ -69,6 +69,7 @@ const TemplateDetails = () => {
   });
   const [userInputTitle, setUserInputTitle] = useState("");
   const [userTemplateLink, setUserTemplateLink] = useState("");
+  const [userEditTemplateLink, setUserEditTemplateLink] = useState("");
   const { gameId, templateId } = useParams();
   const navigate = useNavigate();
 
@@ -95,10 +96,14 @@ const TemplateDetails = () => {
           if (userTemplate) {
             setUserTemplateLink(`/track/${data.username}/${userTemplate._id}`);
           }
+          if (data.username === details.author) {
+            setUserEditTemplateLink(`/templatecreate/${gameId}/${templateId}`);
+            console.log(userEditTemplateLink);
+          }
         });
     }
     getUserTemplateLink();
-  }, [details]);
+  }, [details, gameId, templateId, userEditTemplateLink]);
 
   const onRestore = useCallback(async () => {
     restoreNodes(details.layout);
@@ -106,7 +111,7 @@ const TemplateDetails = () => {
 
   useEffect(() => {
     onRestore();
-  }, [details.layout, onRestore])
+  }, [details.layout, onRestore]);
 
   const handleInputChange = (e) => {
     setUserInputTitle(e.target.value);
@@ -145,6 +150,10 @@ const TemplateDetails = () => {
       navigate("/auth");
     }
   };
+
+  const handleEditTemplate = () => {
+    navigate(userEditTemplateLink);
+  }
 
   return (
     <>
@@ -190,6 +199,14 @@ const TemplateDetails = () => {
                 >
                   {userTemplateLink === "" ? "Add to Profile" : "Track"}
                 </button>
+                {userEditTemplateLink && (
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleEditTemplate}
+                  >
+                    Edit Template
+                  </button>
+                )}
               </div>
             </div>
           </div>

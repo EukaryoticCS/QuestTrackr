@@ -95,7 +95,7 @@ const FAQ = () => {
               <h3>Where does QuestTrackr get its game data?</h3>
             </Accordion.Header>
             <Accordion.Body>
-              QuestTrackr has an internal database of over 250,000 games dumped
+              QuestTrackr has an internal database of over 275,000 games dumped
               directly from <Link to="https://IGDB.com">IGDB.com</Link>. If your
               game is missing from the database, add it to IGDB and it should be
               added soon!
