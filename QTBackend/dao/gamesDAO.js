@@ -73,7 +73,7 @@ export default class GamesDAO {
 
   static async getGameByGameId(gameId) {
     try {
-      let game = await games.findOne({ _id: new ObjectId(gameId) });
+      let game = await games.findOne({ _id: parseInt(gameId) });
       return game;
     } catch (e) {
       console.error(`Error finding game: ` + e.message);
@@ -84,7 +84,7 @@ export default class GamesDAO {
   static async updateGame(gameId, gameData) {
     try {
       return await games.findOneAndUpdate(
-        { _id: new ObjectId(gameId) },
+        { _id: parseInt(gameId) },
         { $set: gameData },
         { overwrite: true }
       );
@@ -108,7 +108,7 @@ export default class GamesDAO {
     try {
       const templateId = new ObjectId();
       await games.updateOne(
-        { _id: new ObjectId(gameId) },
+        { _id: parseInt(gameId) },
         {
           $push: {
             templates: {
@@ -131,7 +131,7 @@ export default class GamesDAO {
     }
   }
 
-  static async updateGameTemplate(gameId, template) {
+  static async updateGameTemplate(template) {
     try {
       return await games.updateOne(
         { "templates._id": new ObjectId(template._id) },
@@ -152,7 +152,7 @@ export default class GamesDAO {
 
   static async getTemplateById(gameId, templateId) {
     try {
-      const game = await this.getGameByGameId(gameId);
+      const game = await this.getGameByGameId(parseInt(gameId));
       return game.templates.find((template) => template._id == templateId);
     } catch (e) {
       console.error(`Error finding template by id: ` + e.message);

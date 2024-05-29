@@ -26,8 +26,8 @@
     "zustand": "^4.4.6"
   },
   "scripts": {
-    "dev": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
-    "prod": "react-scripts build",
+    "dev": "cross-env NODE_ENV=development GENERATE_SOURCEMAP=false react-scripts start",
+    "prod": "cross-env NODE_ENV=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
