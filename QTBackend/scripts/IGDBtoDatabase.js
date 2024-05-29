@@ -1,26 +1,22 @@
 import igdb from "igdb-api-node";
 import dotenv from "dotenv";
 import mongodb from "mongodb";
+import Bottleneck from "bottleneck";
 const ObjectId = mongodb.ObjectId;
 
 dotenv.config();
 
 let offset = 0;
-let itemsProcessed = 0;
-let targetItems = 300000;
-const maxConcurrentImports = 5;
-const batchSize = 500;
 let totalItemsProcessed = 0;
-let dbCalls = 0;
-let totalDBCalls = 600;
 
-function dispose(client) {
-  console.log("Total db calls: " + dbCalls);
-  if (++dbCalls >= totalDBCalls) {
-    console.log("All batches sent!");
-    client.close();
-  }
-}
+const limiter = new Bottleneck({
+  maxConcurrent: 8,
+  minTime: 250,
+});
+
+const maxConcurrentImports = 4;
+const batchSize = 500;
+
 
 async function importGames(offset, client) {
   const response = await igdb
@@ -44,6 +40,10 @@ async function importGames(offset, client) {
     .request("/games");
 
   let games = [];
+  
+  if (response.data.length < 1) {
+    return 0;
+  }
 
   for (const responseGame of response.data) {
     if (responseGame.keywords) {
@@ -113,7 +113,7 @@ async function importGames(offset, client) {
     }
 
     const game = {
-      IGDBId: responseGame.id,
+      _id: responseGame.id,
       title: responseGame.name,
       summary: responseGame.summary ? responseGame.summary : "",
       developers: developers,
@@ -139,10 +139,10 @@ async function addFiveHundredGames(inputGames, client) {
 
       const bulkOps = inputGames.map((game) => ({
         updateOne: {
-          filter: { IGDBId: game.IGDBId },
+          filter: { _id: game._id },
           update: {
             $set: {
-              title: game.name,
+              title: game.title,
               summary: game.summary ? game.summary : "",
               developers: game.developers,
               publishers: game.publishers,
@@ -151,23 +151,19 @@ async function addFiveHundredGames(inputGames, client) {
               cover: game.cover,
               category: game.category,
             },
-            $setOnInsert: { IGDBId: game.IGDBId, templates: [] },
+            $setOnInsert: { _id: game._id, templates: [] },
           },
           upsert: true,
         },
       }));
 
-      const result = await games.bulkWrite(bulkOps).then(dispose());
+      const result = await games.bulkWrite(bulkOps);
 
       return result.matchedCount + result.upsertedCount;
     } catch (e) {
       console.log(e);
     }
   }
-  // else {
-  //   // console.log("Batch " + offset / 500 + " is empty!");
-  //   // totalDBCalls = (offset / 500) - 1;
-  // }
 }
 
 async function deleteAllButTLOZ(client) {
@@ -192,7 +188,7 @@ async function dumpDatabase() {
 
     for (let i = 0; i < maxConcurrentImports; i++) {
       offset += batchSize;
-      importPromises.push(importGames(offset, client));
+      importPromises.push(limiter.schedule(() => importGames(offset, client)));
     }
 
     const results = await Promise.all(importPromises);
@@ -207,6 +203,7 @@ async function dumpDatabase() {
       break;
     }
   }
+  client.close();
 }
 
-dumpDatabase();
+await dumpDatabase();

@@ -7,6 +7,7 @@ import Session, {
   doesSessionExist,
 } from "supertokens-auth-react/recipe/session";
 import TemplateCard from "../components/TemplateCard.tsx";
+import { config } from "../constants.js";
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -38,7 +39,7 @@ const Profile = () => {
 
   useEffect(() => {
     async function getUserData() {
-      fetch(`http://localhost:5000/api/v1/users/${username}`)
+      fetch(`${config.backend}/api/v1/users/${username}`)
         .then((res) => res.json())
         .then(async (data) => {
           setUserData(data);

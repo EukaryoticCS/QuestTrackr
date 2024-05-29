@@ -5,6 +5,7 @@ import Session from "supertokens-auth-react/recipe/session";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
 import { doesSessionExist } from "supertokens-auth-react/recipe/session";
 import axios from "axios";
+import { config } from "../constants";
 
 function QTNavBar({ handleInputChange }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,7 +20,7 @@ function QTNavBar({ handleInputChange }) {
       if (userIsLoggedIn) {
         const userId = await Session.getUserId();
         const response = await axios.get(
-          `http://localhost:5000/api/v1/users/supertokens/${userId}`
+          `${config.backend}/api/v1/users/supertokens/${userId}`
         );
         setUser(response.data);
       }

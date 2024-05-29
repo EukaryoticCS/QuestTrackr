@@ -7,6 +7,7 @@ import Search from "./Search.tsx";
 import axios from "axios";
 import Session from "supertokens-auth-react/recipe/session";
 import { doesSessionExist } from "supertokens-auth-react/recipe/session";
+import { config } from "../constants.js";
 
 const GameDetails = () => {
   const [details, setDetails] = useState({
@@ -30,7 +31,7 @@ const GameDetails = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/v1/games/" + gameId)
+    fetch(`${config.backend}/api/v1/games/` + gameId)
       .then((res) => res.json())
       .then((data) => {
         setDetails(data);
@@ -41,11 +42,11 @@ const GameDetails = () => {
     async (gameId) => {
       if (await doesSessionExist()) {
         const userResponse = await axios.get(
-        `http://localhost:5000/api/v1/users/supertokens/${await Session.getUserId()}`
+        `${config.backend}/api/v1/users/supertokens/${await Session.getUserId()}`
       );
       const author = userResponse.data.username;
       const response = await axios.post(
-        `http://localhost:5000/api/v1/games/${gameId}/templates`,
+        `${config.backend}/api/v1/games/${gameId}/templates`,
         { author: author }
       );
       const templateId = response.data.templateId;

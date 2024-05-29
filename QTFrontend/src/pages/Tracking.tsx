@@ -17,6 +17,7 @@ import TrackingTools from "../components/TrackingTools.tsx";
 import { Alert } from "react-bootstrap";
 import useStore from "../components/store.tsx";
 import axios from "axios";
+import { config } from "../constants.js";
 
 function nodeColor(node) {
   switch (node.type) {
@@ -70,7 +71,7 @@ const Tracking = () => {
   const onSave = useCallback(async () => {
     handleShowSavedAlert();
     await axios.put(
-      `http://localhost:5000/api/v1/users/${username}/templates/${templateId}`,
+      `${config.backend}/api/v1/users/${username}/templates/${templateId}`,
       {
         templateData: {
           _id: details._id,
@@ -86,7 +87,7 @@ const Tracking = () => {
 
   useEffect(() => {
     fetch(
-      `http://localhost:5000/api/v1/users/${username}/templates/${templateId}`
+      `${config.backend}/api/v1/users/${username}/templates/${templateId}`
     )
       .then((res) => res.json())
       .then((data) => {

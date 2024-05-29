@@ -111,6 +111,30 @@ const FAQ = () => {
               Smith at <strong>bssmith2021@gmail.com</strong>
             </Accordion.Body>
           </Accordion.Item>
+          <Accordion.Item eventKey="8">
+            <Accordion.Header>
+              <h3>Why did you make QuestTrackr?</h3>
+            </Accordion.Header>
+            <Accordion.Body>
+              I'm a huge completionist and Zelda fan, and in the wait for The Legend of
+              Zelda: Tears of the Kingdom's release, I challenged myself to 100% every
+              Zelda game. To help me, I found a great set of completion spreadsheets online,
+              but they're annoying to make, usually don't look great, and are boring to share.
+              Thus, the idea for QuestTrackr was born.
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="9">
+            <Accordion.Header>
+              <h3>Did you actually 100% all the Zelda games?</h3>
+            </Accordion.Header>
+            <Accordion.Body>
+              I got very close! I 100%'d the latest version of every game in release order 
+              up to A Link Between Worlds, but didn't get to Breath of the Wild or 
+              TriForce Heroes before TotK came out. I'm still working through them, and 
+              I'll have them all done one day! I've completed Tears of the Kingdom now, 
+              so only 2 remain...
+            </Accordion.Body>
+          </Accordion.Item>
         </Accordion>
       )}
       <QTFooter />

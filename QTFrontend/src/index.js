@@ -20,13 +20,14 @@ import ThirdPartyEmailPassword from "supertokens-auth-react/recipe/thirdpartyema
 import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 import Session from "supertokens-auth-react/recipe/session/index.js";
 import axios from "axios";
+import {config} from "./constants.js";
 
 SuperTokens.init({
   appInfo: {
     // learn more about this on https://supertokens.com/docs/thirdpartyemailpassword/appinfo
     appName: "QuestTrackr",
-    apiDomain: "http://localhost:5000",
-    websiteDomain: "http://localhost:3000",
+    apiDomain: config.backend,
+    websiteDomain: config.frontend,
     apiBasePath: "/auth",
     websiteBasePath: "/auth",
   },
@@ -72,7 +73,7 @@ SuperTokens.init({
             context.user.loginMethods.length === 1
           ) {
             //New sign up -- add to DB
-            await axios.post(`http://localhost:5000/api/v1/users`, {
+            await axios.post(`${config.backend}/api/v1/users`, {
               supertokensId: context.user.id,
               username: context.user.emails[0],
             });

@@ -27,6 +27,7 @@ import Session, {
 } from "supertokens-auth-react/recipe/session";
 import { useNavigate } from "react-router-dom";
 import useStore from "../components/store.tsx";
+import { config } from "../constants.js";
 
 function nodeColor(node) {
   switch (node.type) {
@@ -75,7 +76,7 @@ const TemplateDetails = () => {
 
   useEffect(() => {
     fetch(
-      `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
+      `${config.backend}/api/v1/games/${gameId}/templates/${templateId}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -86,7 +87,7 @@ const TemplateDetails = () => {
   useEffect(() => {
     async function getUserTemplateLink() {
       fetch(
-        `http://localhost:5000/api/v1/users/supertokens/${await Session.getUserId()}`
+        `${config.backend}/api/v1/users/supertokens/${await Session.getUserId()}`
       )
         .then((res) => res.json())
         .then(async (data) => {
@@ -122,10 +123,10 @@ const TemplateDetails = () => {
       if (userTemplateLink === "") {
         const userId = await Session.getUserId();
         const response = await axios.get(
-          `http://localhost:5000/api/v1/users/supertokens/${userId}`
+          `${config.backend}/api/v1/users/supertokens/${userId}`
         );
         await axios.post(
-          `http://localhost:5000/api/v1/users/${response.data.username}/templates`,
+          `${config.backend}/api/v1/users/${response.data.username}/templates`,
           {
             templateData: {
               ...details,

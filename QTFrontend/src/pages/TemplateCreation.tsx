@@ -30,6 +30,7 @@ import {
   Stack,
 } from "react-bootstrap";
 import EditableListItem from "../components/EditableListItem.tsx";
+import { config } from "../constants.js";
 
 const getNodeId = () => `${+new Date()}`;
 function nodeColor(node) {
@@ -201,7 +202,7 @@ function TemplateCreation() {
       let formData = new FormData();
       formData.append("file", e.target.files[0], e.target.files[0].name);
       const response = await axios.post(
-        `http://localhost:5000/upload`,
+        `${config.backend}/upload`,
         formData,
         {
           headers: {
@@ -218,7 +219,7 @@ function TemplateCreation() {
   useEffect(() => {
     async function getTemplate() {
       const response = await axios.get(
-        `http://localhost:5000/api/v1/games/${gameId}/templates/${templateId}`
+        `${config.backend}/api/v1/games/${gameId}/templates/${templateId}`
       );
       setDetails(response.data.template);
     }
@@ -234,7 +235,7 @@ function TemplateCreation() {
       ...node,
       selected: false,
     }));
-    await axios.put(`http://localhost:5000/api/v1/games/${gameId}/templates`, {
+    await axios.put(`${config.backend}/api/v1/games/${gameId}/templates`, {
       templateData: {
         _id: templateId,
         title: details.title,

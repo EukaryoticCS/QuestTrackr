@@ -11,10 +11,12 @@ import {
   errorHandler,
 } from "supertokens-node/framework/express/index.js";
 import Dashboard from "supertokens-node/recipe/dashboard/index.js";
+import { S3 } from "@aws-sdk/client-s3";
 import bodyParser from "body-parser";
 import multiparty from "multiparty";
 import fs from "fs";
 import { fileTypeFromBuffer } from "file-type";
+import { config } from './constants.js';
 
 dotenv.config();
 
@@ -33,8 +35,8 @@ supertokens.init({
   appInfo: {
     // learn more about this on https://supertokens.com/docs/thirdpartyemailpassword/appinfo
     appName: "QuestTrackr",
-    apiDomain: "http://localhost:5000",
-    websiteDomain: "http://localhost:3000",
+    apiDomain: config.backend,
+    websiteDomain: config.frontend,
     apiBasePath: "/auth",
     websiteBasePath: "/auth",
   },
@@ -69,7 +71,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: config.frontend,
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
     credentials: true,
   })
