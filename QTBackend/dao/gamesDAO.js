@@ -131,7 +131,7 @@ export default class GamesDAO {
     }
   }
 
-  static async updateGameTemplate(template) {
+  static async updateGameTemplate(gameId, template) {
     try {
       return await games.updateOne(
         { "templates._id": new ObjectId(template._id) },

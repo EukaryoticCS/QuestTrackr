@@ -80,6 +80,7 @@ app.use(
 app.use(express.json({ type: ["application/json", "text/plain"] }));
 app.use(middleware());
 app.use(bodyParser.json());
+app.use(express.urlencoded({limit: '50mb'}));
 
 app.use("/api/v1/users", users);
 app.use("/api/v1/games", games);

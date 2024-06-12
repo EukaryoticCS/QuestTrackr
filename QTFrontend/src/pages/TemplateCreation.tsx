@@ -6,6 +6,7 @@ import ReactFlow, {
   MiniMap,
   useReactFlow,
   useOnSelectionChange,
+  useKeyPress,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import TemplateTools from "../components/TemplateTools.tsx";
@@ -201,15 +202,11 @@ function TemplateCreation() {
     if (e.target.files && e.target.files.length === 1) {
       let formData = new FormData();
       formData.append("file", e.target.files[0], e.target.files[0].name);
-      const response = await axios.post(
-        `${config.backend}/upload`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(`${config.backend}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       const imageURL = response.data;
 
       updateImage(selectedNode.id, imageURL);
@@ -604,20 +601,20 @@ function TemplateCreation() {
             {selectedNode.type === "numberNode" && (
               <>
                 <Form.Control
-                    defaultValue={selectedNode.data.total}
-                    placeholder="Total to collect"
-                    aria-label="Total"
-                    aria-describedby="set-total"
-                    ref={setTotal}
-                  />
-                <Button 
-                variant="success"
-                id="set-total"
-                onClick={() => {
-                  //@ts-ignore
-                  const total = setTotal.current.value;
-                  updateTotal(selectedNode.id, total);
-                }}
+                  defaultValue={selectedNode.data.total}
+                  placeholder="Total to collect"
+                  aria-label="Total"
+                  aria-describedby="set-total"
+                  ref={setTotal}
+                />
+                <Button
+                  variant="success"
+                  id="set-total"
+                  onClick={() => {
+                    //@ts-ignore
+                    const total = setTotal.current.value;
+                    updateTotal(selectedNode.id, total);
+                  }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -649,7 +646,6 @@ function TemplateCreation() {
                       //@ts-ignore
                       const option = newOption.current.value;
                       addDropdownOption(selectedNode.id, option);
-                      
                     }}
                   >
                     +
