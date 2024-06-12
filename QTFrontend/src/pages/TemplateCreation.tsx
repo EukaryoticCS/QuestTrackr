@@ -19,6 +19,7 @@ import DropdownNode from "../components/Nodes/DropdownNode.tsx";
 import PercentageNode from "../components/Nodes/PercentageNode.tsx";
 import useStore from "../components/store.tsx";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 import { useParams } from "react-router-dom";
 import {
   Alert,
@@ -33,7 +34,7 @@ import {
 import EditableListItem from "../components/EditableListItem.tsx";
 import { config } from "../constants.js";
 
-const getNodeId = () => `${+new Date()}`;
+const getNodeId = () => `${uuidv4()}`;
 function nodeColor(node) {
   switch (node.type) {
     case "shapeNode":
@@ -114,7 +115,10 @@ function TemplateCreation() {
   const [showTemplateSettings, setShowTemplateSettings] = useState(false);
   const [showNodeSettings, setShowNodeSettings] = useState(false);
   const [showSavedAlert, setShowSavedAlert] = useState(false);
+  const [copiedNodes, setCopiedNodes] = useState<Array<Node>>([]);
   const { screenToFlowPosition } = useReactFlow();
+  const copyPressed = useKeyPress(["Control+c", "Strg+c"]);
+  const pastePressed = useKeyPress(["Control+v", "Strg+v"]);
 
   const { gameId, templateId } = useParams();
 
@@ -224,6 +228,39 @@ function TemplateCreation() {
     // onRestore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (copyPressed) {
+      let selectedNodes: Node[] = [];
+      nodes.forEach((node) => {
+        if (node.selected) {
+          selectedNodes.push(node);
+        }
+      });
+      console.log(selectedNodes);
+      setCopiedNodes(selectedNodes);
+    }
+    console.log(copiedNodes);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [copyPressed]);
+
+  useEffect(() => {
+    if (pastePressed) {
+      nodes.forEach((node) => {
+        node.selected = false;
+      });
+      copiedNodes.forEach(async (node) => {
+        const id = getNodeId();
+        console.log(node, id);
+        await onAdd({
+          ...node,
+          id: id,
+          selected: true,
+        });
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pastePressed]);
 
   const onSave = useCallback(async () => {
     console.log("Saving...");

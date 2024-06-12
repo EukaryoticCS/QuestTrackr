@@ -31,7 +31,8 @@
     "mongodb": "^6.1.0",
     "multiparty": "^4.2.3",
     "nodemon": "^3.0.1",
-    "supertokens-node": "^16.5.1"
+    "supertokens-node": "^16.5.1",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"
