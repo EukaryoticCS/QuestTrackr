@@ -187,14 +187,16 @@ const useStore = createWithEqualityFn<RFState>(
       });
     },
     updateTotal: (nodeId: string, total: number) => {
-      set({
-        nodes: get().nodes.map((node) => {
-          if (node.id === nodeId) {
-            node.data = { ...node.data, total };
-          }
-          return node;
-        }),
-      });
+      if (!isNaN(total)) {
+        set({
+          nodes: get().nodes.map((node) => {
+            if (node.id === nodeId) {
+              node.data = { ...node.data, total };
+            }
+            return node;
+          }),
+        });
+      }
     },
     updatePercentage: (check: Node) => {
       //THIS IS BAD, REMOVE IT -- Remove from state???
@@ -353,7 +355,7 @@ const useStore = createWithEqualityFn<RFState>(
         return get().nodes.filter((node) => node.data.section);
       }
       return get().nodes.filter((node) => node.data.section === section);
-    }
+    },
   }),
   Object.is
 );

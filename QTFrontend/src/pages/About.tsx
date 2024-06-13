@@ -54,10 +54,10 @@ const About = () => {
                   </h3>
                   <ul className="list-group list-group-flush h4">
                     <li className="list-group-item bg-transparent text-light">
-                      <strong>Email:</strong> 
-                      <Link to="mailto:brsmith@student.neumont.edu">brsmith@student.neumont.edu
+                      <strong>Email: </strong>
+                      <Link to="mailto:bssmith2021@gmail.com">
+                        bssmith2021@gmail.com
                       </Link>
-                      
                     </li>
                     <li className="list-group-item bg-transparent text-light">
                       <strong>GitHub: </strong>{" "}

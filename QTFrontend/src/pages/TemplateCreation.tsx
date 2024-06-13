@@ -7,6 +7,7 @@ import ReactFlow, {
   useReactFlow,
   useOnSelectionChange,
   useKeyPress,
+  Node,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import TemplateTools from "../components/TemplateTools.tsx";
@@ -83,6 +84,16 @@ const selector = (state) => ({
   deleteDropdownOption: state.deleteDropdownOption,
 });
 
+interface Details {
+  _id: string;
+  title: string;
+  bgColor: string;
+  snapToGrid: boolean;
+  author: string;
+  layout: Node[];
+  sections: string[]; // Define the type for sections if available
+}
+
 function TemplateCreation() {
   const {
     nodes,
@@ -103,7 +114,7 @@ function TemplateCreation() {
     // editDropdownOption,
     deleteDropdownOption,
   } = useStore(selector);
-  const [details, setDetails] = useState({
+  const [details, setDetails] = useState<Details>({
     _id: "",
     title: "",
     bgColor: "",
@@ -130,7 +141,6 @@ function TemplateCreation() {
   let setTotal = useRef(null);
   const handleCloseTemplateSettings = () => setShowTemplateSettings(false);
   const handleShowTemplateSettings = () => {
-    console.log(details);
     setShowTemplateSettings(true);
   };
   const handleSaveChanges = () => {
@@ -164,7 +174,6 @@ function TemplateCreation() {
 
   const updateNodeSettings = (node) => {
     updateSelectedNode(node);
-    console.log(node);
     setShowNodeSettings(true);
   };
 
@@ -185,7 +194,6 @@ function TemplateCreation() {
 
   const handleSaveEditSection = (section, newName) => {
     renameSection(section, newName);
-    console.log(newName);
     nodes.forEach((node) => {
       if (node.data.section === section) {
         updateSection(node.id, newName);
@@ -237,10 +245,8 @@ function TemplateCreation() {
           selectedNodes.push(node);
         }
       });
-      console.log(selectedNodes);
       setCopiedNodes(selectedNodes);
     }
-    console.log(copiedNodes);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [copyPressed]);
 
@@ -251,7 +257,6 @@ function TemplateCreation() {
       });
       copiedNodes.forEach(async (node) => {
         const id = getNodeId();
-        console.log(node, id);
         await onAdd({
           ...node,
           id: id,
@@ -263,7 +268,6 @@ function TemplateCreation() {
   }, [pastePressed]);
 
   const onSave = useCallback(async () => {
-    console.log("Saving...");
     handleShowSavedAlert();
     const nodeList = nodes.map((node) => ({
       ...node,
@@ -281,8 +285,9 @@ function TemplateCreation() {
   }, [nodes, gameId, templateId, details.title, details.bgColor, sections]);
 
   const onRestore = useCallback(async () => {
-    console.log("Restoring nodes...");
-    console.log(details.sections);
+    details.layout.forEach((node) => {
+      node.data.updateNodeSettings = updateNodeSettings;
+    })
     restoreNodes(details.layout);
     restoreSections(details.sections);
   }, [restoreNodes, restoreSections, details]);
@@ -650,7 +655,7 @@ function TemplateCreation() {
                   onClick={() => {
                     //@ts-ignore
                     const total = setTotal.current.value;
-                    updateTotal(selectedNode.id, total);
+                    updateTotal(selectedNode.id, parseInt(total));
                   }}
                 >
                   <svg

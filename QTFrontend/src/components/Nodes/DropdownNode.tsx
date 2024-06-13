@@ -62,7 +62,6 @@ const DropdownNode = ({ id, data, selected }) => {
       <Dropdown
         drop="down-centered"
         style={{
-          zIndex: 50000,
           width: "100%",
           height: "100%",
           minWidth:
@@ -74,14 +73,13 @@ const DropdownNode = ({ id, data, selected }) => {
             width: "100%",
             height: "100%",
             minWidth:
-              Math.max(...data.options.map((option) => option.length)) * 8 +
-              40, //This is CRAZY
+              Math.max(...data.options.map((option) => option.length)) * 8 + 40, //This is CRAZY
           }}
           variant="primary"
         >
           {selectedOption}
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <Dropdown.Menu style={{ zIndex: 50000 }}>
           {data.options.map((option: string) => {
             return (
               <Dropdown.Item
