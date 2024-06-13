@@ -99,7 +99,6 @@ const TemplateDetails = () => {
           }
           if (data.username === details.author) {
             setUserEditTemplateLink(`/templatecreate/${gameId}/${templateId}`);
-            console.log(userEditTemplateLink);
           }
         });
     }
@@ -159,7 +158,7 @@ const TemplateDetails = () => {
   return (
     <>
       <QTNavBar handleInputChange={handleInputChange} />
-      {nodes.length === 0 ? (
+      {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
         <div className="container-fluid">
