@@ -4,6 +4,7 @@ import ReactLoading from "react-loading";
 import axios from "axios";
 import { useDebouncedCallback } from "use-debounce";
 import GameCard from "../components/GameCard.tsx";
+import { config } from "../constants.js";
 
 interface Game {
   _id: string;
@@ -32,7 +33,7 @@ const Search = ({ userInputTitle }) => {
   const fetchData = async () => {
     if (title !== "") {
       const response = await axios.get(
-        "http://localhost:5000/api/v1/games?title=" + title + "&page=" + page
+        `${config.backend}/api/v1/games?title=` + title + "&page=" + page
       );
       setDetails([...details, ...response.data.games]);
       setPage(page + 1);
