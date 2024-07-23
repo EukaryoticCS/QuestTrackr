@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import QTFooter from "../components/QTFooter.tsx";
-import TemplateExample from "../assets/jpg/templateExample.jpg";
+import TemplateExample from "../assets/jpg/BotWTemplateExample.jpg";
 import { Link } from "react-router-dom";
 import Search from "./Search.tsx";
 import Session from "supertokens-auth-react/recipe/session"

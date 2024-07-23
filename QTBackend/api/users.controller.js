@@ -101,11 +101,24 @@ export default class UsersCtrl {
     try {
       const username = req.params.username;
       const template = req.body.templateData;
-      
+
       await UsersDAO.trackTemplate(username, template);
       res.json({ status: "success" });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
+  }
+
+  static async apiRemoveTrackingTemplateFromProfile(req, res, next) {
+    const username = req.params.username;
+    const templateId = req.params.templateId;
+
+    try {
+      await UsersDAO.removeTrackingTemplateFromProfile(username, templateId);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+
+    res.json({ status: "success" });
   }
 }

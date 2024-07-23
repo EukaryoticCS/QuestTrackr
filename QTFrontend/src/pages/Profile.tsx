@@ -91,7 +91,7 @@ const Profile = () => {
             </div>
             <div className="flex-row">
               {userData.templates.length > 0 ? (
-                <div className="row row-cols-2 g-2 ">{arrayTemplateItems}</div>
+                <div className="row row-cols-3 g-2 ">{arrayTemplateItems}</div>
               ) : (
                 <div className="col text-center my-2">
                   <p className="display-2">

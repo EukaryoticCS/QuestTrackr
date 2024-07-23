@@ -137,39 +137,19 @@ export default class UsersDAO {
           },
         }
       );
-      // let update;
-      // switch (typeof newValue) {
-      //   case "string":
-      //     update = {
-      //       $set: {
-      //         "templates.$[template].layout.$[node].data.selected": newValue,
-      //       },
-      //     };
-      //     break;
-      //   case "number":
-      //     update = {
-      //       $set: {
-      //         "templates.$[template].layout.$[node].data.collected": newValue,
-      //       },
-      //     };
-      //     break;
-      //   case "boolean":
-      //     update = {
-      //       $set: {
-      //         "templates.$[template].layout.$[node].data.checked": newValue,
-      //       },
-      //     };
-      // }
-
-      // return await users.updateOne({ username: username }, update, {
-      //   returnOriginal: false,
-      //   arrayFilters: [
-      //     { "template._id": id },
-      //     { "node.id": nodeId },
-      //   ],
-      // });
     } catch (e) {
       console.error("Error adding check: " + e.message);
+      return null;
+    }
+  }
+
+  static async removeTrackingTemplateFromProfile(username, templateId) {
+    try {
+      return await users.updateOne({
+        username: username,
+      }, {$pull: { "templates" : {"_id": new ObjectId(templateId)}}})
+    } catch (e) {
+      console.error("Error removing template: " + e.message);
       return null;
     }
   }
