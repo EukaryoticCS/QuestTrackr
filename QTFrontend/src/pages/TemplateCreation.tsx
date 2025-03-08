@@ -84,6 +84,8 @@ function TemplateCreation() {
     deleteDropdownOption,
   } = useStore(selector);
 
+  const { undo, redo } = useStore.temporal.getState();
+
   const [showTemplateSettings, setShowTemplateSettings] = React.useState(false);
   const [showNodeSettings, setShowNodeSettings] = React.useState(false);
   const [showSavedAlert, setShowSavedAlert] = React.useState(false);
@@ -154,6 +156,31 @@ function TemplateCreation() {
       y: reactFlowBounds!.height * 0.5,
     });
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey) {
+        // metaKey for Mac
+        switch (event.key.toLowerCase()) {
+          case "z":
+            event.preventDefault();
+            if (event.shiftKey) {
+              redo();
+            } else {
+              undo();
+            }
+            break;
+          case "y":
+            event.preventDefault();
+            redo();
+            break;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [undo, redo]);
 
   return (
     <div className="row min-vh-100 p-0 container-fluid">

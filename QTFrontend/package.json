@@ -23,6 +23,7 @@
     "supertokens-auth-react": "^0.35.6",
     "use-debounce": "^10.0.0",
     "web-vitals": "^2.1.4",
+    "zundo": "^2.3.0",
     "zustand": "^4.4.6"
   },
   "scripts": {

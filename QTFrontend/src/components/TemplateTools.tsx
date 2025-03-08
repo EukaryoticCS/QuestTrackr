@@ -2,6 +2,7 @@ import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ReactComponent as QTLogo } from "../assets/svg/QT.svg";
+import useStore from "./store.tsx";
 
 interface Props {
   onShapesClick: React.MouseEventHandler;
@@ -26,6 +27,8 @@ const TemplateTools = ({
   handleShowTemplateSettings,
   handleShowSavedAlert,
 }: Props) => {
+  const { undo, redo } = useStore.temporal.getState();
+
   return (
     <div className="d-flex flex-column bg-dark text-center justify-content-center">
       <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
@@ -39,7 +42,7 @@ const TemplateTools = ({
             key="shapes"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-shapes`} style={{position:"fixed"}}>
+              <Tooltip id={`tooltip-shapes`} style={{ position: "fixed" }}>
                 <h4 className="m-auto ">Shapes</h4>
               </Tooltip>
             }
@@ -66,7 +69,7 @@ const TemplateTools = ({
             key="text"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-text`} style={{position:"fixed"}}>
+              <Tooltip id={`tooltip-text`} style={{ position: "fixed" }}>
                 <h4 className="m-auto">Text</h4>
               </Tooltip>
             }
@@ -93,7 +96,7 @@ const TemplateTools = ({
             key="images"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-images`} style={{position:"fixed"}}>
+              <Tooltip id={`tooltip-images`} style={{ position: "fixed" }}>
                 <h4 className="m-auto">Images</h4>
               </Tooltip>
             }
@@ -121,7 +124,7 @@ const TemplateTools = ({
             key="checkboxes"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-checkboxes`} style={{position:"fixed"}}>
+              <Tooltip id={`tooltip-checkboxes`} style={{ position: "fixed" }}>
                 <h4 className="m-auto">Checkboxes</h4>
               </Tooltip>
             }
@@ -149,7 +152,7 @@ const TemplateTools = ({
             key="numbers"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-numbers`} style={{position:"fixed"}}>
+              <Tooltip id={`tooltip-numbers`} style={{ position: "fixed" }}>
                 <h4 className="m-auto">Numbers</h4>
               </Tooltip>
             }
@@ -176,7 +179,7 @@ const TemplateTools = ({
             key="dropdowns"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-dropdowns`} style={{position:"fixed"}}>
+              <Tooltip id={`tooltip-dropdowns`} style={{ position: "fixed" }}>
                 <h4 className="m-auto">Dropdowns</h4>
               </Tooltip>
             }
@@ -204,7 +207,7 @@ const TemplateTools = ({
             key="percentages"
             placement="right"
             overlay={
-              <Tooltip id={`tooltip-percentages`} style={{position:"fixed"}}>
+              <Tooltip id={`tooltip-percentages`} style={{ position: "fixed" }}>
                 <h4 className="m-auto">Percentages</h4>
               </Tooltip>
             }
@@ -228,16 +231,74 @@ const TemplateTools = ({
         </li>
       </ul>
       <OverlayTrigger
-        key="save"
+        key="undo"
         placement="right"
         overlay={
-          <Tooltip id={`tooltip-save`} style={{position:"fixed"}}>
-            <h4 className="m-auto">Save</h4>
+          <Tooltip id={`tooltip-undo`} style={{ position: "fixed" }}>
+            <h4 className="m-auto">Undo (Ctrl+Z)</h4>
           </Tooltip>
         }
       >
         <button
           className="nav-link py-3 border-bottom mt-auto"
+          onClick={() => undo()}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="white"
+            className="bi bi-arrow-counterclockwise"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"
+            />
+            <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
+          </svg>
+        </button>
+      </OverlayTrigger>
+      <OverlayTrigger
+        key="redo"
+        placement="right"
+        overlay={
+          <Tooltip id={`tooltip-redo`} style={{ position: "fixed" }}>
+            <h4 className="m-auto">Redo (Ctrl+Y)</h4>
+          </Tooltip>
+        }
+      >
+        <button
+          className="nav-link py-3 border-bottom "
+          onClick={() => redo()}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="white"
+            className="bi bi-arrow-clockwise"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+            />
+            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
+          </svg>
+        </button>
+      </OverlayTrigger>
+      <OverlayTrigger
+        key="save"
+        placement="right"
+        overlay={
+          <Tooltip id={`tooltip-save`} style={{ position: "fixed" }}>
+            <h4 className="m-auto">Save</h4>
+          </Tooltip>
+        }
+      >
+        <button
+          className="nav-link py-3 border-bottom"
           onClick={handleShowSavedAlert}
         >
           <svg
@@ -257,7 +318,7 @@ const TemplateTools = ({
         key="settings"
         placement="right"
         overlay={
-          <Tooltip id={`tooltip-settings`} style={{position:"fixed"}}>
+          <Tooltip id={`tooltip-settings`} style={{ position: "fixed" }}>
             <h4 className="m-auto ">Settings</h4>
           </Tooltip>
         }
