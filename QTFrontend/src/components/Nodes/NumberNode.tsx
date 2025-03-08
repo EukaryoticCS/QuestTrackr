@@ -140,86 +140,59 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           fontSize: data.fontSize,
         }}
       >
-        {isMobile ? (
-          <div className="d-flex flex-column justify-content-center align-items-center w-100 h-100">
-            <div className="d-flex justify-content-center align-items-center mb-2">
-              <Button
-                variant="outline-primary"
-                size="sm"
-                onClick={handleDecrement}
-                className="me-2 d-flex justify-content-center align-items-center"
-                style={{ width: "30px", height: "30px", padding: "0" }}
+        <div className="d-flex flex-column justify-content-center align-items-center w-100 h-100">
+          <div className="d-flex justify-content-center align-items-center mb-2">
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={handleDecrement}
+              className="me-2 d-flex justify-content-center align-items-center"
+              style={{ width: "30px", height: "30px", padding: "0" }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-dash"
+                viewBox="0 0 16 16"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-dash"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
-                </svg>
-              </Button>
-              <div className="text-center" style={{ minWidth: "60px" }}>
-                {collected}/{data.total}
-              </div>
-              <Button
-                variant="outline-primary"
-                size="sm"
-                onClick={handleIncrement}
-                className="ms-2 d-flex justify-content-center align-items-center"
-                style={{ width: "30px", height: "30px", padding: "0" }}
+                <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
+              </svg>
+            </Button>
+            <div className="text-center" style={{ minWidth: "60px" }}>
+              {collected}/{data.total}
+            </div>
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={handleIncrement}
+              className="ms-2 d-flex justify-content-center align-items-center"
+              style={{ width: "30px", height: "30px", padding: "0" }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-plus"
+                viewBox="0 0 16 16"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-plus"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                </svg>
-              </Button>
-            </div>
-            <div className="progress w-75" style={{ height: "10px" }}>
-              <div
-                className="progress-bar bg-success"
-                role="progressbar"
-                style={{ width: `${(collected / data.total) * 100}%` }}
-                aria-valuenow={(collected / data.total) * 100}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
-            </div>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+              </svg>
+            </Button>
           </div>
-        ) : (
-          <>
-            <div className="text-center">
-              <input
-                type="number"
-                min="0"
-                max={data.total}
-                value={collected}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value);
-                  if (value >= 0 && value <= data.total) {
-                    setCollected(value);
-                    updateCollected(id, value);
-                  }
-                }}
-                style={{
-                  width: "50px",
-                  textAlign: "center",
-                  color: data.textColor,
-                  fontSize: data.fontSize,
-                }}
-              />
-              /{data.total}
-            </div>
-          </>
-        )}
+          <div className="progress w-75" style={{ height: "10px" }}>
+            <div
+              className="progress-bar bg-success"
+              role="progressbar"
+              style={{ width: `${(collected / data.total) * 100}%` }}
+              aria-valuenow={(collected / data.total) * 100}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            ></div>
+          </div>
+        </div>
       </div>
     </>
   );

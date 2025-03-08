@@ -133,12 +133,14 @@ export default class GamesDAO {
 
   static async updateGameTemplate(gameId, template) {
     try {
+      console.log(template);
       return await games.updateOne(
         { "templates._id": new ObjectId(template._id) },
         {
           $set: {
             "templates.$.title": template.title,
             "templates.$.bgColor": template.bgColor,
+            "templates.$.snapToGrid": template.snapToGrid,
             "templates.$.layout": template.layout,
             "templates.$.sections": template.sections,
           },

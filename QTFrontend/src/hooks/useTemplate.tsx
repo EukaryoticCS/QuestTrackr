@@ -39,17 +39,20 @@ export const useTemplate = (gameId: string, templateId: string) => {
         selected: false,
       }));
 
+      console.log(details);
+
       await axios.put(`${config.backend}/api/v1/games/${gameId}/templates`, {
         templateData: {
           _id: templateId,
           title: details.title,
           bgColor: details.bgColor,
+          snapToGrid: details.snapToGrid,
           sections: sections,
           layout: nodeList,
         },
       });
     },
-    [gameId, templateId, details.title, details.bgColor]
+    [details, gameId, templateId]
   );
 
   const updateDetails = (newDetails: Partial<Details>) => {

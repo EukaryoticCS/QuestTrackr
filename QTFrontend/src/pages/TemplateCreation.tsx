@@ -106,28 +106,29 @@ function TemplateCreation() {
     }, 2000);
   };
 
-  const updateNodeSettings = (node: Node) => {
-    updateSelectedNode(node);
-    setShowNodeSettings(true);
-  };
+  const updateNodeSettings = useCallback((node: Node) => {
+      updateSelectedNode(node);
+      setShowNodeSettings(true);
+    },
+    [updateSelectedNode, setShowNodeSettings]
+  );
 
   const onSave = useCallback(async () => {
     handleShowSavedAlert();
     await saveTemplate(nodes, sections);
   }, [nodes, sections, saveTemplate]);
 
-  const onRestore = useCallback(async () => {
-    const template = await loadTemplate();
-    template.layout.forEach((node: Node) => {
-      node.data.updateNodeSettings = updateNodeSettings;
-    });
-    restoreNodes(template.layout);
-    restoreSections(template.sections);
-  }, [loadTemplate, restoreNodes, restoreSections]);
-
   useEffect(() => {
-    onRestore();
-  }, [onRestore]);
+    const loadInitialTemplate = async () => {
+      const template = await loadTemplate();
+      template.layout.forEach((node: Node) => {
+        node.data.updateNodeSettings = updateNodeSettings;
+      });
+      restoreNodes(template.layout);
+      restoreSections(template.sections);
+    };
+    loadInitialTemplate();
+  }, [loadTemplate, restoreNodes, restoreSections, updateNodeSettings]);
 
   useOnSelectionChange({
     onChange: ({ nodes }) => {
@@ -143,6 +144,7 @@ function TemplateCreation() {
     snapToGrid: boolean
   ) => {
     updateDetails({ title, bgColor, snapToGrid });
+    console.log(snapToGrid);
     setShowTemplateSettings(false);
     onSave();
   };
@@ -218,6 +220,7 @@ function TemplateCreation() {
           fitView
           nodes={nodes}
           onNodesChange={onNodesChange}
+          nodesDraggable={true}
           nodeTypes={nodeTypes}
           snapToGrid={details.snapToGrid}
           snapGrid={[20, 20]}

@@ -16,21 +16,18 @@ export const useCopyPaste = (nodes: Node[], onAdd: (node: Node) => void) => {
   }, [copyPressed, nodes]);
 
   useEffect(() => {
-    if (pastePressed) {
-      nodes.forEach((node) => {
-        node.selected = false;
-      });
-
-      copiedNodes.forEach(async (node) => {
-        const id = uuidv4();
-        await onAdd({
+    if (pastePressed && copiedNodes.length > 0) {
+      // Create new nodes with unique IDs and selected state
+      copiedNodes.forEach((node) => {
+        const newNode = {
           ...node,
-          id,
+          id: uuidv4(),
           selected: true,
-        });
+        };
+        onAdd(newNode);
       });
     }
-  }, [pastePressed, nodes, copiedNodes, onAdd]);
+  }, [pastePressed, copiedNodes, onAdd]);
 
   return {
     copiedNodes,

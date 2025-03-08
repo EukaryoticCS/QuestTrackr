@@ -47,7 +47,10 @@ const TemplateSettings: React.FC<TemplateSettingsProps> = ({
   const handleSave = () => {
     const newTitle = titleRef.current?.value || initialTitle;
     const newBgColor = bgColorRef.current?.value || initialBgColor;
-    const newSnapToGrid = snapToGridRef.current?.checked || initialSnapToGrid;
+    const newSnapToGrid = snapToGridRef.current?.checked ?? initialSnapToGrid;
+
+    console.log(snapToGridRef.current?.checked);
+    console.log(newSnapToGrid);
 
     onSave(newTitle, newBgColor, newSnapToGrid);
   };

@@ -1,32 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { Dropdown, Form } from "react-bootstrap";
-import { NodeToolbar, NodeResizer } from "reactflow";
+import { NodeToolbar, NodeResizer, useReactFlow } from "reactflow";
 import useStore from "../store.tsx";
 
 const DropdownNode = ({ id, data, selected }) => {
   const [selectedOption, setSelectedOption] = useState(data.selected);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isInteractionEnabled, setIsInteractionEnabled] = useState(false);
+  const isTrackingMode = !data.selectable;
   let sections = useStore((state) => state.sections);
   const updateSection = useStore((state) => state.updateSection);
   const updateSelected = useStore((state) => state.updateSelected);
 
-  // Handle window resize to detect mobile
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // Double-click handler for template creation mode
+  const handleDoubleClick = useCallback(
+    (e) => {
+      if (!isTrackingMode) {
+        e.stopPropagation(); // Prevent double-click from triggering other events
+        setIsInteractionEnabled(true);
+      }
+    },
+    [isTrackingMode]
+  );
 
   const handleUpdateNodeSettings = () => {
     data.updateNodeSettings({ id, data, selected, type: "dropdownNode" });
   };
 
   const handleSelectChange = (option) => {
-    setSelectedOption(option);
-    updateSelected(id, option);
+    // In tracking mode or when interaction is enabled in creation mode
+    if (isTrackingMode || isInteractionEnabled) {
+      setSelectedOption(option);
+      updateSelected(id, option);
+      setIsInteractionEnabled(false); // Reset interaction state after selection in creation mode
+    }
   };
 
   return (
@@ -78,40 +84,47 @@ const DropdownNode = ({ id, data, selected }) => {
       <div
         className="d-flex justify-content-center align-items-center"
         style={{ width: "100%", height: "100%" }}
+        onDoubleClick={handleDoubleClick}
       >
-        {isMobile ? (
-          <Form.Select
-            value={selectedOption}
-            onChange={(e) => handleSelectChange(e.target.value)}
-            style={{
-              width: "90%",
-              height: "auto",
-              fontSize: "16px",
-              padding: "8px",
-              borderRadius: "8px",
-            }}
-          >
-            {data.options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </Form.Select>
-        ) : (
-          <select
-            value={selectedOption}
-            onChange={(e) => handleSelectChange(e.target.value)}
-            style={{ width: "100%", height: "100%" }}
-          >
-            <option value="">Select an option</option>
-            {data.options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        )}
+        <Form.Select
+          value={selectedOption}
+          onChange={(e) => handleSelectChange(e.target.value)}
+          style={{
+            width: "90%",
+            height: "auto",
+            fontSize: "16px",
+            padding: "8px",
+            borderRadius: "8px",
+            cursor: isTrackingMode || isInteractionEnabled ? "pointer" : "move",
+            pointerEvents:
+              isTrackingMode || isInteractionEnabled ? "auto" : "none",
+          }}
+        >
+          {data.options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </Form.Select>
       </div>
+      {!isTrackingMode && !isInteractionEnabled && selected && (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "rgba(0,0,0,0.7)",
+            color: "white",
+            padding: "4px 8px",
+            borderRadius: "4px",
+            fontSize: "12px",
+            pointerEvents: "none",
+          }}
+        >
+          Double-click to interact
+        </div>
+      )}
     </>
   );
 };
