@@ -1,0 +1,170 @@
+/* Global Responsive Styles for QuestTrackr */
+
+/* Base mobile-first styles */
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* Responsive typography */
+h1,
+.h1 {
+  font-size: calc(1.5rem + 1.5vw);
+}
+
+h2,
+.h2 {
+  font-size: calc(1.3rem + 0.9vw);
+}
+
+h3,
+.h3 {
+  font-size: calc(1.2rem + 0.6vw);
+}
+
+.display-1 {
+  font-size: calc(1.8rem + 3.5vw);
+}
+
+.display-2 {
+  font-size: calc(1.7rem + 2.7vw);
+}
+
+.display-3 {
+  font-size: calc(1.6rem + 1.8vw);
+}
+
+/* Responsive spacing */
+.container-fluid {
+  padding-left: max(15px, 4vw);
+  padding-right: max(15px, 4vw);
+}
+
+/* Responsive images */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive cards */
+.card {
+  margin-bottom: 1rem;
+}
+
+/* Responsive tables */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Navbar improvements */
+.navbar-brand {
+  font-size: 1.25rem;
+  padding: 0.5rem 0;
+}
+
+.navbar-toggler {
+  padding: 0.5rem;
+}
+
+/* Improve mobile search experience */
+@media (max-width: 992px) {
+  .navbar .form-control {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Responsive utilities */
+.d-xs-none {
+  display: none !important;
+}
+
+@media (min-width: 576px) {
+  .d-xs-none {
+    display: initial !important;
+  }
+
+  .d-sm-none {
+    display: none !important;
+  }
+}
+
+/* Improve mobile scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Touch-friendly styles */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Floating action buttons for mobile */
+.mobile-fab {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1030;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive profile page */
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-avatar {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Responsive game details page */
+@media (max-width: 768px) {
+  .game-details-container {
+    flex-direction: column;
+  }
+
+  .game-cover {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Responsive template cards */
+@media (max-width: 768px) {
+  .template-card {
+    width: 100%;
+  }
+}
+
+/* Improve offcanvas on mobile */
+.offcanvas-bottom {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+/* Improve alerts on mobile */
+.alert {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+/* Fix for Bootstrap modals on mobile */
+.modal-dialog {
+  margin: 0.5rem;
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    margin: 1.75rem auto;
+  }
+}

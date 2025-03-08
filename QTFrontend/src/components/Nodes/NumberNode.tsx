@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Dropdown } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Dropdown, Button } from "react-bootstrap";
 import { NodeProps, NodeToolbar } from "reactflow";
 import useStore, { NodeData } from "../store.tsx";
 
@@ -7,16 +7,43 @@ const fontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96];
 
 const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   const [collected, setCollected] = useState(data.collected);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   let sections = useStore((state) => state.sections);
-  
+
   const updateTextColor = useStore((state) => state.updateTextColor);
   const updateSection = useStore((state) => state.updateSection);
   const updateCollected = useStore((state) => state.updateCollected);
   const updateFontSize = useStore((state) => state.updateFontSize);
 
+  // Handle window resize to detect mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleUpdateNodeSettings = () => {
     data.updateNodeSettings({ id, data, selected, type: "numberNode" });
+  };
+
+  const handleIncrement = () => {
+    if (collected < data.total) {
+      const newCollected = collected + 1;
+      setCollected(newCollected);
+      updateCollected(id, newCollected);
+    }
+  };
+
+  const handleDecrement = () => {
+    if (collected > 0) {
+      const newCollected = collected - 1;
+      setCollected(newCollected);
+      updateCollected(id, newCollected);
+    }
   };
 
   return (
@@ -73,9 +100,9 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
           type="color"
           onChange={(e) => updateTextColor(id, e.target.value)}
         />
-        <Dropdown drop="down-centered" style={{ zIndex: 50000 }}>
+        <Dropdown className="nav-item">
           <Dropdown.Toggle variant="primary">{data.section}</Dropdown.Toggle>
-          <Dropdown.Menu>
+          <Dropdown.Menu className="w-100">
             {sections.map((option: string) => {
               return (
                 <Dropdown.Item
@@ -105,50 +132,94 @@ const NumberNode = ({ id, data, selected }: NodeProps<NodeData>) => {
         </button>
       </NodeToolbar>
       <div
-        className="container text-center form-group"
+        className="d-flex flex-column justify-content-center align-items-center"
         style={{
-          fontSize: data.fontSize,
+          width: "100%",
+          height: "100%",
           color: data.textColor,
+          fontSize: data.fontSize,
         }}
       >
-        <div className="row p-0">
-          <div className="col-6 " style={{ textShadow: "none" }}>
-            Collected:
+        {isMobile ? (
+          <div className="d-flex flex-column justify-content-center align-items-center w-100 h-100">
+            <div className="d-flex justify-content-center align-items-center mb-2">
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={handleDecrement}
+                className="me-2 d-flex justify-content-center align-items-center"
+                style={{ width: "30px", height: "30px", padding: "0" }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-dash"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
+                </svg>
+              </Button>
+              <div className="text-center" style={{ minWidth: "60px" }}>
+                {collected}/{data.total}
+              </div>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={handleIncrement}
+                className="ms-2 d-flex justify-content-center align-items-center"
+                style={{ width: "30px", height: "30px", padding: "0" }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-plus"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                </svg>
+              </Button>
+            </div>
+            <div className="progress w-75" style={{ height: "10px" }}>
+              <div
+                className="progress-bar bg-success"
+                role="progressbar"
+                style={{ width: `${(collected / data.total) * 100}%` }}
+                aria-valuenow={(collected / data.total) * 100}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              ></div>
+            </div>
           </div>
-          <div className="col-6 " style={{ textShadow: "none" }}>
-            Remaining:
-          </div>
-        </div>
-        <div
-          className="row p-0"
-          style={{ height: data.fontSize, color: "inherit" }}
-        >
-          <input
-            id="collected"
-            className="col-6"
-            type="text"
-            onChange={(e) => {
-              let inputNum = parseInt(e.target.value);
-              updateCollected(
-                id,
-                !isNaN(inputNum) && inputNum > 0 ? inputNum : 0
-              );
-              setCollected(!isNaN(inputNum) && inputNum > 0 ? inputNum : 0);
-            }}
-            defaultValue={collected}
-            style={{
-              fontSize: data.fontSize,
-              background: "none",
-              outline: "none",
-              border: "none",
-              color: data.textColor,
-              textAlign: "center",
-            }}
-          />
-          <div id="remaining" className="col-6" style={{ textShadow: "none" }}>
-            {collected > data.total ? 0 : data.total - collected}
-          </div>
-        </div>
+        ) : (
+          <>
+            <div className="text-center">
+              <input
+                type="number"
+                min="0"
+                max={data.total}
+                value={collected}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (value >= 0 && value <= data.total) {
+                    setCollected(value);
+                    updateCollected(id, value);
+                  }
+                }}
+                style={{
+                  width: "50px",
+                  textAlign: "center",
+                  color: data.textColor,
+                  fontSize: data.fontSize,
+                }}
+              />
+              /{data.total}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

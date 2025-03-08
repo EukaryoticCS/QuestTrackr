@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import QTNavBar from "../components/QTNavBar.tsx";
 import Search from "./Search.tsx";
 import QTFooter from "../components/QTFooter.tsx";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Session, {
   doesSessionExist,
 } from "supertokens-auth-react/recipe/session";
@@ -74,67 +74,50 @@ const Profile = () => {
       {userInputTitle !== "" ? (
         <Search userInputTitle={userInputTitle} />
       ) : (
-        <div className="container-fluid row h-100">
-          <div className="col-md-8 flex-column">
-            <div className="d-flex flex-row py-3">
-              <div style={{ height: 200 }}>
-                <img
-                  className="img-fluid h-100 card img-thumbnail rounded-circle"
-                  alt=""
-                  src={userData.profile.profilePicture}
-                />
-              </div>
-              <div>
-                <h1 className="display-1 m-2">{username}</h1>
-                <h1>{userData.profile.bio}</h1>
-              </div>
+        <div className="container-fluid px-4">
+          <div className="profile-header d-flex flex-column flex-md-row py-3 align-items-md-center">
+            <div className="profile-avatar text-center text-md-start me-md-4 mb-3 mb-md-0">
+              <img
+                className="img-fluid rounded-circle"
+                alt={`${username}'s profile`}
+                src={userData.profile.profilePicture}
+                style={{ maxHeight: "150px", maxWidth: "150px" }}
+              />
             </div>
-            <div className="flex-row">
-              {userData.templates.length > 0 ? (
-                <div className="row row-cols-3 g-2 ">{arrayTemplateItems}</div>
-              ) : (
-                <div className="col text-center my-2">
-                  <p className="display-2">
-                    {viewingOwnProfile
-                      ? "You haven't added any templates yet!"
-                      : "This user has not added any templates yet!"}
-                  </p>
+            <div className="profile-info">
+              <h1 className="display-4 mb-2">{username}</h1>
+              <p className="lead">{userData.profile.bio}</p>
+
+              {viewingOwnProfile && (
+                <div className="d-flex flex-wrap gap-2 mt-3">
+                  <Link to="/settings" className="btn btn-outline-secondary">
+                    Edit Profile
+                  </Link>
                 </div>
               )}
             </div>
           </div>
-          <div className="col-md-4">
-            <h1 className="card-title display-3 text-center my-2">
-              User Statistics
-            </h1>
-            <div className="row row-cols-1 gy-5">
-              <div className="card bg-primary">
-                <div className="card-body">
-                  <p className="card-text h2 text-center">Played/Playing:</p>
-                  <p className="card-text h2 text-center">
-                    {userData.templates.length}
-                  </p>
-                </div>
+
+          <div className="mt-4">
+            <h2 className="mb-3">Templates</h2>
+            {userData.templates.length > 0 ? (
+              <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {arrayTemplateItems}
               </div>
-              {/* <div className="card bg-secondary">
-                <div className="card-body">
-                  <p className="card-text h2 text-center">Completed:</p>
-                  <p className="card-text h2 text-center">0</p>
-                </div>
+            ) : (
+              <div className="alert alert-info text-center p-4">
+                <p className="h4 mb-3">
+                  {viewingOwnProfile
+                    ? "You haven't added any templates yet!"
+                    : "This user has not added any templates yet!"}
+                </p>
               </div>
-              <div className="card bg-info">
-                <div className="card-body">
-                  <p className="card-text h2 text-center">
-                    Average Completion Rate:
-                  </p>
-                  <p className="card-text h2 text-center">0%</p>
-                </div>
-              </div> */}
-            </div>
+            )}
           </div>
+
+          <QTFooter />
         </div>
       )}
-      <QTFooter />
     </>
   );
 };

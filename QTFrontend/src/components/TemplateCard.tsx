@@ -12,42 +12,44 @@ interface Props {
 
 const TemplateCard = (props: Props) => {
   return (
-    <div>
-      <Link to={props.link} className="col">
-        <Card className="card bg-primary bg-gradient">
-          <Card.Body className="card-header">
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Card.Title>{props.title}</Card.Title>
-            </div>
-            <Card.Subtitle className="mt-auto text-muted">
+    <div className="template-card h-100">
+      <Card className="h-100 bg-primary bg-gradient shadow-sm">
+        <Link to={props.link} className="text-decoration-none text-white h-100">
+          <Card.Body className="d-flex flex-column">
+            <Card.Title className="mb-2 text-truncate">
+              {props.title}
+            </Card.Title>
+            <Card.Subtitle className="mt-auto text-light opacity-75 small">
               By: {props.author}
             </Card.Subtitle>
           </Card.Body>
-        </Card>
-      </Link>
-      <Dropdown align="end">
-        <Dropdown.Toggle variant="link" bsPrefix="p-0">
-          <Button
-            variant="link"
-            className="text-decoration-none p-0"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="white"
-              className="bi bi-three-dots-vertical"
-              viewBox="0 0 16 16"
+        </Link>
+        <div className="position-absolute top-0 end-0 p-2">
+          <Dropdown align="end">
+            <Dropdown.Toggle
+              as={Button}
+              variant="link"
+              size="sm"
+              className="bg-transparent border-0 p-0 shadow-none"
+              onClick={(e) => e.stopPropagation()}
             >
-              <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-            </svg>
-          </Button>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item href="">Remove from Profile</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="white"
+                className="bi bi-three-dots-vertical"
+                viewBox="0 0 16 16"
+              >
+                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+              </svg>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="">Remove from Profile</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </Card>
     </div>
 
     // <Link to={props.link} className="col ">

@@ -1,16 +1,32 @@
-import React, { useState } from "react";
-import { Dropdown } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Dropdown, Form } from "react-bootstrap";
 import { NodeToolbar, NodeResizer } from "reactflow";
 import useStore from "../store.tsx";
 
 const DropdownNode = ({ id, data, selected }) => {
   const [selectedOption, setSelectedOption] = useState(data.selected);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   let sections = useStore((state) => state.sections);
   const updateSection = useStore((state) => state.updateSection);
   const updateSelected = useStore((state) => state.updateSelected);
 
+  // Handle window resize to detect mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleUpdateNodeSettings = () => {
     data.updateNodeSettings({ id, data, selected, type: "dropdownNode" });
+  };
+
+  const handleSelectChange = (option) => {
+    setSelectedOption(option);
+    updateSelected(id, option);
   };
 
   return (
@@ -52,49 +68,50 @@ const DropdownNode = ({ id, data, selected }) => {
         </button>
       </NodeToolbar>
       <NodeResizer
-        color="ff0071"
+        color="#ff0071"
         isVisible={selected && data.selectable}
         minWidth={
           Math.max(...data.options.map((option) => option.length)) * 8 + 40
         }
         minHeight={40}
       />
-      <Dropdown
-        drop="down-centered"
-        style={{
-          width: "100%",
-          height: "100%",
-          minWidth:
-            Math.max(...data.options.map((option) => option.length)) * 8 + 40,
-        }}
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ width: "100%", height: "100%" }}
       >
-        <Dropdown.Toggle
-          style={{
-            width: "100%",
-            height: "100%",
-            minWidth:
-              Math.max(...data.options.map((option) => option.length)) * 8 + 40, //This is CRAZY
-          }}
-          variant="primary"
-        >
-          {selectedOption}
-        </Dropdown.Toggle>
-        <Dropdown.Menu style={{ zIndex: 50000 }}>
-          {data.options.map((option: string) => {
-            return (
-              <Dropdown.Item
-                key={option}
-                onClick={() => {
-                  updateSelected(id, option);
-                  setSelectedOption(option);
-                }}
-              >
+        {isMobile ? (
+          <Form.Select
+            value={selectedOption}
+            onChange={(e) => handleSelectChange(e.target.value)}
+            style={{
+              width: "90%",
+              height: "auto",
+              fontSize: "16px",
+              padding: "8px",
+              borderRadius: "8px",
+            }}
+          >
+            {data.options.map((option, index) => (
+              <option key={index} value={option}>
                 {option}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown.Menu>
-      </Dropdown>
+              </option>
+            ))}
+          </Form.Select>
+        ) : (
+          <select
+            value={selectedOption}
+            onChange={(e) => handleSelectChange(e.target.value)}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <option value="">Select an option</option>
+            {data.options.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
     </>
   );
 };

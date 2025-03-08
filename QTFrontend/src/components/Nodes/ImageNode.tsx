@@ -28,7 +28,7 @@ const ImageNode = ({ id, data, selected }) => {
         </button>
       </NodeToolbar>
       <NodeResizer
-        color="ff0071"
+        color="#ff0071"
         isVisible={selected && data.selectable}
         minWidth={20}
         minHeight={20}
