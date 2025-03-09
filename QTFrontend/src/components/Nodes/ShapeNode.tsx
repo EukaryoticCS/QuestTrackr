@@ -13,7 +13,7 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
   return (
     <>
       <NodeResizer
-        color="ff0071"
+        color="#ff0071"
         isVisible={selected && data.selectable}
         minWidth={20}
         minHeight={20}
@@ -25,7 +25,7 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
       >
         <input
           className="form-control form-control-color"
-          defaultValue={data.color}
+          value={data.color || "#ffffff"}
           type="color"
           onChange={(e) => {
             updateNodeColor(id, e.target.value);
@@ -49,7 +49,7 @@ const ShapeNode = ({ id, data, selected }: NodeProps<NodeData>) => {
       <div
         className="px-2 text-center"
         style={{
-          backgroundColor: data.color,
+          backgroundColor: data.color || "#ffffff",
           width: "100%",
           height: "100%",
           borderRadius: 15,

@@ -1,4 +1,5 @@
-import { createWithEqualityFn } from "zustand/traditional";
+import { create } from "zustand";
+import { temporal } from "zundo";
 import {
   Connection,
   Edge,
@@ -59,8 +60,8 @@ export type RFState = {
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-const useStore = createWithEqualityFn<RFState>(
-  (set, get) => ({
+const useStore = create<RFState>()(
+  temporal((set, get) => ({
     nodes: [],
     edges: [],
     sections: [],
@@ -356,8 +357,7 @@ const useStore = createWithEqualityFn<RFState>(
       }
       return get().nodes.filter((node) => node.data.section === section);
     },
-  }),
-  Object.is
+  }))
 );
 
 export default useStore;

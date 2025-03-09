@@ -20,7 +20,9 @@ import ThirdPartyEmailPassword from "supertokens-auth-react/recipe/thirdpartyema
 import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 import Session from "supertokens-auth-react/recipe/session/index.js";
 import axios from "axios";
-import {config} from "./constants.js";
+import { config } from "./constants.js";
+import "./assets/mobile.css";
+import "./assets/responsive.css";
 
 SuperTokens.init({
   appInfo: {
@@ -63,8 +65,7 @@ SuperTokens.init({
             },
           ],
         },
-        providers: [
-        ],
+        providers: [],
       },
       onHandleEvent: async (context) => {
         if (context.action === "SUCCESS") {
@@ -98,7 +99,7 @@ root.render(
             {getSuperTokensRoutesForReactRouterDom(reactRouterDom, [
               ThirdPartyEmailPasswordPreBuiltUI,
             ])}
-            
+
             <reactRouterDom.Route path="/*" element={<Home />} exact />
             <reactRouterDom.Route path="/about" element={<About />} />
             <reactRouterDom.Route path="/faq" element={<FAQ />} />

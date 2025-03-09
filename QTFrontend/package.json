@@ -9,7 +9,7 @@
     "@uiw/react-color": "^2.0.0",
     "axios": "^1.6.0",
     "bootstrap": "^5.3.2",
-    "bootstrap-icons": "^1.11.1",
+    "bootstrap-icons": "^1.11.3",
     "bootswatch": "^5.3.2",
     "eslint-config-react-app": "^7.0.1",
     "react": "^18.2.0",
@@ -23,6 +23,7 @@
     "supertokens-auth-react": "^0.35.6",
     "use-debounce": "^10.0.0",
     "web-vitals": "^2.1.4",
+    "zundo": "^2.3.0",
     "zustand": "^4.4.6"
   },
   "scripts": {

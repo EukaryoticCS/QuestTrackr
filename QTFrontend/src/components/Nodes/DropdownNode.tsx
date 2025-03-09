@@ -1,16 +1,38 @@
-import React, { useState } from "react";
-import { Dropdown } from "react-bootstrap";
-import { NodeToolbar, NodeResizer } from "reactflow";
+import React, { useState, useCallback } from "react";
+import { Dropdown, Form } from "react-bootstrap";
+import { NodeToolbar, NodeResizer, useReactFlow } from "reactflow";
 import useStore from "../store.tsx";
 
 const DropdownNode = ({ id, data, selected }) => {
   const [selectedOption, setSelectedOption] = useState(data.selected);
+  const [isInteractionEnabled, setIsInteractionEnabled] = useState(false);
+  const isTrackingMode = !data.selectable;
   let sections = useStore((state) => state.sections);
   const updateSection = useStore((state) => state.updateSection);
   const updateSelected = useStore((state) => state.updateSelected);
 
+  // Double-click handler for template creation mode
+  const handleDoubleClick = useCallback(
+    (e) => {
+      if (!isTrackingMode) {
+        e.stopPropagation(); // Prevent double-click from triggering other events
+        setIsInteractionEnabled(true);
+      }
+    },
+    [isTrackingMode]
+  );
+
   const handleUpdateNodeSettings = () => {
     data.updateNodeSettings({ id, data, selected, type: "dropdownNode" });
+  };
+
+  const handleSelectChange = (option) => {
+    // In tracking mode or when interaction is enabled in creation mode
+    if (isTrackingMode || isInteractionEnabled) {
+      setSelectedOption(option);
+      updateSelected(id, option);
+      setIsInteractionEnabled(false); // Reset interaction state after selection in creation mode
+    }
   };
 
   return (
@@ -52,49 +74,57 @@ const DropdownNode = ({ id, data, selected }) => {
         </button>
       </NodeToolbar>
       <NodeResizer
-        color="ff0071"
+        color="#ff0071"
         isVisible={selected && data.selectable}
         minWidth={
           Math.max(...data.options.map((option) => option.length)) * 8 + 40
         }
         minHeight={40}
       />
-      <Dropdown
-        drop="down-centered"
-        style={{
-          width: "100%",
-          height: "100%",
-          minWidth:
-            Math.max(...data.options.map((option) => option.length)) * 8 + 40,
-        }}
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ width: "100%", height: "100%" }}
+        onDoubleClick={handleDoubleClick}
       >
-        <Dropdown.Toggle
+        <Form.Select
+          value={selectedOption}
+          onChange={(e) => handleSelectChange(e.target.value)}
           style={{
-            width: "100%",
-            height: "100%",
-            minWidth:
-              Math.max(...data.options.map((option) => option.length)) * 8 + 40, //This is CRAZY
+            width: "90%",
+            height: "auto",
+            fontSize: "16px",
+            padding: "8px",
+            borderRadius: "8px",
+            cursor: isTrackingMode || isInteractionEnabled ? "pointer" : "move",
+            pointerEvents:
+              isTrackingMode || isInteractionEnabled ? "auto" : "none",
           }}
-          variant="primary"
         >
-          {selectedOption}
-        </Dropdown.Toggle>
-        <Dropdown.Menu style={{ zIndex: 50000 }}>
-          {data.options.map((option: string) => {
-            return (
-              <Dropdown.Item
-                key={option}
-                onClick={() => {
-                  updateSelected(id, option);
-                  setSelectedOption(option);
-                }}
-              >
-                {option}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown.Menu>
-      </Dropdown>
+          {data.options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </Form.Select>
+      </div>
+      {!isTrackingMode && !isInteractionEnabled && selected && (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "rgba(0,0,0,0.7)",
+            color: "white",
+            padding: "4px 8px",
+            borderRadius: "4px",
+            fontSize: "12px",
+            pointerEvents: "none",
+          }}
+        >
+          Double-click to interact
+        </div>
+      )}
     </>
   );
 };

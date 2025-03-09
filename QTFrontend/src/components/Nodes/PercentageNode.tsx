@@ -130,7 +130,7 @@ const PercentageNode = ({ id, data, selected }: NodeProps<NodeData>) => {
         </button>
       </NodeToolbar>
       <NodeResizer
-        color="ff0071"
+        color="#ff0071"
         isVisible={selected}
         minWidth={20}
         // minHeight={height}

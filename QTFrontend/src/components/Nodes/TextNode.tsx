@@ -84,29 +84,41 @@ const TextNode = ({ id, data, selected }: NodeProps<NodeData>) => {
         </button>
       </NodeToolbar>
       <NodeResizer
-        color="ff0071"
+        color="#ff0071"
         isVisible={selected}
         minWidth={20}
-        // minHeight={height}
+        minHeight={data.fontSize * 1.5}
       />
-      <textarea
-        className="text-center"
+      <div
         style={{
-          resize: "none",
-          background: "none",
-          height: "100%",
+          position: "relative",
           width: "100%",
-          overflow: "hidden",
-          border: "none",
-          outline: "none",
-          fontSize: data.fontSize,
-          color: data.textColor,
+          height: "100%",
+          minHeight: `${data.fontSize * 1.5}px`,
         }}
-        value={data.text}
-        onChange={(e) => updateText(id, e.target.value)}
-        spellCheck={false}
-        disabled={!data.selectable}
-      ></textarea>
+      >
+        <textarea
+          className="text-center"
+          style={{
+            position: "absolute",
+            resize: "none",
+            background: "none",
+            height: "100%",
+            width: "100%",
+            overflow: "hidden",
+            border: "none",
+            outline: "none",
+            fontSize: `${data.fontSize}px`,
+            color: data.textColor,
+            lineHeight: "1.2",
+            padding: "4px",
+          }}
+          value={data.text}
+          onChange={(e) => updateText(id, e.target.value)}
+          spellCheck={false}
+          disabled={!data.selectable}
+        ></textarea>
+      </div>
     </>
   );
 };

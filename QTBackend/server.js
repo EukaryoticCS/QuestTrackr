@@ -16,7 +16,7 @@ import bodyParser from "body-parser";
 import multiparty from "multiparty";
 import fs from "fs";
 import { fileTypeFromBuffer } from "file-type";
-import { config } from './constants.js';
+import { config } from "./constants.js";
 
 dotenv.config();
 
@@ -77,7 +77,9 @@ app.use(
   })
 );
 
-app.use(express.json({ type: ["application/json", "text/plain"], limit: '50mb', }));
+app.use(
+  express.json({ type: ["application/json", "text/plain"], limit: "50mb" })
+);
 app.use(middleware());
 app.use(bodyParser.json());
 
