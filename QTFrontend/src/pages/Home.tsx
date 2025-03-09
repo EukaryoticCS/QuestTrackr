@@ -53,7 +53,7 @@ const Home = () => {
           </div>
           <div className="row my-4">
             <div className="col-12 col-md-7 text-secondary text-center m-auto mb-4 mb-md-0">
-              <p className="text-info fs-2">
+              <p className="text-info fs-1">
                 Are you a{" "}
                 <strong className="text-secondary font-weight-bold">
                   Completionist?
