@@ -5,7 +5,7 @@ const productionFrontendDomains = [
   "https://www.questtrackr.onrender.com",
 ];
 const developmentFrontend = "http://localhost:3000";
-const productionBackend = "https://questtrackrbackend.com";
+const productionBackend = "https://questtrackrbackend.onrender.com";
 const developmentBackend = "http://localhost:5000";
 
 export const config =
