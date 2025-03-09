@@ -82,8 +82,8 @@ const FAQ = () => {
             <Accordion.Body>
               <div className="text-success">
                 Maybe! Reach out to me at{" "}
-                <Link to="mailto:bssmith2021@gmail.com">
-                  bssmith2021@gmail.com
+                <Link to="mailto:cs.brandon.smith@gmail.com">
+                  cs.brandon.smith@gmail.com
                 </Link>{" "}
                 with your feature ideas or bugs you'd like me to fix!
               </div>
@@ -130,8 +130,8 @@ const FAQ = () => {
                 QuestTrackr is completely free for use. If you would like to
                 donate or have any other questions/concerns, reach out to
                 Brandon Smith at{" "}
-                <Link to="mailto:bssmith2021@gmail.com">
-                  bssmith2021@gmail.com
+                <Link to="mailto:cs.brandon.smith@gmail.com">
+                  cs.brandon.smith@gmail.com
                 </Link>
                 .
               </div>

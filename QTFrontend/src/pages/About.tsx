@@ -33,15 +33,15 @@ const About = () => {
                   <h2 className="card-title text-light">Brandon Smith</h2>
                   <h3 className="card-title text-light">Eukaryotic</h3>
                   <p className="card-text text-light">
-                    I'm Brandon Smith, a senior at Neumont College of Computer
-                    Science in Salt Lake City, Utah. Neumont requires students
-                    to take a class called "Capstone" where they work on a
-                    project by themselves and create it from start to finish in
-                    10 weeks. I'm a huge data nerd and I love spreadsheets. I've
-                    used spreadsheets to track my completion through the various
-                    Zelda games as I played through them, but I thought a
-                    centralized website to track game progression would be a fun
-                    choice for my Capstone project, so QuestTrackr was born.
+                    I'm Brandon Smith, a graduate of Neumont College of Computer
+                    Science. Neumont requires students to take a class called
+                    "Capstone" where they work on a project by themselves and
+                    create it from start to finish in 10 weeks. I'm a huge data
+                    nerd and I love spreadsheets. I've used spreadsheets to track
+                    my completion through the various Zelda games as I played
+                    through them, but I thought a centralized website to track
+                    game progression would be a fun choice for my Capstone
+                    project, so QuestTrackr was born.
                   </p>
                 </div>
               </div>
@@ -55,8 +55,8 @@ const About = () => {
                   <ul className="list-group list-group-flush h4">
                     <li className="list-group-item bg-transparent text-light">
                       <strong>Email: </strong>
-                      <Link to="mailto:bssmith2021@gmail.com">
-                        bssmith2021@gmail.com
+                      <Link to="mailto:cs.brandon.smith@gmail.com">
+                        cs.brandon.smith@gmail.com
                       </Link>
                     </li>
                     <li className="list-group-item bg-transparent text-light">
