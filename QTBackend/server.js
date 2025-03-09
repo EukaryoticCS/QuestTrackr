@@ -71,7 +71,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: config.frontend,
+    origin: config.frontendDomains,
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
     credentials: true,
   })
