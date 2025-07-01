@@ -1,7 +1,7 @@
-import igdb from "igdb-api-node";
 import dotenv from "dotenv";
 import mongodb from "mongodb";
 import Bottleneck from "bottleneck";
+import axios from "axios";
 const ObjectId = mongodb.ObjectId;
 
 dotenv.config();
@@ -17,30 +17,29 @@ const limiter = new Bottleneck({
 const maxConcurrentImports = 4;
 const batchSize = 500;
 
-
 async function importGames(offset, client) {
-  const response = await igdb
-    .default(process.env.TWITCH_CLIENT_ID, process.env.TWITCH_APP_ACCESS_TOKEN)
-    .fields([
-      "id",
-      "name",
-      "summary",
-      "platforms.name",
-      "genres.name",
-      "involved_companies.company.name",
-      "involved_companies.developer",
-      "involved_companies.publisher",
-      "first_release_date",
-      "cover.image_id",
-      "category",
-      "keywords.name",
-    ])
-    .limit(500)
-    .offset(offset)
-    .request("/games");
+  console.log(process.env.TWITCH_CLIENT_ID);
+  console.log(process.env.TWITCH_APP_ACCESS_TOKEN);
+  console.log(offset);
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://api.igdb.com/v4/games",
+    headers: {
+      "Client-ID": process.env.TWITCH_CLIENT_ID,
+      Authorization: `Bearer ${process.env.TWITCH_APP_ACCESS_TOKEN}`,
+      "Content-Type": "text/plain",
+    },
+    data: `fields id, name, summary, platforms.name, genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, first_release_date, cover.image_id, category, keywords.name; limit 500; offset 0; where id = 338067;`,
+  };
+
+  const response = await axios.request(config);
+
+  console.log(response.data);
 
   let games = [];
-  
+
   if (response.data.length < 1) {
     return 0;
   }
@@ -183,6 +182,11 @@ async function deleteAllButTLOZ(client) {
 async function dumpDatabase() {
   const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
   // await deleteAllButTLOZ(client);
+
+  await importGames(0, client);
+  client.close();
+  return;
+
   while (true) {
     const importPromises = [];
 

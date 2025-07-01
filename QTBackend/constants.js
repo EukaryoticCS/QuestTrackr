@@ -2,6 +2,7 @@
 const productionFrontendDomains = [
   "https://questtrackr.com",
   "https://www.questtrackr.com",
+  "https://questtrackr.onrender.com",
   "https://www.questtrackr.onrender.com",
 ];
 const developmentFrontend = "http://localhost:3000";
