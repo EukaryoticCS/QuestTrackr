@@ -6,6 +6,10 @@ const ObjectId = mongodb.ObjectId;
 
 dotenv.config();
 
+const clientId = process.env.TWITCH_CLIENT_ID;
+const accessToken = process.env.TWITCH_APP_ACCESS_TOKEN;
+const dbUri = process.env.QUESTTRACKR_DB_URI;
+
 let offset = 0;
 let totalItemsProcessed = 0;
 
@@ -18,25 +22,34 @@ const maxConcurrentImports = 4;
 const batchSize = 500;
 
 async function importGames(offset, client) {
-  console.log(process.env.TWITCH_CLIENT_ID);
-  console.log(process.env.TWITCH_APP_ACCESS_TOKEN);
-  console.log(offset);
-
   const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: "https://api.igdb.com/v4/games",
     headers: {
-      "Client-ID": process.env.TWITCH_CLIENT_ID,
-      Authorization: `Bearer ${process.env.TWITCH_APP_ACCESS_TOKEN}`,
+      "Client-ID": clientId,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "text/plain",
     },
-    data: `fields id, name, summary, platforms.name, genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, first_release_date, cover.image_id, category, keywords.name; limit 500; offset 0; where id = 338067;`,
+    data: `
+    fields 
+      id, 
+      name, 
+      summary, 
+      platforms.name, 
+      genres.name, 
+      involved_companies.company.name, 
+      involved_companies.developer, 
+      involved_companies.publisher, 
+      first_release_date, 
+      cover.image_id, 
+      category, 
+      keywords.name; 
+    limit 500; 
+    offset ${offset};`,
   };
 
   const response = await axios.request(config);
-
-  console.log(response.data);
 
   let games = [];
 
@@ -180,12 +193,8 @@ async function deleteAllButTLOZ(client) {
 }
 
 async function dumpDatabase() {
-  const client = new mongodb.MongoClient(process.env.QUESTTRACKR_DB_URI);
+  const client = new mongodb.MongoClient(dbUri);
   // await deleteAllButTLOZ(client);
-
-  await importGames(0, client);
-  client.close();
-  return;
 
   while (true) {
     const importPromises = [];
