@@ -4,11 +4,15 @@ import { Node } from "reactflow";
 import axios from "axios";
 import { config } from "../constants";
 
+const isDev = process.env.NODE_ENV === "development";
+
 interface NodeSettingsProps {
   show: boolean;
   onHide: () => void;
   selectedNode: Node | null;
   updateImage: (nodeId: string, imageUrl: string) => void;
+  updateCheckedImage: (nodeId: string, imageUrl: string) => void;
+  updateUncheckedImage: (nodeId: string, imageUrl: string) => void;
   updateTotal: (nodeId: string, total: number) => void;
   addDropdownOption: (nodeId: string, option: string) => void;
   deleteDropdownOption: (nodeId: string, option: string) => void;
@@ -19,6 +23,8 @@ const NodeSettings: React.FC<NodeSettingsProps> = ({
   onHide,
   selectedNode,
   updateImage,
+  updateCheckedImage,
+  updateUncheckedImage,
   updateTotal,
   addDropdownOption,
   deleteDropdownOption,
@@ -37,6 +43,36 @@ const NodeSettings: React.FC<NodeSettingsProps> = ({
       });
       const imageURL = response.data;
       updateImage(selectedNode.id, imageURL);
+    }
+  };
+
+  const uploadCheckedImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length === 1 && selectedNode) {
+      let formData = new FormData();
+      formData.append("file", e.target.files[0], e.target.files[0].name);
+      const response = await axios.post(`${config.backend}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      const imageURL = response.data;
+      updateCheckedImage(selectedNode.id, imageURL);
+    }
+  };
+
+  const uploadUncheckedImage = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.files && e.target.files.length === 1 && selectedNode) {
+      let formData = new FormData();
+      formData.append("file", e.target.files[0], e.target.files[0].name);
+      const response = await axios.post(`${config.backend}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      const imageURL = response.data;
+      updateUncheckedImage(selectedNode.id, imageURL);
     }
   };
 
@@ -62,7 +98,12 @@ const NodeSettings: React.FC<NodeSettingsProps> = ({
       <Offcanvas.Body>
         <div className="col-12">
           Node ID: {selectedNode.id}
-          data: {JSON.stringify(selectedNode.data)}
+          {isDev && (
+            <div>
+              <p>Node Type: {selectedNode.type}</p>
+              <p>Node Data: {JSON.stringify(selectedNode.data)}</p>
+            </div>
+          )}
           {selectedNode.type === "imageNode" && (
             <Form>
               <Form.Group controlId="formFile" className="mb-3">
@@ -71,6 +112,58 @@ const NodeSettings: React.FC<NodeSettingsProps> = ({
                   accept="image/png, image/gif, image/jpeg"
                   onChange={uploadNewImage}
                 />
+              </Form.Group>
+            </Form>
+          )}
+          {selectedNode.type === "checkboxNode" && (
+            <Form>
+              <Form.Group controlId="checkedImageFile" className="mb-3">
+                <Form.Label>Image for Checked State</Form.Label>
+                <Form.Control
+                  type="file"
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={uploadCheckedImage}
+                />
+                {selectedNode.data.checkedImage && (
+                  <div className="mt-2">
+                    <small className="text-muted">Current checked image:</small>
+                    <img
+                      src={selectedNode.data.checkedImage}
+                      alt="Checked"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        objectFit: "cover",
+                        marginLeft: "10px",
+                      }}
+                    />
+                  </div>
+                )}
+              </Form.Group>
+              <Form.Group controlId="uncheckedImageFile" className="mb-3">
+                <Form.Label>Image for Unchecked State</Form.Label>
+                <Form.Control
+                  type="file"
+                  accept="image/png, image/gif, image/jpeg"
+                  onChange={uploadUncheckedImage}
+                />
+                {selectedNode.data.uncheckedImage && (
+                  <div className="mt-2">
+                    <small className="text-muted">
+                      Current unchecked image:
+                    </small>
+                    <img
+                      src={selectedNode.data.uncheckedImage}
+                      alt="Unchecked"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        objectFit: "cover",
+                        marginLeft: "10px",
+                      }}
+                    />
+                  </div>
+                )}
               </Form.Group>
             </Form>
           )}

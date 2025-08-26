@@ -268,10 +268,7 @@ const TemplateTools = ({
           </Tooltip>
         }
       >
-        <button
-          className="nav-link py-3 border-bottom "
-          onClick={() => redo()}
-        >
+        <button className="nav-link py-3 border-bottom " onClick={() => redo()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"

@@ -96,6 +96,8 @@ export const createCheckboxNode = (
     updateNodeSettings,
     section: "Total",
     checked: false,
+    checkedImage: "",
+    uncheckedImage: "",
   },
   type: "checkboxNode",
   style: {

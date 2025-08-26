@@ -55,6 +55,8 @@ const selector = (state) => ({
   updateSelectedNode: state.updateSelectedNode,
   updateSection: state.updateSection,
   updateImage: state.updateImage,
+  updateCheckedImage: state.updateCheckedImage,
+  updateUncheckedImage: state.updateUncheckedImage,
   updateTotal: state.updateTotal,
   deleteSection: state.deleteSection,
   addSection: state.addSection,
@@ -75,6 +77,8 @@ function TemplateCreation() {
     updateSelectedNode,
     updateSection,
     updateImage,
+    updateCheckedImage,
+    updateUncheckedImage,
     updateTotal,
     deleteSection,
     addSection,
@@ -106,7 +110,8 @@ function TemplateCreation() {
     }, 2000);
   };
 
-  const updateNodeSettings = useCallback((node: Node) => {
+  const updateNodeSettings = useCallback(
+    (node: Node) => {
       updateSelectedNode(node);
       setShowNodeSettings(true);
     },
@@ -256,6 +261,8 @@ function TemplateCreation() {
         onHide={() => setShowNodeSettings(false)}
         selectedNode={selectedNode}
         updateImage={updateImage}
+        updateCheckedImage={updateCheckedImage}
+        updateUncheckedImage={updateUncheckedImage}
         updateTotal={updateTotal}
         addDropdownOption={addDropdownOption}
         deleteDropdownOption={deleteDropdownOption}

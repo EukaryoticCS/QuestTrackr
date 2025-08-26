@@ -27,6 +27,8 @@ export type NodeData = {
   options: string[];
   img: string;
   percentage: number;
+  checkedImage?: string;
+  uncheckedImage?: string;
 };
 
 export type RFState = {
@@ -51,6 +53,8 @@ export type RFState = {
   editDropdownOption: (nodeId: string, option: string) => void;
   deleteDropdownOption: (nodeId: string, option: string) => void;
   updateImage: (nodeId: string, imageURL: string) => void;
+  updateCheckedImage: (nodeId: string, imageURL: string) => void;
+  updateUncheckedImage: (nodeId: string, imageURL: string) => void;
   restoreNodes: (nodes: Node[]) => void;
   deleteSection: (sectionName: string) => void;
   addSection: (sectionName: string) => void;
@@ -84,6 +88,8 @@ const useStore = create<RFState>()(
         options: ["N/A"],
         img: "",
         percentage: 0,
+        checkedImage: "",
+        uncheckedImage: "",
       },
     },
     onNodesChange: (changes: NodeChange[]) => {
@@ -306,6 +312,26 @@ const useStore = create<RFState>()(
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
             node.data = { ...node.data, img };
+          }
+          return node;
+        }),
+      });
+    },
+    updateCheckedImage: (nodeId: string, imageURL: string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, checkedImage: imageURL };
+          }
+          return node;
+        }),
+      });
+    },
+    updateUncheckedImage: (nodeId: string, imageURL: string) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, uncheckedImage: imageURL };
           }
           return node;
         }),
